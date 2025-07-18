@@ -174,7 +174,7 @@ export const getAppWebSocketUrl = (
     env = "town"
   }
 
-  return `ws://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
+  return `wss://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
 }
 
 export const getChainName = ({

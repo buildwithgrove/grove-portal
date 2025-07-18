@@ -1,4 +1,12 @@
-import { ActionIcon, Flex, Menu, Stack, TextInput, Tooltip, UnstyledButton } from "@mantine/core"
+import {
+  ActionIcon,
+  Flex,
+  Menu,
+  Stack,
+  TextInput,
+  Tooltip,
+  UnstyledButton,
+} from "@mantine/core"
 import { useFetcher, useNavigation, useParams } from "@remix-run/react"
 import { Book, Play, Star } from "lucide-react"
 import React, { useMemo, useState } from "react"

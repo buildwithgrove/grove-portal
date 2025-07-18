@@ -80,11 +80,11 @@ body {
 /* Light mode hover */
 [data-mantine-color-scheme="light"] .nv-popoverTrigger:hover {
   background-color: #f1f3f5 !important; /* theme.colors.gray[0] */
-  border-color: #dee2e6 !important;     /* theme.colors.gray[3] */
+  border-color: #dee2e6 !important; /* theme.colors.gray[3] */
 }
 
 /* Dark mode hover */
 [data-mantine-color-scheme="dark"] .nv-popoverTrigger:hover {
-  background-color: #1A1B1E !important; /* theme.colors.dark[5] */
-  border-color: #2C2E33 !important;     /* theme.colors.dark[4] */
+  background-color: #1a1b1e !important; /* theme.colors.dark[5] */
+  border-color: #2c2e33 !important; /* theme.colors.dark[4] */
 }
