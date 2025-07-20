@@ -9,12 +9,11 @@
     "esbuild": "0.17.19"
   },
   "scripts": {
-    "dev": "run-s generate:types:safe remix:dev",
-    "build": "run-s generate:types:safe remix:build",
+    "dev": "run-s generate:types remix:dev",
+    "build": "run-s generate:types remix:build",
     "start": "remix-serve ./build/server/index.js",
     "format": "prettier --write .",
     "generate:types": "run-p generate:types:*",
-    "generate:types:safe": "pnpm run generate:types:portal || (echo '\n⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️' && echo '🚨🚨🚨 WARNING: GraphQL CODEGEN FAILED! 🚨🚨🚨' && echo '⚠️  BUILD CONTINUING WITH EXISTING TYPES - SCHEMA MAY BE OUTDATED!' && echo '⚠️  GraphQL introspection is disabled on production API' && echo '⚠️  Manual schema updates may be required for new backend changes' && echo '⚠️  Contact backend team for schema.graphql file for proper codegen' && echo '⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️\n' && exit 0)",
     "generate:types:portal": "graphql-codegen -r dotenv/config --config ./app/models/portal/codegen.config.yml",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",

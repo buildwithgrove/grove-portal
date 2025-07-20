@@ -158,9 +158,6 @@ export const getAppEndpointUrl = (
   appId: string | undefined,
 ) => {
   let env = "city"
-  if (getRequiredClientEnvVar("VERCEL_ENV") !== "production") {
-    env = "town"
-  }
 
   return `https://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
 }
@@ -170,9 +167,6 @@ export const getAppWebSocketUrl = (
   appId: string | undefined,
 ) => {
   let env = "city"
-  if (getRequiredClientEnvVar("VERCEL_ENV") !== "production") {
-    env = "town"
-  }
 
   return `wss://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
 }

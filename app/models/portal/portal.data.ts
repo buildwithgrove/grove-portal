@@ -76,6 +76,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 0,
     path: "",
     blockchainAliases: ["btc-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0027",
@@ -88,6 +89,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000000,
     path: "",
     blockchainAliases: ["poa-xdai", "gnosischain-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0004",
@@ -100,6 +102,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["bsc-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0021",
@@ -112,6 +115,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["eth-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0022",
@@ -124,6 +128,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 500000,
     path: "",
     blockchainAliases: ["eth-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "0044",
@@ -136,6 +141,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["iotex-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0025",
@@ -148,6 +154,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["eth-rinkeby"],
+    websocketsEnabled: false,
   },
   {
     id: "0009",
@@ -160,6 +167,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["poly-mainnet", "poly-rpc"],
+    websocketsEnabled: false,
   },
   {
     id: "0001",
@@ -172,6 +180,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 0,
     path: "/v1/query/height",
     blockchainAliases: ["mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "000B",
@@ -184,6 +193,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["poly-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "0046",
@@ -196,6 +206,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["evmos-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0040",
@@ -208,6 +219,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 0,
     path: "",
     blockchainAliases: ["harmony-0"],
+    websocketsEnabled: false,
   },
   {
     id: "0010",
@@ -220,6 +232,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["bsc-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "00A3",
@@ -232,6 +245,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 1000000,
     path: "/ext/bc/C/rpc",
     blockchainAliases: ["avax-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "0003",
@@ -244,6 +258,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "/ext/bc/C/rpc",
     blockchainAliases: ["avax-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0029",
@@ -256,6 +271,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 1000000,
     path: "",
     blockchainAliases: ["algo-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0024",
@@ -268,6 +284,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["poa-kovan", "eth-kovan"],
+    websocketsEnabled: false,
   },
   {
     id: "000A",
@@ -280,6 +297,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["fuse-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "0026",
@@ -292,6 +310,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["eth-goerli"],
+    websocketsEnabled: false,
   },
   {
     id: "000D",
@@ -304,6 +323,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 1000000,
     path: "",
     blockchainAliases: ["algo-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "0006",
@@ -316,6 +336,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 0,
     path: "",
     blockchainAliases: ["solana-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "000C",
@@ -328,6 +349,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 500000,
     path: "",
     blockchainAliases: ["poa-xdai-archival", "gnosischain-archival"],
+    websocketsEnabled: false,
   },
   {
     id: "0028",
@@ -340,6 +362,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["eth-trace"],
+    websocketsEnabled: false,
   },
   {
     id: "0023",
@@ -352,6 +375,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["eth-ropsten"],
+    websocketsEnabled: false,
   },
   {
     id: "0047",
@@ -364,6 +388,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["okc-mainnet", "oec-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0048",
@@ -376,6 +401,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["boba-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "03DF",
@@ -388,6 +414,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc",
     blockchainAliases: ["avax-dfk"],
+    websocketsEnabled: false,
   },
   {
     id: "0049",
@@ -400,6 +427,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["fantom-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "03CB",
@@ -412,6 +440,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "/ext/bc/2K33xS9AyP9oCDiHYKVrHe7F54h2La5D8erpTChaAhdzeSu2RX/rpc",
     blockchainAliases: ["avax-cra"],
+    websocketsEnabled: false,
   },
   {
     id: "0052",
@@ -424,6 +453,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["near-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0050",
@@ -436,6 +466,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["moonbeam-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0051",
@@ -448,6 +479,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["moonriver-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0005",
@@ -460,6 +492,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["fuse-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0053",
@@ -472,6 +505,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["optimism-mainnet"],
+    websocketsEnabled: false,
   },
   {
     id: "0054",
@@ -484,6 +518,7 @@ export const blockchains: Omit<Blockchain, "scheme">[] = [
     logLimitBlocks: 100000,
     path: "",
     blockchainAliases: ["osmosis-mainnet"],
+    websocketsEnabled: false,
   },
 ]
 
