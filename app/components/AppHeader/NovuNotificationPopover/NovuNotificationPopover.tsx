@@ -20,7 +20,6 @@ export const NovuNotificationPopover = ({
   const navigate = useNavigate()
   const theme = useMantineTheme()
   const [isOpen, setIsOpen] = useState(false)
-  console.log("colorScheme prop value:", colorScheme)
 
   // Handle notification clicks
   const handleNotificationClick = (notification: any) => {
