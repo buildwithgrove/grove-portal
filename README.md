@@ -28,7 +28,6 @@ This portal allows users to manage their Grove services, subscriptions, configur
 3. **Open Application**
    - Visit [http://localhost:3000](http://localhost:3000)
 
-
 ## Table of Contents <!-- omit in toc -->
 
 - [Run with **Remix**](#run-with-remix)
