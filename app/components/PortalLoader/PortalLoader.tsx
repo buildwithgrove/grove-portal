@@ -62,8 +62,8 @@ function ClientSideLottie({ message, size = "md", loaderAnimation }: PortalLoade
             animationData: loaderAnimation,
             loop: true,
             autoplay: true,
-            style: { height: LOADER_SIZE[size] }
-          })
+            style: { height: LOADER_SIZE[size] },
+          }),
         )
       } catch (error) {
         console.error("Error creating Lottie animation:", error)
@@ -73,9 +73,7 @@ function ClientSideLottie({ message, size = "md", loaderAnimation }: PortalLoade
 
   return (
     <Stack align="center" justify="center">
-      <Box aria-labelledby="Grove loading animation">
-        {lottieView || "Loading..."}
-      </Box>
+      <Box aria-labelledby="Grove loading animation">{lottieView || "Loading..."}</Box>
       {message && <Text> {message} </Text>}
     </Stack>
   )

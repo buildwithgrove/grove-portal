@@ -10,7 +10,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   await requireUser(request)
-  
+
   const url = new URL(request.url)
   const formData = await request.formData()
   const returnPathParam = formData.get("return-path") as string | null
@@ -22,16 +22,16 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   try {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId)
-    
+
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: subscription.customer as string,
       return_url: returnUrl,
     })
-    
+
     if (portalSession.url) {
       return redirect(portalSession.url)
     }
-    
+
     return json({
       error: true,
       message: "Stripe portal session was not established",

@@ -17,10 +17,10 @@ metadata:
       title: Pocket Portal
       icon: dashboard
       type: prod
-    - url: https://staging.portal.pokt.network/
-      title: Pocket Portal [stage]
+    - url: https://portal.grove.city/
+      title: Pocket Portal
       icon: dashboard
-      type: stage
+      type: prod
 spec:
   type: website
   lifecycle: production

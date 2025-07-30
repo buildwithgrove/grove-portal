@@ -11,6 +11,7 @@ query blockchains($active: Boolean, $sortOrder: SortOrder) {
     logLimitBlocks
     path
     scheme
+    websocketsEnabled
   }
 }
 

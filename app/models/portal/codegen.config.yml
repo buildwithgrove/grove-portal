@@ -1,4 +1,7 @@
-schema: ${PORTAL_API_URL}
+schema:
+  - ${PORTAL_API_URL}:
+      headers:
+        X-Admin-key: ${PORTAL_ADMIN_KEY}
 documents: "./app/models/portal/*.graphqls"
 generates:
   ./app/models/portal/sdk.ts:

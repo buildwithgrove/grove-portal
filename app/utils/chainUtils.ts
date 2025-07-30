@@ -158,11 +158,17 @@ export const getAppEndpointUrl = (
   appId: string | undefined,
 ) => {
   let env = "city"
-  if (getRequiredClientEnvVar("VERCEL_ENV") !== "production") {
-    env = "town"
-  }
 
   return `https://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
+}
+
+export const getAppWebSocketUrl = (
+  chain: Blockchain | undefined | null,
+  appId: string | undefined,
+) => {
+  let env = "city"
+
+  return `wss://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
 }
 
 export const getChainName = ({

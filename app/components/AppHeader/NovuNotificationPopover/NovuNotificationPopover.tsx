@@ -20,7 +20,6 @@ export const NovuNotificationPopover = ({
   const navigate = useNavigate()
   const theme = useMantineTheme()
   const [isOpen, setIsOpen] = useState(false)
-  console.log('colorScheme prop value:', colorScheme)
 
   // Handle notification clicks
   const handleNotificationClick = (notification: any) => {
@@ -99,18 +98,12 @@ export const NovuNotificationPopover = ({
               styles={(theme) => ({
                 root: {
                   boxShadow: `inset 0 0 0 1px ${
-                    colorScheme === "dark"
-                      ? theme.colors.dark[4]
-                      : theme.colors.gray[3]
+                    colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
                   }`,
                   color:
-                    colorScheme === "dark"
-                      ? theme.colors.gray[2]
-                      : theme.colors.dark[6],
+                    colorScheme === "dark" ? theme.colors.gray[2] : theme.colors.dark[6],
                   backgroundColor:
-                    colorScheme === "dark"
-                      ? theme.colors.dark[9]
-                      : theme.white,
+                    colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
                   padding: "15px",
                   backgroundClip: "content-box",
 

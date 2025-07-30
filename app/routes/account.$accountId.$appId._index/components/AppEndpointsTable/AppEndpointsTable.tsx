@@ -1,4 +1,12 @@
-import { ActionIcon, Flex, Menu, TextInput, Tooltip, UnstyledButton } from "@mantine/core"
+import {
+  ActionIcon,
+  Flex,
+  Menu,
+  Stack,
+  TextInput,
+  Tooltip,
+  UnstyledButton,
+} from "@mantine/core"
 import { useFetcher, useNavigation, useParams } from "@remix-run/react"
 import { Book, Play, Star } from "lucide-react"
 import React, { useMemo, useState } from "react"
@@ -14,7 +22,7 @@ import useActionNotification, {
 import { Blockchain, PortalApp } from "~/models/portal/sdk"
 import ChainSandboxSideDrawer from "~/routes/account.$accountId.$appId._index/components/ChainSandboxSideDrawer"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
-import { CHAIN_DOCS_URL, getAppEndpointUrl } from "~/utils/chainUtils"
+import { CHAIN_DOCS_URL, getAppEndpointUrl, getAppWebSocketUrl } from "~/utils/chainUtils"
 import { DOCS_PATH } from "~/utils/utils"
 
 type AppEndpointsProps = {
@@ -90,19 +98,36 @@ const AppEndpointsTable = ({
               },
               endpointUrl: {
                 element: (
-                  <TextInput
-                    readOnly
-                    miw={300}
-                    rightSection={
-                      <CopyTextButton
-                        size={16}
-                        value={getAppEndpointUrl(chain, appId)}
-                        variant="transparent"
-                        width={28}
+                  <Stack gap="xs">
+                    <TextInput
+                      readOnly
+                      miw={300}
+                      rightSection={
+                        <CopyTextButton
+                          size={16}
+                          value={getAppEndpointUrl(chain, appId)}
+                          variant="transparent"
+                          width={28}
+                        />
+                      }
+                      value={getAppEndpointUrl(chain, appId)}
+                    />
+                    {chain.websocketsEnabled && (
+                      <TextInput
+                        readOnly
+                        miw={300}
+                        rightSection={
+                          <CopyTextButton
+                            size={16}
+                            value={getAppWebSocketUrl(chain, appId)}
+                            variant="transparent"
+                            width={28}
+                          />
+                        }
+                        value={getAppWebSocketUrl(chain, appId)}
                       />
-                    }
-                    value={getAppEndpointUrl(chain, appId)}
-                  />
+                    )}
+                  </Stack>
                 ),
               },
               action: {
