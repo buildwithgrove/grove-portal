@@ -10,7 +10,6 @@
 - [Deployment](#deployment)
 - [Development](#development)
   - [Env](#env)
-  - [Node Version](#node-version)
   - [Frontend](#frontend)
   - [Stripe Webhook Forwarding](#stripe-webhook-forwarding)
   - [Environment Variables](#environment-variables)
@@ -26,17 +25,15 @@
 
    - Test your changes locally before creating a PR.
 
-2. **Test in Staging**
+2. **Test in Preview**
 
-   - Create a PR into the "staging" branch.
-   - Continuous Deployment (CD) will automatically deploy to [https://staging.portal.grove.city](https://staging.portal.grove.city).
-   - eg. https://github.com/pokt-foundation/grove-portal/pull/660
+   - Push your feature branch and create a PR.
+   - Continuous Deployment (CD) will automatically deploy via Vercel to a preview environment
 
 3. **Deploy to PROD**
 
-   - Create a PR from "staging" into "main".
+   - Create a PR into `main`.
    - CD will automatically deploy to [https://portal.grove.city/](https://portal.grove.city).
-   - eg. https://github.com/pokt-foundation/grove-portal/pull/662
 
 4. **Test in Main**
    - Test your changes in the main environment to ensure everything is working as expected.
@@ -46,12 +43,6 @@
 ### Env
 
 Make sure to get the `.env` from [1password](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&i=usnpm5yls4p4vvtz5srqzuokz4&h=buildwithgrove.1password.com).
-
-### Node Version
-
----
-
-**Ensure you're using Node v18 (not 22).**
 
 ### Frontend
 
@@ -101,8 +92,10 @@ You will be given a webhook signing secret, set it in your `.env` file as `STRIP
 
 ### Environment Variables
 
-[You can find the environment variables - including for Stripe- here.](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&i=picsbxs4vwfewipk5zg3rdou2u&h=buildwithgrove.1password.com)
+- [For Grove Employees - Search 1password for `Grove Portal - Portal UI -.env (PROD)`](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&i=c5cretuyeauiubm3uaqojdy4zm&h=my.1password.com)
 
 ### Backend
 
-This currently requires you to also run the current portal backend on localhost:4200 in order to run. I am working with the backend team to whitelist localhost and enable us to hit the backend.staging.portal.pokt.network endpoints.
+The default `.env` uses the PRODUCTION environment backend.
+
+If you'd like to test in a nonprod environment, run the backend on `localhost:4200` in order to run.
