@@ -34,7 +34,7 @@ const LogsSideDrawer = ({
       value: logsItem?.chainID,
     },
     {
-      label: "Network",
+      label: "Service",
       value: getChainName({ chainId: logsItem?.chainID as string, chains: blockchains }),
     },
     {

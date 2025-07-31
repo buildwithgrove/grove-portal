@@ -25,7 +25,7 @@ export default function AppIdLayoutView({
   const routes = [
     {
       to: "",
-      label: "Networks",
+      label: "Services",
       end: true,
     },
     {

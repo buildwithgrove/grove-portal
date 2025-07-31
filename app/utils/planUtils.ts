@@ -1,5 +1,5 @@
 import { PayPlanType } from "~/models/portal/sdk"
-export const FREE_TIER_MAX_RELAYS = 100_000
+export const FREE_TIER_MONTHLY_RELAY_LIMIT = 150000
 
 export function isEnterprisePlan(planType: PayPlanType) {
   return planType === PayPlanType.Enterprise
