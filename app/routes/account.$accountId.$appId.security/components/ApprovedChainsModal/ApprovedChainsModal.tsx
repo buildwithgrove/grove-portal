@@ -98,7 +98,9 @@ const ApprovedChainsModal = ({
       ) : (
         <LoadingOverlay
           visible
-          loaderProps={{ children: <PortalLoader message="Adding whitelist services..." /> }}
+          loaderProps={{
+            children: <PortalLoader message="Adding whitelist services..." />,
+          }}
         />
       )}
     </>

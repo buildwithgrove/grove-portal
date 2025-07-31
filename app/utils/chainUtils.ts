@@ -9,7 +9,7 @@ export const CHAIN_DOCS_URL: KeyValuePair<string> = {
   "avax-dfk": "avalanche-api/intro",
   base: "base-api/intro",
   "base-testnet": "base-api/intro",
-  berachain: "berachain/intro",
+  berachain: "berachain-api/intro",
   blast: "blastchain-api/intro",
   boba: "boba-api/intro",
   bsc: "binance-smart-chain-api/intro",

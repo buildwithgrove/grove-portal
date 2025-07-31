@@ -89,8 +89,9 @@ export default function AccountNotificationsView({
   return (
     <Stack pt={36}>
       <Text pb={16}>
-        Set up usage alerts to be warned when you are approaching your monthly relay limits. We
-        will send an email when your usage crosses the thresholds specified below.
+        Set up usage alerts to be warned when you are approaching your monthly relay
+        limits. We will send an email when your usage crosses the thresholds specified
+        below.
       </Text>
       <Stack gap={32} my={16}>
         {NOTIFICATIONS_ALERT_LEVELS.map((level, index) => (
