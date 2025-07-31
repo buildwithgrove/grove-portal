@@ -7,7 +7,7 @@ import useActionNotification, {
 import { Account, RoleName } from "~/models/portal/sdk"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { formatNumberToSICompact } from "~/utils/formattingUtils"
-import { FREE_TIER_MAX_RELAYS } from "~/utils/planUtils"
+import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 
 type NotificationLevel = "quarter" | "half" | "threeQuarters" | "full"
 
@@ -89,8 +89,9 @@ export default function AccountNotificationsView({
   return (
     <Stack pt={36}>
       <Text pb={16}>
-        Set up usage alerts to be warned when you are approaching your relay limits. We
-        will send an email when your usage crosses the thresholds specified below.
+        Set up usage alerts to be warned when you are approaching your monthly relay
+        limits. We will send an email when your usage crosses the thresholds specified
+        below.
       </Text>
       <Stack gap={32} my={16}>
         {NOTIFICATIONS_ALERT_LEVELS.map((level, index) => (
@@ -98,7 +99,7 @@ export default function AccountNotificationsView({
             <Group justify="space-between" px={20}>
               <Text>
                 {getUsagePercentage(level)} of{" "}
-                {formatNumberToSICompact(FREE_TIER_MAX_RELAYS)} relays per day
+                {formatNumberToSICompact(FREE_TIER_MONTHLY_RELAY_LIMIT)} relays per month
               </Text>
               <Switch
                 defaultChecked={getNotificationCheckedState(level)}

@@ -49,8 +49,8 @@ const ApprovedChainsModal = ({
       {state === "idle" ? (
         <Container>
           <ModalHeader
-            subtitle="Limits the Endpoints to be used only with specific chains."
-            title="Approved Chains"
+            subtitle="Limits the Endpoints to be used only with specific services."
+            title="Whitelist Services"
             onDiscard={closeAllModals}
           />
           <Box px={8} py={24}>
@@ -98,7 +98,9 @@ const ApprovedChainsModal = ({
       ) : (
         <LoadingOverlay
           visible
-          loaderProps={{ children: <PortalLoader message="Adding approved chains..." /> }}
+          loaderProps={{
+            children: <PortalLoader message="Adding whitelist services..." />,
+          }}
         />
       )}
     </>

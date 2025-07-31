@@ -1,4 +1,14 @@
-import { Button, Divider, Group, Stack, TextInput, Title, Tooltip } from "@mantine/core"
+import {
+  ActionIcon,
+  Button,
+  Divider,
+  Group,
+  Stack,
+  TextInput,
+  Title,
+  Tooltip,
+} from "@mantine/core"
+import { Book } from "lucide-react"
 import React, { useMemo } from "react"
 import useChainSandboxContext from "~/components/ChainSandbox/state"
 import { HttpMethod } from "~/components/ChainSandbox/state/stateReducer"
@@ -7,7 +17,13 @@ import CopyTextButton from "~/components/CopyTextButton"
 import FluidSelect from "~/components/FluidSelect"
 import { Blockchain, PortalApp } from "~/models/portal/sdk"
 import { getAppNameWithEmoji } from "~/utils/accountUtils"
-import { evmMethods, getAppEndpointUrl, isEvmChain } from "~/utils/chainUtils"
+import {
+  CHAIN_DOCS_URL,
+  evmMethods,
+  getAppEndpointUrl,
+  isEvmChain,
+} from "~/utils/chainUtils"
+import { DOCS_PATH } from "~/utils/utils"
 
 type ChainSandboxInputsProps = {
   apps?: PortalApp[]
@@ -122,9 +138,32 @@ const ChainSandboxInputs = ({
           )}
         </Group>
 
-        <Button loading={isLoading} radius={4} size="sm" onClick={onSendRequest}>
-          Send Request
-        </Button>
+        <Group gap="sm">
+          <Button loading={isLoading} radius={4} size="sm" onClick={onSendRequest}>
+            Send Request
+          </Button>
+          {selectedChain && (
+            <Tooltip withArrow label="View Documentation">
+              <ActionIcon
+                aria-label={`View documentation for ${selectedChain.description}`}
+                color="gray"
+                radius="xl"
+                size={36}
+                variant="subtle"
+                component="a"
+                href={
+                  selectedChain.blockchain && CHAIN_DOCS_URL[selectedChain.blockchain]
+                    ? `${DOCS_PATH}/${CHAIN_DOCS_URL[selectedChain.blockchain]}`
+                    : DOCS_PATH
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Book size={16} />
+              </ActionIcon>
+            </Tooltip>
+          )}
+        </Group>
       </Group>
       <Stack>
         <Stack>

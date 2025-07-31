@@ -35,7 +35,7 @@ const LogsTable = ({ logs, meta, blockchains }: LogsTableProps) => {
       />
       <DataTable
         className={classes.logsTable}
-        columns={["Timestamp", "Method", "Network", "Status"]}
+        columns={["Timestamp", "Method", "Service", "Status"]}
         data={logs?.map((log) => {
           return {
             timestamp: {
@@ -46,7 +46,7 @@ const LogsTable = ({ logs, meta, blockchains }: LogsTableProps) => {
               element: log?.chainMethod ? log?.chainMethod : "-",
               value: log?.chainMethod ? log?.chainMethod : "-",
             },
-            network: {
+            service: {
               element: getChainName({
                 chainId: log.chainID as string,
                 chains: blockchains,

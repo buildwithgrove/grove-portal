@@ -26,7 +26,7 @@ const ChainsDropdown = ({ chains, onChange, width }: ChainsDropdownProps) => {
       aria-label="Add new"
       data={selectChainData}
       leftSection={<Search size={18} />}
-      placeholder="Search Network"
+      placeholder="Search Service"
       rightSection={<></>}
       rightSectionWidth={0}
       w={width}

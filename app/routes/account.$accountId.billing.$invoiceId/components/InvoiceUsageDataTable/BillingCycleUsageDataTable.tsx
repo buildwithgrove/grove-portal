@@ -86,8 +86,8 @@ const BillingCycleUsageDataTable = ({
         },
         {
           accessor: "usage",
-          render: () => "All Networks",
-          title: "Network",
+          render: () => "All Services",
+          title: "Service",
           width: 250,
         },
         { accessor: "totalAppUsage", title: "Total Relays", width: 250 },
@@ -109,7 +109,7 @@ const BillingCycleUsageDataTable = ({
               },
               {
                 accessor: "chainID",
-                title: "Network",
+                title: "Service",
                 width: 250,
                 render: ({ chainID }) =>
                   getChainName({ chainId: String(chainID), chains: blockchains }),

@@ -105,7 +105,7 @@ export const Application = () => {
       <Flex align="center" justify="flex-end" my="xl">
         <Input
           leftSection={<Search />}
-          placeholder="Search network"
+          placeholder="Search service"
           value={searchTerm}
           onChange={(event: any) => setSearchTerm(event.currentTarget.value)}
         />

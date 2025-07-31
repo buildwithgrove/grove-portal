@@ -45,7 +45,7 @@ const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
   const chainsSelectItems = React.useMemo(() => {
     return chains.length > 0
       ? [
-          { value: "all", label: "All Networks" },
+          { value: "all", label: "All Services" },
           ...(chains.length > 0
             ? chains.map((chain) => ({
                 value: chain.id,
@@ -112,7 +112,7 @@ const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
             disabled={chainsSelectItems.length === 0}
             itemComponent={ChainSelectItem}
             items={chainsSelectItems}
-            placeholder="No Networks"
+            placeholder="No Services"
             value={chainParam}
             withSearch={chainsSelectItems.length > 7}
             onSelect={(chain: string) => {

@@ -25,8 +25,8 @@ const ApprovedChains = ({
   return (
     <Box py={32}>
       <Stack align="flex-start">
-        <Text fw={600}>Approved Chains</Text>
-        <Text>Limit the chains that can be used for this application.</Text>
+        <Text fw={600}>Whitelist Services</Text>
+        <Text>Limit the services that can be used for this application.</Text>
         <AddSettingsButton
           disabled={readOnly}
           onClick={() =>
