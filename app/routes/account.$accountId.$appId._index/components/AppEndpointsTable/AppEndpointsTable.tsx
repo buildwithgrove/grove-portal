@@ -152,31 +152,36 @@ const AppEndpointsTable = ({
                         <Play size={18} style={{ position: "relative", left: 2 }} />
                       </ActionIcon>
                     </Tooltip>
-                    <Menu>
-                      <ContextMenuTarget variant="subtle" />
-                      <Menu.Dropdown>
-                        {chain.blockchain && CHAIN_DOCS_URL[chain.blockchain] && (
-                          <Menu.Item leftSection={<Book size={18} />}>
-                            <UnstyledButton
-                              component="a"
-                              fz="sm"
-                              href={`${DOCS_PATH}/${CHAIN_DOCS_URL[chain.blockchain]}`}
-                              rel="noreferrer"
-                              target="_blank"
-                              onClick={() => {
-                                trackEvent({
-                                  category: AnalyticCategories.app,
-                                  action: AnalyticActions.app_chain_docs,
-                                  label: chain.id,
-                                })
-                              }}
-                            >
-                              Documentation
-                            </UnstyledButton>
-                          </Menu.Item>
-                        )}
-
-                        {!readOnly && (
+                    <Tooltip withArrow label="Documentation">
+                      <ActionIcon
+                        aria-label={`View documentation for ${chain.description}`}
+                        color="gray"
+                        radius="xl"
+                        size={40}
+                        variant="subtle"
+                        component="a"
+                        href={
+                          chain.blockchain && CHAIN_DOCS_URL[chain.blockchain]
+                            ? `${DOCS_PATH}/${CHAIN_DOCS_URL[chain.blockchain]}`
+                            : DOCS_PATH
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          trackEvent({
+                            category: AnalyticCategories.app,
+                            action: AnalyticActions.app_chain_docs,
+                            label: chain.id,
+                          })
+                        }}
+                      >
+                        <Book size={18} />
+                      </ActionIcon>
+                    </Tooltip>
+                    {!readOnly && (
+                      <Menu>
+                        <ContextMenuTarget variant="subtle" />
+                        <Menu.Dropdown>
                           <Menu.Item
                             leftSection={
                               <Star
@@ -206,9 +211,9 @@ const AppEndpointsTable = ({
                           >
                             {chain.favorite ? "Remove favorite" : "Mark as favorite"}
                           </Menu.Item>
-                        )}
-                      </Menu.Dropdown>
-                    </Menu>
+                        </Menu.Dropdown>
+                      </Menu>
+                    )}
                   </Flex>
                 ),
                 cellProps: {
