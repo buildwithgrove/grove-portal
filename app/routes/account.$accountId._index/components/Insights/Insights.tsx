@@ -9,6 +9,7 @@ import { Blockchain, D2Chain, D2Stats, PortalApp } from "~/models/portal/sdk"
 import { AccountAppsOverview } from "~/routes/account.$accountId._index/components/AccountAppsOverview"
 import { OverviewSparkline } from "~/routes/account.$accountId._index/components/OverviewSparkline"
 import useAggregateChartData from "~/routes/account.$accountId._index/hooks/useAggregateChartData"
+import { matchLegacyChainIdToBlockchain } from "~/utils/chainUtils"
 import { commify } from "~/utils/formattingUtils"
 
 const ChartHeader = ({
@@ -62,8 +63,12 @@ export const Insights = ({
     aggregatedErrorData,
   } = useAggregateChartData({ data: aggregate, period: periodParam })
 
-  const availableChains = blockchains.filter(({ id }) =>
-    realtimeDataChains.some(({ chainID }) => chainID === id),
+  const availableChains = blockchains.filter((blockchain) =>
+    realtimeDataChains.some(({ chainID }) => {
+      if (!chainID) return false
+      const matchedBlockchain = matchLegacyChainIdToBlockchain(chainID, blockchains)
+      return matchedBlockchain?.id === blockchain.id
+    }),
   )
 
   return (

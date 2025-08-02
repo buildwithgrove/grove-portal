@@ -48,7 +48,7 @@ const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
           { value: "all", label: "All Services" },
           ...(chains.length > 0
             ? chains.map((chain) => ({
-                value: chain.id,
+                value: chain.blockchain,
                 label: chain.description ?? chain.blockchain,
                 chain,
               }))

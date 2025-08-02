@@ -41,6 +41,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Prevent manually entering an invalid period
   validatePeriod({ period, url })
 
+  // Pass chain name directly to API calls
+  const chainName = chainParam && chainParam !== "all" 
+    ? chainParam 
+    : null
+
   try {
     const { appId, accountId } = params
     invariant(typeof appId === "string", "AppId must be a set url parameter")
@@ -52,7 +57,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       portalClient: portal,
       byHour: byHourPeriods.includes(period),
       applicationIDs: [appId],
-      ...(chainParam && chainParam !== "all" && { chainIDs: [chainParam] }),
+      ...(chainName && { chainIDs: [chainName] }),
     })
 
     const getTotalRelaysResponse = await getTotalRelays({
@@ -60,7 +65,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       accountId,
       portalClient: portal,
       applicationIDs: [appId],
-      ...(chainParam && chainParam !== "all" && { chainIDs: [chainParam] }),
+      ...(chainName && { chainIDs: [chainName] }),
     })
 
     const getRealtimeDataChainsResponse = await getRealtimeDataChains({
