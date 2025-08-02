@@ -167,6 +167,64 @@ export const getAppWebSocketUrl = (
   return `wss://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
 }
 
+// Blockchain name to hex chainID mapping
+// Maps blockchain names to hex chainIDs for API filtering
+export const BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID: KeyValuePair<string> = {
+  "arb-one": "F001",
+  "arb-sepolia-testnet": "F002", 
+  "avax": "F003",
+  "avax-dfk": "F004",
+  "base": "F005",
+  "base-sepolia-testnet": "F006",
+  "bera": "F035",
+  "bitcoin": "F007",
+  "blast": "F008",
+  "boba": "F009",
+  "bsc": "F00A",
+  "celo": "F00B",
+  "eth": "F00C",
+  "eth-holesky-testnet": "F00D",
+  "eth-sepolia-testnet": "F00E",
+  "evmos": "F00F",
+  "fantom": "F010",
+  "fraxtal": "F011",
+  "fuse": "F012",
+  "gnosis": "F013",
+  "harmony": "F014",
+  "ink": "F032",
+  "iotex": "F015",
+  "kaia": "F016",
+  "kava": "F017",
+  "linea": "F030",
+  "mantle": "F033",
+  "metis": "F018",
+  "moonbeam": "F019",
+  "moonriver": "F01A",
+  "near": "F01B",
+  "oasys": "F01C",
+  "op": "F01F",
+  "op-sepolia-testnet": "F01D",
+  "opbnb": "F01E",
+  "osmosis": "F020",
+  "pocket": "F000",
+  "poly": "F021",
+  "poly-amoy-testnet": "F022",
+  "poly-zkevm": "F029",
+  "radix": "F023",
+  "scroll": "F024",
+  "sei": "F034",
+  "solana": "F025",
+  "sonic": "F02D",
+  "sui": "F026",
+  "taiko": "F027",
+  "taiko-hekla-testnet": "F028",
+  "tron": "F02E",
+  "xrplevm": "1234",
+  "xrplevm-testnet": "F02C",
+  "zklink-nova": "F02A",
+  "zksync-era": "F02B",
+}
+
 export const getChainName = ({
   chainId,
   chains,
@@ -179,4 +237,38 @@ export const getChainName = ({
   }
   const chain = chains.find((chain) => chain.id === chainId)
   return chain?.blockchain ?? chainId
+}
+
+// Helper function to match legacy chainID format with blockchain entries
+export const matchLegacyChainIdToBlockchain = (
+  legacyChainId: string | null | undefined,
+  blockchains: Blockchain[]
+): Blockchain | undefined => {
+  if (!legacyChainId) return undefined
+
+  // Try to find blockchain by matching hex chainID from legacy chainID
+  // First reverse lookup from hex chainID to blockchain name
+  const hexChainId = Object.keys(BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID).find(
+    (blockchainName) => BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID[blockchainName] === legacyChainId
+  )
+  
+  if (hexChainId) {
+    return blockchains.find((chain) => chain.blockchain === hexChainId)
+  }
+
+  // Fallback: try direct blockchain name match
+  return blockchains.find((chain) => chain.blockchain === legacyChainId)
+}
+
+// Helper function to convert blockchain name to hex chainID for API calls
+export const blockchainNameToHexChainId = (blockchainName: string): string => {
+  // Direct lookup in the mapping
+  const hexChainId = BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID[blockchainName]
+  
+  if (hexChainId) {
+    return hexChainId
+  }
+  
+  // Fallback: return the blockchain name as-is if not found in mapping
+  return blockchainName
 }

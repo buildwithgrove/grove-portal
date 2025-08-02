@@ -60,6 +60,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Prevent manually entering an invalid period
   validatePeriod({ period, url })
 
+  // Pass chain name directly to API calls
+  const chainName = chainParam && chainParam !== "all" 
+    ? chainParam 
+    : null
+
   try {
     const { accountId } = params
     invariant(typeof accountId === "string", "AccountId must be a set url parameter")
@@ -70,7 +75,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       portalClient: portal,
       byHour: byHourPeriods.includes(period),
       ...(appParam && appParam !== "all" && { applicationIDs: [appParam] }),
-      ...(chainParam && chainParam !== "all" && { chainIDs: [chainParam] }),
+      ...(chainName && { chainIDs: [chainName] }),
     })
 
     const csv = toCsvSync(getAggregateRelaysResponse, csvOptions)
