@@ -1,12 +1,13 @@
-import { ActionIcon, Burger, Flex, useMantineColorScheme } from "@mantine/core"
+import { ActionIcon, Burger, Button, Flex, useMantineColorScheme } from "@mantine/core"
 import { useFetcher } from "@remix-run/react"
-import { Contrast } from "lucide-react"
+import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
 import React from "react"
 import AccountDrawer from "~/components/AccountDrawer"
 import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
 import { Account, User } from "~/models/portal/sdk"
 import { ColorScheme } from "~/root"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
+import { DISCORD_PATH, DOCS_PATH } from "~/utils/utils"
 
 type HeaderProps = {
   user?: User
@@ -34,10 +35,11 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
 
   return (
     <Flex align="center" gap="sm" h="100%" justify="flex-end" px="md" py={40}>
-      <Burger
+      <ActionIcon
         hiddenFrom="sm"
-        opened={opened}
-        size="sm"
+        variant="filled"
+        color="green"
+        size={40}
         onClick={() => {
           toggle()
           trackEvent({
@@ -46,16 +48,62 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
             label: `${opened ? "Close" : "Open"} menu`,
           })
         }}
-      />
+        styles={{
+          root: {
+            color: 'white',
+          }
+        }}
+      >
+        <Burger opened={opened} size="sm" />
+      </ActionIcon>
+      <Button
+        component="a"
+        href={DOCS_PATH}
+        target="_blank"
+        rel="noreferrer"
+        variant="filled"
+        color="green"
+        size="sm"
+        leftSection={<BookOpen size={16} />}
+        styles={{
+          root: {
+            color: 'white',
+          }
+        }}
+      >
+        Docs
+      </Button>
+      <Button
+        component="a"
+        href={DISCORD_PATH}
+        target="_blank"
+        rel="noreferrer"
+        variant="filled"
+        color="green"
+        size="sm"
+        leftSection={<LifeBuoy size={16} />}
+        styles={{
+          root: {
+            color: 'white',
+          }
+        }}
+      >
+        Support
+      </Button>
       <ActionIcon
         aria-label="toggle color scheme"
-        color="dark"
-        radius="xl"
+        variant="filled"
+        color="green"
         size={40}
-        variant="outline"
+        radius="xl"
         onClick={handleColorSchemeToggle}
+        styles={{
+          root: {
+            color: 'white',
+          }
+        }}
       >
-        <Contrast size={20} />
+        <Contrast size={16} />
       </ActionIcon>
       {user && (
         <NovuNotificationPopover
@@ -63,7 +111,6 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
           subscriberId={user.portalUserID}
         />
       )}
-      <AccountDrawer user={user} />
     </Flex>
   )
 }
