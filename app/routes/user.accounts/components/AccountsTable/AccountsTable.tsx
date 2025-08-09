@@ -98,7 +98,7 @@ const AccountsTable = ({ accounts, pendingAccounts, user }: AccountsTableProps) 
               <Text
                 c={
                   account.accepted
-                    ? "var(--mantine-color-green-6)"
+                    ? "var(--mantine-color-green-7)"
                     : "var(--mantine-color-yellow-7)"
                 }
               >

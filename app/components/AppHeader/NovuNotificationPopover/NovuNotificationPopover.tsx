@@ -68,7 +68,7 @@ export const NovuNotificationPopover = ({
                   ? { backgroundColor: theme.colors.dark[7] }
                   : {}),
                 borderLeft: "4px solid",
-                borderLeftColor: theme.colors.green[6],
+                borderLeftColor: theme.colors.green[7],
               },
               unseenBadge: {
                 background:
@@ -90,33 +90,34 @@ export const NovuNotificationPopover = ({
               aria-label={`${
                 unreadCount ? unreadCount : "No"
               } unread notifications. Click to open notifications popover.`}
-              variant="default"
-              color="gray"
               radius="xl"
               size={40}
               onClick={() => setIsOpen(!isOpen)}
               styles={(theme) => ({
                 root: {
-                  boxShadow: `inset 0 0 0 1px ${
-                    colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-                  }`,
-                  color:
-                    colorScheme === "dark" ? theme.colors.gray[2] : theme.colors.dark[6],
                   backgroundColor:
-                    colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
-                  padding: "15px",
-                  backgroundClip: "content-box",
-
+                    colorScheme === "dark"
+                      ? theme.colors.green[7]
+                      : theme.colors.green[7],
+                  color: "white",
+                  borderRadius: "50%",
+                  border: "none",
                   "&:hover": {
                     backgroundColor:
                       colorScheme === "dark"
-                        ? theme.colors.dark[6]
-                        : theme.colors.gray[0],
+                        ? theme.colors.green[7]
+                        : theme.colors.green[7],
+                  },
+                  "&:active": {
+                    backgroundColor:
+                      colorScheme === "dark"
+                        ? theme.colors.green[7]
+                        : theme.colors.green[7],
                   },
                 },
               })}
             >
-              <Bell size={18} />
+              <Bell size={16} />
             </ActionIcon>
           </Indicator>
         )}

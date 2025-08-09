@@ -76,7 +76,7 @@ const TeamMembersTable = ({ account, userRole, user }: TeamMembersTableProps) =>
                   roleName === RoleName.Owner
                     ? "var(--text-color)"
                     : accepted
-                    ? "var(--mantine-color-green-6)"
+                    ? "var(--mantine-color-green-7)"
                     : "var(--mantine-color-yellow-7)"
                 }
               >

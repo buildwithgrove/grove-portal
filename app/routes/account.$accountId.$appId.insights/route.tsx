@@ -42,9 +42,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   validatePeriod({ period, url })
 
   // Pass chain name directly to API calls
-  const chainName = chainParam && chainParam !== "all" 
-    ? chainParam 
-    : null
+  const chainName = chainParam && chainParam !== "all" ? chainParam : null
 
   try {
     const { appId, accountId } = params

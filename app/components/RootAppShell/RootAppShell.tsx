@@ -43,6 +43,7 @@ export const RootAppShell = ({
           accounts={accounts}
           toggle={toggle}
           userRole={userRole}
+          user={user}
         />
       )}
       <AppShell.Main>

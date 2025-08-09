@@ -21,7 +21,7 @@ function MembersView({ account, userRole, user }: TeamViewProps) {
     <Box>
       <Flex align="center" justify="flex-end" my="xl">
         {userRole !== RoleName.Member && (
-          <Button size="md" onClick={openInviteMemberModal}>
+          <Button size="md" color="green.7" onClick={openInviteMemberModal}>
             Invite new member
           </Button>
         )}

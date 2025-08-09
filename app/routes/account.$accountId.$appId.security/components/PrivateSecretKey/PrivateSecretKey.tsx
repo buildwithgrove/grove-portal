@@ -26,6 +26,7 @@ const PrivateSecretKey = ({ secretKeyRequired, readOnly }: PrivateSecretKeyProps
         <Switch
           aria-label="Private Secret Key Required"
           checked={checked}
+          color="green.7"
           disabled={readOnly}
           id="secretRequired"
           onChange={(event) => {

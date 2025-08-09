@@ -22,6 +22,18 @@
   color: var(--mantine-color-text);
 }
 
+/* Force hamburger menu to always have white burger lines */
+.mantine-ActionIcon-root[data-mantine-color-scheme="dark"] .mantine-Burger-burger,
+[data-mantine-color-scheme="light"] .mantine-ActionIcon-root .mantine-Burger-burger {
+  background-color: white !important;
+}
+.mantine-ActionIcon-root[data-mantine-color-scheme="dark"] .mantine-Burger-burger::before,
+.mantine-ActionIcon-root[data-mantine-color-scheme="dark"] .mantine-Burger-burger::after,
+[data-mantine-color-scheme="light"] .mantine-ActionIcon-root .mantine-Burger-burger::before,
+[data-mantine-color-scheme="light"] .mantine-ActionIcon-root .mantine-Burger-burger::after {
+  background-color: white !important;
+}
+
 .mantine-TextInput-input[readonly],
 .mantine-PasswordInput-input:has(> input[readonly]) {
   background-color: var(--app-secondary-bg-color) !important;

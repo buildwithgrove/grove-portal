@@ -86,6 +86,7 @@ export default function UnlimitedPlanOverviewCard({
                 <Grid.Col span={{ base: 6, md: 4 }}>
                   <Button
                     fullWidth
+                    color="green.7"
                     rightSection={<ArrowUpRight size={18} />}
                     type="submit"
                     onClick={() => {

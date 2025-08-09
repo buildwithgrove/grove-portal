@@ -58,7 +58,7 @@ const LogsTable = ({ logs, meta, blockchains }: LogsTableProps) => {
             },
             status: {
               element: (
-                <Text c={log.isError ? "red" : "green"} fz={12}>
+                <Text c={log.isError ? "red" : "green.7"} fz={12}>
                   {log.isError ? "Error" : "Success"}
                 </Text>
               ),

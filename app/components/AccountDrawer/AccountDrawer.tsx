@@ -52,16 +52,6 @@ const DrawerLink = ({ setIsDrawerOpen, external, ...props }: DrawerLinkProps) =>
 
 const drawerExternalLinks = [
   {
-    label: "Documentation",
-    to: DOCS_PATH,
-    icon: <BookOpen size={18} />,
-  },
-  {
-    label: "Support",
-    to: DISCORD_PATH,
-    icon: <LifeBuoy size={18} />,
-  },
-  {
     label: "Feedback",
     to: DISCORD_PATH,
     icon: <Smile size={18} />,
@@ -115,19 +105,6 @@ const AccountDrawer = ({ user }: AccountDrawerProps) => {
         onClose={() => setIsDrawerOpen(false)}
       >
         <Stack gap={0}>
-          <DrawerLink
-            label="My Profile"
-            leftSection={<User size={18} />}
-            setIsDrawerOpen={setIsDrawerOpen}
-            to="/user"
-          />
-          <DrawerLink
-            label="My Accounts"
-            leftSection={<TowerControl size={18} />}
-            setIsDrawerOpen={setIsDrawerOpen}
-            to={`/user/accounts`}
-          />
-          <Divider my={8} />
           {drawerExternalLinks.map(({ label, to, icon, withDivider }, index) => (
             <React.Fragment key={`${label}-${index}`}>
               <DrawerLink
@@ -140,14 +117,6 @@ const AccountDrawer = ({ user }: AccountDrawerProps) => {
               {withDivider && <Divider my={8} />}
             </React.Fragment>
           ))}
-          {}
-          <NavLink
-            aria-label="Sign out"
-            className={classes.drawerLink}
-            label="Sign out"
-            p={8}
-            onClick={logout}
-          />
         </Stack>
       </Drawer>
       <UnstyledButton onClick={() => setIsDrawerOpen(true)}>
