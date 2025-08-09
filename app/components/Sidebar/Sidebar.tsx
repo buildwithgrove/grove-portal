@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   AppShell,
   Box,
   Burger,
@@ -10,7 +11,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core"
 import { Link, useParams, useFetcher } from "@remix-run/react"
-import { Plus, User, TowerControl, LogOut } from "lucide-react"
+import { Plus, User, TowerControl, LogOut, X } from "lucide-react"
 import React, { useMemo, useState } from "react"
 import AccountSelect from "~/components/AccountSelect"
 import GroveLogo from "~/components/GroveLogo"
@@ -107,17 +108,23 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
   }
 
   return (
-    <AppShell.Navbar p={8} pt={18} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <AppShell.Navbar
+      p={8}
+      pt={18}
+      style={{ display: "flex", flexDirection: "column", height: "100%" }}
+    >
       <Stack gap="md" style={{ flex: 1 }}>
-        <Group>
-          <Burger
-            opened
-            hiddenFrom="sm"
-            size="sm"
-            onClick={() => {
-              toggle()
-            }}
-          />
+        {/* MOBILE CLOSE BUTTON */}
+        <Group justify="flex-end" hiddenFrom="sm">
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            size="lg"
+            onClick={toggle}
+            aria-label="Close sidebar"
+          >
+            <X size={18} />
+          </ActionIcon>
         </Group>
 
         {/* ACCOUNT HEADER */}
@@ -127,18 +134,23 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
             py={6}
             mx={-8}
             style={{
-              backgroundColor: colorScheme === 'dark' 
-                ? 'var(--mantine-color-dark-6)'
-                : 'var(--mantine-color-gray-1)',
-              borderLeft: '3px solid var(--mantine-color-green-7)',
-              borderBottom: '1px solid var(--mantine-color-gray-3)',
+              backgroundColor:
+                colorScheme === "dark"
+                  ? "var(--mantine-color-dark-6)"
+                  : "var(--mantine-color-gray-1)",
+              borderLeft: "3px solid var(--mantine-color-green-7)",
+              borderBottom: "1px solid var(--mantine-color-gray-3)",
             }}
           >
-            <Text size="xs" fw={600} style={{ 
-              color: 'var(--mantine-color-green-7)',
-              letterSpacing: '0.05em',
-              marginBottom: '2px'
-            }}>
+            <Text
+              size="xs"
+              fw={600}
+              style={{
+                color: "var(--mantine-color-green-7)",
+                letterSpacing: "0.05em",
+                marginBottom: "2px",
+              }}
+            >
               Account
             </Text>
           </Box>
@@ -159,18 +171,23 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
             py={6}
             mx={-8}
             style={{
-              backgroundColor: colorScheme === 'dark' 
-                ? 'var(--mantine-color-dark-6)'
-                : 'var(--mantine-color-gray-1)',
-              borderLeft: '3px solid var(--mantine-color-green-7)',
-              borderBottom: '1px solid var(--mantine-color-gray-3)',
+              backgroundColor:
+                colorScheme === "dark"
+                  ? "var(--mantine-color-dark-6)"
+                  : "var(--mantine-color-gray-1)",
+              borderLeft: "3px solid var(--mantine-color-green-7)",
+              borderBottom: "1px solid var(--mantine-color-gray-3)",
             }}
           >
-            <Text size="xs" fw={600} style={{ 
-              color: 'var(--mantine-color-green-7)',
-              letterSpacing: '0.05em',
-              marginBottom: '2px'
-            }}>
+            <Text
+              size="xs"
+              fw={600}
+              style={{
+                color: "var(--mantine-color-green-7)",
+                letterSpacing: "0.05em",
+                marginBottom: "2px",
+              }}
+            >
               Applications
             </Text>
           </Box>
@@ -198,18 +215,23 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
             py={6}
             mx={-8}
             style={{
-              backgroundColor: colorScheme === 'dark' 
-                ? 'var(--mantine-color-dark-6)'
-                : 'var(--mantine-color-gray-1)',
-              borderLeft: '3px solid var(--mantine-color-green-7)',
-              borderBottom: '1px solid var(--mantine-color-gray-3)',
+              backgroundColor:
+                colorScheme === "dark"
+                  ? "var(--mantine-color-dark-6)"
+                  : "var(--mantine-color-gray-1)",
+              borderLeft: "3px solid var(--mantine-color-green-7)",
+              borderBottom: "1px solid var(--mantine-color-gray-3)",
             }}
           >
-            <Text size="xs" fw={600} style={{ 
-              color: 'var(--mantine-color-green-7)',
-              letterSpacing: '0.05em',
-              marginBottom: '2px'
-            }}>
+            <Text
+              size="xs"
+              fw={600}
+              style={{
+                color: "var(--mantine-color-green-7)",
+                letterSpacing: "0.05em",
+                marginBottom: "2px",
+              }}
+            >
               User
             </Text>
           </Box>
@@ -261,7 +283,7 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
           </Stack>
         </Stack>
       </Stack>
-      
+
       <Box ml={10} mt="auto" pb={8}>
         <Link to={`/account/${accountId}`}>
           <GroveLogo />

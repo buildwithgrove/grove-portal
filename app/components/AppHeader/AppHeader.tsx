@@ -1,4 +1,4 @@
-import { ActionIcon, Burger, Button, Flex, useMantineColorScheme } from "@mantine/core"
+import { ActionIcon, Box, Burger, Button, Flex, MantineProvider, useMantineColorScheme } from "@mantine/core"
 import { useFetcher } from "@remix-run/react"
 import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
 import React from "react"
@@ -34,62 +34,115 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
   }
 
   return (
-    <Flex align="center" gap="sm" h="100%" justify="flex-end" px="md" py={40}>
-      <ActionIcon
-        hiddenFrom="sm"
-        variant="filled"
-        color={colorScheme === "dark" ? "green.7" : "green.7"}
-        size={40}
-        onClick={() => {
-          toggle()
-          trackEvent({
-            category: AnalyticCategories.user,
-            action: AnalyticActions.user_header_menu,
-            label: `${opened ? "Close" : "Open"} menu`,
-          })
-        }}
-        styles={{
-          root: {
-            color: "white",
-          },
-        }}
-      >
-        <Burger opened={opened} size="sm" />
-      </ActionIcon>
-      <Button
-        component="a"
-        href={DOCS_PATH}
-        target="_blank"
-        rel="noreferrer"
-        variant="filled"
-        color={colorScheme === "dark" ? "green.7" : "green.7"}
-        size="sm"
-        leftSection={<BookOpen size={16} />}
-        styles={{
-          root: {
-            color: "white",
-          },
-        }}
-      >
-        Docs
-      </Button>
-      <Button
-        component="a"
-        href={DISCORD_PATH}
-        target="_blank"
-        rel="noreferrer"
-        variant="filled"
-        color={colorScheme === "dark" ? "green.7" : "green.7"}
-        size="sm"
-        leftSection={<LifeBuoy size={16} />}
-        styles={{
-          root: {
-            color: "white",
-          },
-        }}
-      >
-        Support
-      </Button>
+    <Flex align="center" h="100%" justify="space-between" px="md" py={40}>
+      {/* Left side - Hamburger menu (mobile only) */}
+      <Box>
+        <MantineProvider forceColorScheme="dark">
+          <ActionIcon
+            hiddenFrom="sm"
+            variant="filled"
+            color="green.7"
+            size={40}
+            onClick={() => {
+              toggle()
+              trackEvent({
+                category: AnalyticCategories.user,
+                action: AnalyticActions.user_header_menu,
+                label: `${opened ? "Close" : "Open"} menu`,
+              })
+            }}
+            styles={{
+              root: {
+                color: "white",
+              },
+            }}
+          >
+            <Burger opened={opened} size="sm" />
+          </ActionIcon>
+        </MantineProvider>
+      </Box>
+      
+      {/* Right side - Navigation buttons */}
+      <Flex align="center" gap="sm">
+      {/* Mobile: Circular ActionIcon, Desktop: Button with text */}
+      <Box hiddenFrom="sm">
+        <ActionIcon
+          component="a"
+          href={DOCS_PATH}
+          target="_blank"
+          rel="noreferrer"
+          variant="filled"
+          color="green.7"
+          size={40}
+          radius="xl"
+          styles={{
+            root: {
+              color: "white",
+            },
+          }}
+        >
+          <BookOpen size={16} />
+        </ActionIcon>
+      </Box>
+      <Box visibleFrom="sm">
+        <Button
+          component="a"
+          href={DOCS_PATH}
+          target="_blank"
+          rel="noreferrer"
+          variant="filled"
+          color="green.7"
+          size="sm"
+          leftSection={<BookOpen size={16} />}
+          styles={{
+            root: {
+              color: "white",
+            },
+          }}
+        >
+          Docs
+        </Button>
+      </Box>
+
+      {/* Mobile: Circular ActionIcon, Desktop: Button with text */}
+      <Box hiddenFrom="sm">
+        <ActionIcon
+          component="a"
+          href={DISCORD_PATH}
+          target="_blank"
+          rel="noreferrer"
+          variant="filled"
+          color="green.7"
+          size={40}
+          radius="xl"
+          styles={{
+            root: {
+              color: "white",
+            },
+          }}
+        >
+          <LifeBuoy size={16} />
+        </ActionIcon>
+      </Box>
+      <Box visibleFrom="sm">
+        <Button
+          component="a"
+          href={DISCORD_PATH}
+          target="_blank"
+          rel="noreferrer"
+          variant="filled"
+          color="green.7"
+          size="sm"
+          leftSection={<LifeBuoy size={16} />}
+          styles={{
+            root: {
+              color: "white",
+            },
+          }}
+        >
+          Support
+        </Button>
+      </Box>
       <ActionIcon
         aria-label="toggle color scheme"
         variant="filled"
@@ -111,6 +164,7 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
           subscriberId={user.portalUserID}
         />
       )}
+      </Flex>
     </Flex>
   )
 }
