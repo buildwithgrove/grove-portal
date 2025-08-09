@@ -38,7 +38,7 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
       <ActionIcon
         hiddenFrom="sm"
         variant="filled"
-        color="green"
+        color={colorScheme === "dark" ? "green.7" : "green.7"}
         size={40}
         onClick={() => {
           toggle()
@@ -50,8 +50,8 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
         }}
         styles={{
           root: {
-            color: 'white',
-          }
+            color: "white",
+          },
         }}
       >
         <Burger opened={opened} size="sm" />
@@ -62,13 +62,13 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
         target="_blank"
         rel="noreferrer"
         variant="filled"
-        color="green"
+        color={colorScheme === "dark" ? "green.7" : "green.7"}
         size="sm"
         leftSection={<BookOpen size={16} />}
         styles={{
           root: {
-            color: 'white',
-          }
+            color: "white",
+          },
         }}
       >
         Docs
@@ -79,13 +79,13 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
         target="_blank"
         rel="noreferrer"
         variant="filled"
-        color="green"
+        color={colorScheme === "dark" ? "green.7" : "green.7"}
         size="sm"
         leftSection={<LifeBuoy size={16} />}
         styles={{
           root: {
-            color: 'white',
-          }
+            color: "white",
+          },
         }}
       >
         Support
@@ -93,14 +93,14 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
       <ActionIcon
         aria-label="toggle color scheme"
         variant="filled"
-        color="green"
+        color={colorScheme === "dark" ? "green.7" : "green.7"}
         size={40}
         radius="xl"
         onClick={handleColorSchemeToggle}
         styles={{
           root: {
-            color: 'white',
-          }
+            color: "white",
+          },
         }}
       >
         <Contrast size={16} />

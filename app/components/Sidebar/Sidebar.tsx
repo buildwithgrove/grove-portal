@@ -1,4 +1,14 @@
-import { AppShell, Box, Burger, Divider, Group, ScrollArea, Text, Stack } from "@mantine/core"
+import {
+  AppShell,
+  Box,
+  Burger,
+  Divider,
+  Group,
+  ScrollArea,
+  Text,
+  Stack,
+  useMantineColorScheme,
+} from "@mantine/core"
 import { Link, useParams, useFetcher } from "@remix-run/react"
 import { Plus, User, TowerControl, LogOut } from "lucide-react"
 import React, { useMemo, useState } from "react"
@@ -11,7 +21,13 @@ import {
   SidebarNavRoute,
   NavButton,
 } from "~/components/Sidebar/components"
-import { Account, PayPlanType, PortalApp, RoleName, User as UserType } from "~/models/portal/sdk"
+import {
+  Account,
+  PayPlanType,
+  PortalApp,
+  RoleName,
+  User as UserType,
+} from "~/models/portal/sdk"
 
 type SidebarProps = {
   account: Account
@@ -69,7 +85,8 @@ const getAccountRoutes = (
 export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarProps) => {
   const { accountId } = useParams()
   const logoutFetcher = useFetcher()
-  
+  const { colorScheme } = useMantineColorScheme()
+
   const accountRoutes = useMemo(() => {
     return getAccountRoutes(account, userRole)
   }, [account, userRole])
@@ -90,8 +107,8 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
   }
 
   return (
-    <AppShell.Navbar p={8} pt={18}>
-      <Stack gap="md">
+    <AppShell.Navbar p={8} pt={18} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Stack gap="md" style={{ flex: 1 }}>
         <Group>
           <Burger
             opened
@@ -102,55 +119,100 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
             }}
           />
         </Group>
-        
+
         {/* ACCOUNT HEADER */}
         <Stack gap="sm">
-          <Text size="sm" fw={600} c="green.6" pl={8}>
-            Account
-          </Text>
+          <Box
+            px={8}
+            py={6}
+            mx={-8}
+            style={{
+              backgroundColor: colorScheme === 'dark' 
+                ? 'var(--mantine-color-dark-6)'
+                : 'var(--mantine-color-gray-1)',
+              borderLeft: '3px solid var(--mantine-color-green-7)',
+              borderBottom: '1px solid var(--mantine-color-gray-3)',
+            }}
+          >
+            <Text size="xs" fw={600} style={{ 
+              color: 'var(--mantine-color-green-7)',
+              letterSpacing: '0.05em',
+              marginBottom: '2px'
+            }}>
+              Account
+            </Text>
+          </Box>
           <AccountSelect accounts={accounts} />
         </Stack>
-      </Stack>
-      
-      <ScrollArea h="100%" mt="lg">
+
         {/* ACCOUNT SECTION */}
-        <AppShell.Section>
+        <Stack gap={0}>
           {accountRoutes.map((route, index) => (
             <InternalLink key={`${route.label}-${index}`} route={route} />
           ))}
-        </AppShell.Section>
-
-        <Divider my="lg" />
+        </Stack>
 
         {/* APPLICATIONS SECTION */}
-        <AppShell.Section>
-          <Text size="sm" fw={600} c="green.6" mb="sm" ml={8}>
-            Applications
-          </Text>
-          <Box>
-            {apps && <SidebarApps apps={apps as PortalApp[]} />}
-            {canCreateApps && (
-              <Box mt="xs">
-                <InternalLink
-                  route={{
-                    to: `/account/${accountId}/create`,
-                    label: "New Application",
-                    icon: Plus,
-                    end: true,
-                  }}
-                />
-              </Box>
-            )}
+        <Stack gap="sm" mt="lg">
+          <Box
+            px={8}
+            py={6}
+            mx={-8}
+            style={{
+              backgroundColor: colorScheme === 'dark' 
+                ? 'var(--mantine-color-dark-6)'
+                : 'var(--mantine-color-gray-1)',
+              borderLeft: '3px solid var(--mantine-color-green-7)',
+              borderBottom: '1px solid var(--mantine-color-gray-3)',
+            }}
+          >
+            <Text size="xs" fw={600} style={{ 
+              color: 'var(--mantine-color-green-7)',
+              letterSpacing: '0.05em',
+              marginBottom: '2px'
+            }}>
+              Applications
+            </Text>
           </Box>
-        </AppShell.Section>
-
-        <Divider my="lg" />
+          <ScrollArea mah="300px" h="auto">
+            {apps && <SidebarApps apps={apps as PortalApp[]} />}
+          </ScrollArea>
+          {canCreateApps && (
+            <Box mt="xs">
+              <InternalLink
+                route={{
+                  to: `/account/${accountId}/create`,
+                  label: "New Application",
+                  icon: Plus,
+                  end: true,
+                }}
+              />
+            </Box>
+          )}
+        </Stack>
 
         {/* USER SECTION */}
-        <AppShell.Section>
-          <Text size="sm" fw={600} c="green.6" mb="sm" ml={8}>
-            User
-          </Text>
+        <Stack gap="sm" mt="lg">
+          <Box
+            px={8}
+            py={6}
+            mx={-8}
+            style={{
+              backgroundColor: colorScheme === 'dark' 
+                ? 'var(--mantine-color-dark-6)'
+                : 'var(--mantine-color-gray-1)',
+              borderLeft: '3px solid var(--mantine-color-green-7)',
+              borderBottom: '1px solid var(--mantine-color-gray-3)',
+            }}
+          >
+            <Text size="xs" fw={600} style={{ 
+              color: 'var(--mantine-color-green-7)',
+              letterSpacing: '0.05em',
+              marginBottom: '2px'
+            }}>
+              User
+            </Text>
+          </Box>
           <Stack gap={0}>
             <Box p={8} mb="xs">
               <Group gap="xs" align="center">
@@ -158,25 +220,25 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
                   style={{
                     width: 32,
                     height: 32,
-                    borderRadius: '4px',
-                    backgroundColor: 'var(--mantine-color-blue-6)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '12px',
+                    borderRadius: "4px",
+                    backgroundColor: "var(--mantine-color-blue-6)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "12px",
                     fontWeight: 600,
-                    flexShrink: 0
+                    flexShrink: 0,
                   }}
                 >
-                  {user?.email?.charAt(0).toUpperCase() || 'U'}
+                  {user?.email?.charAt(0).toUpperCase() || "U"}
                 </Box>
                 <Stack gap={2} flex={1} style={{ minWidth: 0 }}>
                   <Text size="sm" fw={500} truncate>
-                    {user?.email?.split('@')[0] || 'User'}
+                    {user?.email?.split("@")[0] || "User"}
                   </Text>
                   <Text size="xs" c="dimmed" truncate>
-                    {user?.email || 'No email'}
+                    {user?.email || "No email"}
                   </Text>
                 </Stack>
               </Group>
@@ -195,15 +257,12 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
                 icon: TowerControl,
               }}
             />
-            <NavButton
-              icon={LogOut}
-              label="Sign Out"
-              onClick={logout}
-            />
+            <NavButton icon={LogOut} label="Sign Out" onClick={logout} />
           </Stack>
-        </AppShell.Section>
-      </ScrollArea>
-      <Box ml={10}>
+        </Stack>
+      </Stack>
+      
+      <Box ml={10} mt="auto" pb={8}>
         <Link to={`/account/${accountId}`}>
           <GroveLogo />
         </Link>

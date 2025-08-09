@@ -139,7 +139,7 @@ const ChainSandboxInputs = ({
         </Group>
 
         <Group gap="sm">
-          <Button loading={isLoading} radius={4} size="sm" onClick={onSendRequest}>
+          <Button loading={isLoading} radius={4} size="sm" color="green.7" onClick={onSendRequest}>
             Send Request
           </Button>
           {selectedChain && (

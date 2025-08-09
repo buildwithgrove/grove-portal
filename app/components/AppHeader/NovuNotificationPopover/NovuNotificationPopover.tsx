@@ -68,7 +68,7 @@ export const NovuNotificationPopover = ({
                   ? { backgroundColor: theme.colors.dark[7] }
                   : {}),
                 borderLeft: "4px solid",
-                borderLeftColor: theme.colors.green[6],
+                borderLeftColor: theme.colors.green[7],
               },
               unseenBadge: {
                 background:
@@ -95,17 +95,26 @@ export const NovuNotificationPopover = ({
               onClick={() => setIsOpen(!isOpen)}
               styles={(theme) => ({
                 root: {
-                  backgroundColor: colorScheme === "dark" ? theme.colors.green[7] : theme.colors.green[6],
-                  color: 'white',
-                  borderRadius: '50%',
-                  border: 'none',
-                  '&:hover': {
-                    backgroundColor: colorScheme === "dark" ? theme.colors.green[8] : theme.colors.green[7],
+                  backgroundColor:
+                    colorScheme === "dark"
+                      ? theme.colors.green[7]
+                      : theme.colors.green[7],
+                  color: "white",
+                  borderRadius: "50%",
+                  border: "none",
+                  "&:hover": {
+                    backgroundColor:
+                      colorScheme === "dark"
+                        ? theme.colors.green[7]
+                        : theme.colors.green[7],
                   },
-                  '&:active': {
-                    backgroundColor: theme.colors.green[9],
-                  }
-                }
+                  "&:active": {
+                    backgroundColor:
+                      colorScheme === "dark"
+                        ? theme.colors.green[7]
+                        : theme.colors.green[7],
+                  },
+                },
               })}
             >
               <Bell size={16} />

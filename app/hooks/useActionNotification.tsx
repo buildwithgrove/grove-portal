@@ -12,7 +12,7 @@ const useActionNotification = (data: ActionNotificationData) => {
     if (data.message) {
       notifications.show({
         icon: data.error ? <X size={18} /> : <Check size={18} />,
-        color: data.error ? "red" : "green",
+        color: data.error ? "red" : "green.7",
         message: data.message,
       })
     }

@@ -89,7 +89,7 @@ export const AccountPlan = ({
         </Button>
       )}
       {isUnlimited && (
-        <Button fullWidth radius="xl" onClick={onContinue}>
+        <Button fullWidth radius="xl" color="green.7" onClick={onContinue}>
           Continue with Unlimited
         </Button>
       )}

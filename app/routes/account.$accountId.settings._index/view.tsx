@@ -97,7 +97,7 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
             {({ copied, copy }) => (
               <Tooltip withArrow label={copied ? "Copied" : "Copy"}>
                 <Badge
-                  color={copied ? "green" : "gray"}
+                  color={copied ? "green.7" : "gray"}
                   data-outline-exclude={copied ? "true" : "false"}
                   px={6}
                   radius="sm"
