@@ -40,6 +40,9 @@ jobs:
 
       - name: Run unit tests
         run: make portal_test
+        env:
+          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
 
       - name: Build application for E2E
         run: pnpm run build
