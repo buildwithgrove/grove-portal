@@ -49,7 +49,7 @@ todos: ## Show all TODO items in the codebase
 
 .PHONY: check_deps_all
 # Internal helper target - ensure everything is installed
-check_deps_all: check_version_pnpm check_version_node check_version_stripe
+check_deps_all: check_version_pnpm check_version_node # check_version_stripe
 
 .PHONY: check_version_pnpm
 # Internal helper target - check pnpm version
