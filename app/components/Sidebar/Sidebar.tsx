@@ -87,7 +87,7 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
   const { accountId } = useParams()
   const logoutFetcher = useFetcher()
   const { colorScheme: mantineColorScheme } = useMantineColorScheme()
-  
+
   // Ensure color scheme is always defined to prevent render issues
   const colorScheme = mantineColorScheme || "light"
 

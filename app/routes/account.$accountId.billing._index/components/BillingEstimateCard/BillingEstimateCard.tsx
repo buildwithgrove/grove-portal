@@ -13,11 +13,11 @@ export type BillingEstimateCardProps = {
   isLoading?: boolean
 }
 
-export const BillingEstimateCard = ({ 
-  totalRelays, 
-  subscription, 
-  upcomingInvoice, 
-  isLoading = false 
+export const BillingEstimateCard = ({
+  totalRelays,
+  subscription,
+  upcomingInvoice,
+  isLoading = false,
 }: BillingEstimateCardProps) => {
   // Get real pricing data from subscription or use fallback
   const getUnitPrice = () => {
@@ -37,10 +37,15 @@ export const BillingEstimateCard = ({
   // Apply any discounts from subscription or upcoming invoice
   let discountAmount = 0
   let discountText = ""
-  
+
   if (upcomingInvoice?.discounts && upcomingInvoice.discounts.length > 0) {
     const discount = upcomingInvoice.discounts[0]
-    if (typeof discount === 'object' && discount && 'coupon' in discount && discount.coupon) {
+    if (
+      typeof discount === "object" &&
+      discount &&
+      "coupon" in discount &&
+      discount.coupon
+    ) {
       if (discount.coupon.percent_off) {
         discountAmount = (estimatedCost * discount.coupon.percent_off) / 100
         discountText = `${discount.coupon.percent_off}% discount applied`
@@ -51,13 +56,20 @@ export const BillingEstimateCard = ({
     }
   } else if (subscription?.discounts && subscription.discounts.length > 0) {
     const subscriptionDiscount = subscription.discounts[0]
-    if (typeof subscriptionDiscount === 'object' && subscriptionDiscount && 'coupon' in subscriptionDiscount && subscriptionDiscount.coupon) {
+    if (
+      typeof subscriptionDiscount === "object" &&
+      subscriptionDiscount &&
+      "coupon" in subscriptionDiscount &&
+      subscriptionDiscount.coupon
+    ) {
       if (subscriptionDiscount.coupon.percent_off) {
         discountAmount = (estimatedCost * subscriptionDiscount.coupon.percent_off) / 100
         discountText = `${subscriptionDiscount.coupon.percent_off}% discount applied`
       } else if (subscriptionDiscount.coupon.amount_off) {
         discountAmount = subscriptionDiscount.coupon.amount_off / 100 // Convert cents to dollars
-        discountText = `$${getStripeAmount(subscriptionDiscount.coupon.amount_off)} discount applied`
+        discountText = `$${getStripeAmount(
+          subscriptionDiscount.coupon.amount_off,
+        )} discount applied`
       }
     }
   }
@@ -68,7 +80,11 @@ export const BillingEstimateCard = ({
   const getNextBillingDate = () => {
     if (upcomingInvoice?.period_end) {
       return formatStripeDate(upcomingInvoice.period_end, "Do MMM")
-    } else if (subscription && 'current_period_end' in subscription && subscription.current_period_end) {
+    } else if (
+      subscription &&
+      "current_period_end" in subscription &&
+      subscription.current_period_end
+    ) {
       return formatStripeDate(subscription.current_period_end as number, "Do MMM")
     } else {
       return `1st ${dayjs().add(1, "month").format("MMM")}`
@@ -78,9 +94,7 @@ export const BillingEstimateCard = ({
   const currentMonth = dayjs().format("MMMM")
   const nextBillingDate = getNextBillingDate()
 
-  const headerComponent = () => (
-    <Title order={4}>{currentMonth} Billing Estimate</Title>
-  )
+  const headerComponent = () => <Title order={4}>{currentMonth} Billing Estimate</Title>
 
   return (
     <TitledCard header={headerComponent}>
@@ -92,31 +106,24 @@ export const BillingEstimateCard = ({
             value={isLoading ? 0 : finalCost}
           />
         </Title>
-        
+
         <Text c="dimmed" size="sm">
-          Based on {new Intl.NumberFormat().format(totalRelays)} relays this month
-          ({units} units × ${unitPrice}/unit)
+          Based on {new Intl.NumberFormat().format(totalRelays)} relays this month (
+          {units} units × ${unitPrice}/unit)
         </Text>
-        
+
         {discountText && (
           <Text c="green" size="sm" fw={500}>
             {discountText}
           </Text>
         )}
-        
-        <Text>
-          Your next invoice will be billed on {nextBillingDate}
-        </Text>
-        
-        <Alert
-          variant="light"
-          color="blue"
-          icon={<Info size="1rem" />}
-          mt="xs"
-        >
+
+        <Text>Your next invoice will be billed on {nextBillingDate}</Text>
+
+        <Alert variant="light" color="blue" icon={<Info size="1rem" />} mt="xs">
           <Text size="sm">
-            This is an estimate based on current usage from the first of the month to today. 
-            Actual billing may vary based on final usage and any applicable taxes.
+            This is an estimate based on current usage from the first of the month to
+            today. Actual billing may vary based on final usage and any applicable taxes.
           </Text>
         </Alert>
       </Stack>

@@ -29,8 +29,12 @@
 }
 .mantine-ActionIcon-root[data-mantine-color-scheme="dark"] .mantine-Burger-burger::before,
 .mantine-ActionIcon-root[data-mantine-color-scheme="dark"] .mantine-Burger-burger::after,
-[data-mantine-color-scheme="light"] .mantine-ActionIcon-root .mantine-Burger-burger::before,
-[data-mantine-color-scheme="light"] .mantine-ActionIcon-root .mantine-Burger-burger::after {
+[data-mantine-color-scheme="light"]
+  .mantine-ActionIcon-root
+  .mantine-Burger-burger::before,
+[data-mantine-color-scheme="light"]
+  .mantine-ActionIcon-root
+  .mantine-Burger-burger::after {
   background-color: white !important;
 }
 

@@ -22,8 +22,8 @@ export const AccountBillingView = ({
     <Stack gap={32}>
       <Title order={2}>Billing</Title>
 
-      <BillingEstimateCard 
-        totalRelays={currentMonthRelays} 
+      <BillingEstimateCard
+        totalRelays={currentMonthRelays}
         subscription={subscription}
         upcomingInvoice={upcomingInvoice}
       />

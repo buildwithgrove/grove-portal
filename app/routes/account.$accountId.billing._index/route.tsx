@@ -12,6 +12,8 @@ import { dayjs } from "~/utils/dayjs"
 import { getRequiredServerEnvVar } from "~/utils/environment"
 import { requireUser } from "~/utils/user.server"
 
+
+//TODO: Implement historical usage graphs and more insights about overall billing utilization
 export type AccountBillingLoaderData = {
   invoices: Stripe.Invoice[]
   currentMonthRelays: number
@@ -37,7 +39,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       getUserAccountStripeIdResponse.getUserAccount.integrations?.stripeSubscriptionID
     let invoices: Stripe.Invoice[] = []
     let upcomingInvoice: Stripe.UpcomingInvoice | undefined
-    
+
     if (accountStripeId) {
       const invoicesResponse = await stripe.invoices.list({
         subscription: String(accountStripeId),
@@ -60,7 +62,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     // Get current month relays for billing estimate
     const currentMonthStart = dayjs().utc().startOf("month").toDate()
     const now = dayjs().utc().toDate()
-    
+
     let currentMonthRelays = 0
     try {
       const relayStats = await getBillingPeriodRelays({
@@ -69,9 +71,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         accountId,
         portalClient: portal,
       })
-      
+
       // Sum total relays from all stats
-      currentMonthRelays = relayStats.reduce((total, stat) => total + (stat.totalCount || 0), 0)
+      currentMonthRelays = relayStats.reduce(
+        (total, stat) => total + (stat.totalCount || 0),
+        0,
+      )
     } catch (error) {
       console.warn("Could not fetch current month relay data:", error)
       currentMonthRelays = 0
@@ -89,8 +94,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 }
 export default function AccountBilling() {
-  const { userRole, usageRecords, subscription } = useOutletContext<AccountBillingOutletContext>()
-  const { invoices, currentMonthRelays, upcomingInvoice } = useLoaderData<AccountBillingLoaderData>()
+  const { userRole, usageRecords, subscription } =
+    useOutletContext<AccountBillingOutletContext>()
+  const { invoices, currentMonthRelays, upcomingInvoice } =
+    useLoaderData<AccountBillingLoaderData>()
 
   return (
     <AccountBillingView

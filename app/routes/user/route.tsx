@@ -48,12 +48,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
     const accountsList = accounts.getUserAccounts as Account[]
     // Find the primary account (first Owner account, or first account if no owner)
-    const primaryAccount = accountsList.find(account => {
-      const userRole = getUserAccountRole(account.users, user.user.portalUserID)
-      return userRole === RoleName.Owner
-    }) || accountsList[0]
+    const primaryAccount =
+      accountsList.find((account) => {
+        const userRole = getUserAccountRole(account.users, user.user.portalUserID)
+        return userRole === RoleName.Owner
+      }) || accountsList[0]
 
-    const primaryUserRole = primaryAccount ? getUserAccountRole(primaryAccount.users, user.user.portalUserID) as RoleName : undefined
+    const primaryUserRole = primaryAccount
+      ? (getUserAccountRole(primaryAccount.users, user.user.portalUserID) as RoleName)
+      : undefined
 
     return json<UserAccountLoaderData>({
       accounts: accountsList,
@@ -71,12 +74,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 }
 
 export default function UserAccount() {
-  const { accounts, user, pendingAccounts, primaryAccount, primaryUserRole, colorScheme } = useLoaderData() as UserAccountLoaderData
+  const {
+    accounts,
+    user,
+    pendingAccounts,
+    primaryAccount,
+    primaryUserRole,
+    colorScheme,
+  } = useLoaderData() as UserAccountLoaderData
 
   // Ensure the document color scheme attribute matches the server-provided color scheme
   useEffect(() => {
-    if (document.documentElement.getAttribute('data-mantine-color-scheme') !== colorScheme) {
-      document.documentElement.setAttribute('data-mantine-color-scheme', colorScheme)
+    if (
+      document.documentElement.getAttribute("data-mantine-color-scheme") !== colorScheme
+    ) {
+      document.documentElement.setAttribute("data-mantine-color-scheme", colorScheme)
     }
   }, [colorScheme])
 
@@ -93,9 +105,9 @@ export default function UserAccount() {
   ]
 
   return (
-    <RootAppShell 
-      accounts={accounts} 
-      user={user} 
+    <RootAppShell
+      accounts={accounts}
+      user={user}
       account={primaryAccount}
       userRole={primaryUserRole}
     >

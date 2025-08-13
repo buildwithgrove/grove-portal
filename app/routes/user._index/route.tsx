@@ -20,7 +20,6 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const email = formData.get("email")

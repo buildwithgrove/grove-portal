@@ -24,7 +24,7 @@ export type AccountIdLoaderData = {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
 
-  // Get color scheme from session to ensure it's preserved on account routes  
+  // Get color scheme from session to ensure it's preserved on account routes
   const themeSession = await getColorSchemeSession(request)
   const systemPreferredColorScheme = request.headers.get(
     "Sec-CH-Prefers-Color-Scheme",
@@ -86,8 +86,10 @@ export default function AccountId() {
 
   // Ensure the document color scheme attribute matches the server-provided color scheme
   useEffect(() => {
-    if (document.documentElement.getAttribute('data-mantine-color-scheme') !== colorScheme) {
-      document.documentElement.setAttribute('data-mantine-color-scheme', colorScheme)
+    if (
+      document.documentElement.getAttribute("data-mantine-color-scheme") !== colorScheme
+    ) {
+      document.documentElement.setAttribute("data-mantine-color-scheme", colorScheme)
     }
   }, [colorScheme])
 

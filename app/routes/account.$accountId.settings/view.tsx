@@ -31,7 +31,9 @@ export default function AccountSettingsLayoutView({
           label: "Plan",
         },
       ],
-      ...(account.planType === PayPlanType.PlanFree || userRole === RoleName.Admin || userRole === RoleName.Owner
+      ...(account.planType === PayPlanType.PlanFree ||
+      userRole === RoleName.Admin ||
+      userRole === RoleName.Owner
         ? [
             {
               to: "notifications",
