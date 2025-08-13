@@ -11,6 +11,11 @@ list: ## List all make targets
 help: ## Prints all the targets in all the Makefiles
 	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-60s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: trigger_ci
+trigger_ci: ## Trigger the CI pipeline by submitting an empty commit; See https://github.com/pokt-network/pocket/issues/900 for details
+	git commit --allow-empty -m "Empty commit"
+	git push
+
 
 #############################
 #### Portal Install & Run ###
