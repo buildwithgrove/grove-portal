@@ -17,12 +17,11 @@ This [portal](https://portal.grove.city/) allows users to manage their Grove ser
   - [3. Open Application](#3-open-application)
 - [Run with **Remix**](#run-with-remix)
 - [Deployment Workflow](#deployment-workflow)
-- [Development](#development)
-  - [Env](#env)
-  - [Frontend](#frontend)
-  - [Stripe Webhook Forwarding](#stripe-webhook-forwarding)
-  - [Environment Variables](#environment-variables)
+- [Development Details](#development-details)
+  - [Environment Configuration](#environment-configuration)
+  - [Frontend Development](#frontend-development)
   - [Backend](#backend)
+  - [Stripe Webhook Forwarding](#stripe-webhook-forwarding)
 
 ## Development Quickstart
 
@@ -48,9 +47,7 @@ make portal_install_and_run
 
 - Visit [http://localhost:3000](http://localhost:3000)
 
-## Run with **Remix**
-
-- [Remix Docs](https://remix.run/docs)
+## Run with [**Remix**](https://remix.run/docs)
 
 ## Deployment Workflow
 
@@ -59,13 +56,21 @@ make portal_install_and_run
 3. **Deploy to PROD**: Create a PR into `main`. CD will automatically deploy to [https://portal.grove.city/](https://portal.grove.city).
 4. **Test in Main**: Test your changes in the main environment to ensure everything is working as expected.
 
-## Development
+## Development Details
 
-### Env
+### Environment Configuration
 
-Make sure to get the `.env` from [1password](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&h=buildwithgrove.1password.com).
+Make sure to get the `.env` from [1password](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&i=c5cretuyeauiubm3uaqojdy4zm&h=buildwithgrove.1password.com).
 
-### Frontend
+You can download it with the following command if you have the [1password CLI](https://developer.1password.com/docs/cli/get-started/):
+
+```sh
+op item get c5cretuyeauiubm3uaqojdy4zm --fields notesPlain --format json | jq -r '.value' > .env
+```
+
+If the link ☝️ doesn't work for you, look for a file named `Grove Portal - Portal UI - .env (PROD)`
+
+### Frontend Development
 
 To run your Remix app locally, make sure your project's local dependencies are installed:
 
@@ -87,6 +92,14 @@ pnpm dev
 
 Open up [http://localhost:3000](http://localhost:3000) and you should be ready to go!
 
+### Backend
+
+The default `.env` uses the `PRODUCTION` environment backend.
+
+If you'd like to test in a `NON-PRODUCTION` environment, run the backend on `localhost:4200`.
+
+A template `.env` can be found at [`.env.template`](.env.template)
+
 ### Stripe Webhook Forwarding
 
 If you're testing the Stripe webhook flow, you must use the Stripe CLI to forward the webhook to your local environment.
@@ -102,23 +115,13 @@ stripe login
 Then run the following to start forwarding webhooks:
 
 ```sh
-stripe --api-key {STRIPE_API_KEY} listen --forward-to http://localhost:3000/api/stripe/webhook
+source .env
+stripe listen --forward-to http://localhost:3000/api/stripe/webhook --live=false
 ```
-
-It is generally recommended to use the test mode Stripe API key for forwarding webhooks, as this will not create any real subscriptions or charge any real money.
 
 You will be given a webhook signing secret, set it in your `.env` file as `STRIPE_WEBHOOK_SECRET`.
 
-The webhook handling code in this repo [can be found here](app/routes/api.stripe.webhook/route.tsx).
+**IMPORTANT**: It is generally recommended to use the test mode Stripe API key for forwarding webhooks,
+as this will not create any real subscriptions or charge any real money.
 
-### Environment Variables
-
-Download `.env` from [1Password](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&h=buildwithgrove.1password.com)
-
-If the link ☝️ doesn't work for you, look for a file named `Grove Portal - Portal UI - .env (PROD)`
-
-### Backend
-
-The default `.env` uses the `PRODUCTION` environment backend.
-
-If you'd like to test in a `NON-PRODUCTION` environment, run the backend on `localhost:4200`.
+**NOTE**: The webhook handling code in this repo [can be found here](app/routes/api.stripe.webhook/route.tsx).

@@ -1,3 +1,4 @@
+import React, { useMemo } from "react"
 import { Divider, Box, Group, Text, Button } from "@mantine/core"
 import { useParams, useSearchParams } from "@remix-run/react"
 import ChainSelectItem from "~/components/ChainSelectItem"
@@ -41,7 +42,7 @@ const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
       : []),
   ]
 
-  const chainsSelectItems = React.useMemo(() => {
+  const chainsSelectItems = useMemo(() => {
     return chains.length > 0
       ? [
           { value: "all", label: "All Services" },
