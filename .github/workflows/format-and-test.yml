@@ -34,6 +34,9 @@ jobs:
 
       - name: Format code and generate types
         run: make portal_format
+        env:
+          PORTAL_API_URL: ${{ secrets.PORTAL_API_URL }}
+          PORTAL_ADMIN_KEY: ${{ secrets.PORTAL_ADMIN_KEY }}
 
       - name: Run unit tests
         run: make portal_test
