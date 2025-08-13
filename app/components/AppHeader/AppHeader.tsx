@@ -1,4 +1,3 @@
-import { User } from "~/models/portal/sdk"
 import {
   ActionIcon,
   Box,
@@ -14,6 +13,7 @@ import { DISCORD_PATH, DOCS_PATH } from "~/utils/utils"
 
 import { ColorScheme } from "~/root"
 import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
+import { User } from "~/models/portal/sdk"
 import { useFetcher } from "@remix-run/react"
 
 type HeaderProps = {
@@ -152,7 +152,7 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
         <ActionIcon
           aria-label="toggle color scheme"
           variant="filled"
-          color="green.7"
+          color={colorScheme === "dark" ? "green.7" : "green.7"}
           size={40}
           radius="xl"
           onClick={handleColorSchemeToggle}
