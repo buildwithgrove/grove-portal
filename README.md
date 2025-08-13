@@ -12,6 +12,7 @@
 This [portal](https://portal.grove.city/) allows users to manage their Grove services, subscriptions, configurations and more.
 
 - [Development Quickstart](#development-quickstart)
+  - [0. Makefile](#0-makefile)
   - [1. Get Environment Variables](#1-get-environment-variables)
   - [2. Install Dependencies, Build \& Run](#2-install-dependencies-build--run)
   - [3. Open Application](#3-open-application)
@@ -24,6 +25,14 @@ This [portal](https://portal.grove.city/) allows users to manage their Grove ser
   - [Stripe Webhook Forwarding](#stripe-webhook-forwarding)
 
 ## Development Quickstart
+
+### 0. Makefile
+
+Run the following to see helpers to get you started:
+
+```bash
+make todos
+```
 
 ### 1. Get Environment Variables
 

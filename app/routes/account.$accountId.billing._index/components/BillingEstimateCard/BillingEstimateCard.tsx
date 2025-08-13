@@ -13,6 +13,7 @@ export type BillingEstimateCardProps = {
   isLoading?: boolean
 }
 
+// TODO: Need to add support for free tier plans and pricing: https://github.com/buildwithgrove/grove-portal/pull/730#issuecomment-3184904755
 export const BillingEstimateCard = ({
   totalRelays,
   subscription,
@@ -30,7 +31,8 @@ export const BillingEstimateCard = ({
   }
 
   // Calculate billing estimate using real pricing
-  const units = Math.floor(totalRelays / 1_000_000) + 1
+  const oneUnit = 1_000_000 // 1 unit = 1M relays
+  const units = Math.floor(totalRelays / oneUnit) + 1
   const unitPrice = getUnitPrice()
   let estimatedCost = units * unitPrice
 
@@ -79,15 +81,15 @@ export const BillingEstimateCard = ({
   // Get next billing date from subscription or use fallback
   const getNextBillingDate = () => {
     if (upcomingInvoice?.period_end) {
-      return formatStripeDate(upcomingInvoice.period_end, "Do MMM")
+      return formatStripeDate(upcomingInvoice.period_end, "MMMM D, YYYY")
     } else if (
       subscription &&
       "current_period_end" in subscription &&
       subscription.current_period_end
     ) {
-      return formatStripeDate(subscription.current_period_end as number, "Do MMM")
+      return formatStripeDate(subscription.current_period_end as number, "MMMM D, YYYY")
     } else {
-      return `1st ${dayjs().add(1, "month").format("MMM")}`
+      return dayjs().add(1, "month").format("MMMM 1, YYYY")
     }
   }
 
@@ -109,7 +111,7 @@ export const BillingEstimateCard = ({
 
         <Text c="dimmed" size="sm">
           Based on {new Intl.NumberFormat().format(totalRelays)} relays this month (
-          {units} units × ${unitPrice}/unit)
+          {units} units × ${unitPrice}/unit with 1M relays per unit)
         </Text>
 
         {discountText && (

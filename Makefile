@@ -30,7 +30,7 @@ portal_install_and_run: check_deps_all ## Run Portal locally after ensuring all 
 todos: ## Show all TODO items in the codebase
 	@echo "📝 TODOs found in codebase:"
 	@echo "=========================="
-	@rg -n "TODO|FIXME|XXX|HACK" --type js --type ts --type tsx --type jsx --type json --type md --type yaml --type yml . || echo "No TODOs found!"
+	@rg -n "TODO|FIXME|XXX|HACK" --type js --type ts --type json --type md --type yaml -g "*.tsx" -g "*.jsx" -g "*.yml" . || echo "No TODOs found!"
 
 #############################
 #### Environment Checkers ###
