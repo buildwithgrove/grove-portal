@@ -22,6 +22,17 @@ portal_install_and_run: check_deps_all ## Run Portal locally after ensuring all 
 	pnpm build
 	pnpm dev
 
+.PHONY: portal_format
+portal_format: check_deps_all ## Generate types and format the code
+	pnpm run generate:types
+	pnpm run format
+	pnpm run lint:fix
+	pnpm run typecheck
+
+.PHONY: portal_test
+portal_test: ## Run unit tests
+	pnpm run test:unit:run
+
 #############################
 #### Development Helpers ####
 #############################

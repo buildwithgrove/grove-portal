@@ -1,16 +1,14 @@
 import { ActionFunction, MetaFunction } from "@remix-run/node"
 import { ActionPassword, actionPassword } from "./utils/actionPassword"
 import { useActionData, useOutletContext } from "@remix-run/react"
-import { useActionData, useOutletContext } from "@remix-run/react"
-import React from "react"
-import invariant from "tiny-invariant"
-import { ActionPassword, actionPassword } from "./utils/actionPassword"
+
+import { ActionDataStruct } from "~/types/global"
 import { ActionUser } from "./utils/actionUser"
-import ProfileView from "./view"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
-import useActionNotification from "~/hooks/useActionNotification"
-import { User } from "~/models/portal/sdk"
+import ProfileView from "./view"
 import { UserAccountLoaderData } from "~/routes/user/route"
+import invariant from "tiny-invariant"
+import { seo_title_append } from "~/utils/seo"
 import useActionNotification from "~/hooks/useActionNotification"
 
 export const meta: MetaFunction = () => {

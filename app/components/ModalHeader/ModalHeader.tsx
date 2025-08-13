@@ -1,4 +1,4 @@
-import { Divider, Box, CloseButton, Flex, Text, Tooltip } from "@mantine/core"
+import { Box, CloseButton, Divider, Flex, Text, Tooltip } from "@mantine/core"
 
 type ModalHeaderProps = {
   title: string
