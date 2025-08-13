@@ -1,15 +1,17 @@
 import { Container, Stack, Title } from "@mantine/core"
 import React, { useMemo } from "react"
 import LinkTabs from "~/components/LinkTabs"
-import { Account, PayPlanType } from "~/models/portal/sdk"
+import { Account, PayPlanType, RoleName } from "~/models/portal/sdk"
 
 type AccountSettingsLayoutViewProps = {
   account: Account
+  userRole: RoleName
   children: React.ReactNode
 }
 
 export default function AccountSettingsLayoutView({
   account,
+  userRole,
   children,
 }: AccountSettingsLayoutViewProps) {
   const routes = useMemo(() => {
@@ -29,7 +31,7 @@ export default function AccountSettingsLayoutView({
           label: "Plan",
         },
       ],
-      ...(account.planType === PayPlanType.PlanFree
+      ...(account.planType === PayPlanType.PlanFree || userRole === RoleName.Admin || userRole === RoleName.Owner
         ? [
             {
               to: "notifications",
@@ -38,7 +40,7 @@ export default function AccountSettingsLayoutView({
           ]
         : []),
     ]
-  }, [account])
+  }, [account, userRole])
 
   return (
     <Container fluid px={0}>

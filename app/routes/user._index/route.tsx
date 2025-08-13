@@ -1,5 +1,5 @@
-import { ActionFunction, LoaderFunction, json, MetaFunction } from "@remix-run/node"
-import { useActionData, useLoaderData } from "@remix-run/react"
+import { ActionFunction, MetaFunction } from "@remix-run/node"
+import { useActionData, useOutletContext } from "@remix-run/react"
 import React from "react"
 import invariant from "tiny-invariant"
 import { ActionPassword, actionPassword } from "./utils/actionPassword"
@@ -8,9 +8,9 @@ import ProfileView from "./view"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
 import useActionNotification from "~/hooks/useActionNotification"
 import { User } from "~/models/portal/sdk"
+import { UserAccountLoaderData } from "~/routes/user/route"
 import { ActionDataStruct } from "~/types/global"
 import { seo_title_append } from "~/utils/seo"
-import { requireUser } from "~/utils/user.server"
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,17 +20,6 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-type LoaderData = {
-  user: User
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request)
-
-  return json<LoaderData>({
-    user: user.user,
-  })
-}
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
@@ -40,7 +29,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function Profile() {
-  const { user } = useLoaderData() as LoaderData
+  const { user } = useOutletContext<UserAccountLoaderData>()
   const actionData = useActionData() as ActionDataStruct<ActionUser | ActionPassword>
 
   useActionNotification(actionData)

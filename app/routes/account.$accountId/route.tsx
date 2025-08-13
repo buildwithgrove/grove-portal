@@ -1,13 +1,15 @@
 import { json, LoaderFunction } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
-import React from "react"
+import React, { useEffect } from "react"
 import invariant from "tiny-invariant"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
 import RootAppShell from "~/components/RootAppShell/RootAppShell"
 import { initPortalClient } from "~/models/portal/portal.server"
 import { Account, Blockchain, RoleName, SortOrder, User } from "~/models/portal/sdk"
+import { ColorScheme } from "~/root"
 import { getUserAccountRole } from "~/utils/accountUtils"
 import { getErrorMessage } from "~/utils/catchError"
+import { getColorSchemeSession } from "~/utils/colorScheme.server"
 import { redirectToUserAccount, requireUser } from "~/utils/user.server"
 
 export type AccountIdLoaderData = {
@@ -16,10 +18,19 @@ export type AccountIdLoaderData = {
   blockchains: Blockchain[]
   user: User
   userRole: RoleName
+  colorScheme: ColorScheme
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
+
+  // Get color scheme from session to ensure it's preserved on account routes  
+  const themeSession = await getColorSchemeSession(request)
+  const systemPreferredColorScheme = request.headers.get(
+    "Sec-CH-Prefers-Color-Scheme",
+  ) as ColorScheme
+  const sessionColorScheme = themeSession.getColorScheme()
+  const colorScheme = sessionColorScheme || systemPreferredColorScheme || "dark"
 
   const portal = initPortalClient({ token: user.accessToken })
   const { accountId } = params
@@ -46,6 +57,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       user: user.user,
       blockchains,
       userRole,
+      colorScheme,
     })
   } catch (error) {
     /**
@@ -69,8 +81,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 }
 
 export default function AccountId() {
-  const { account, accounts, blockchains, user, userRole } =
+  const { account, accounts, blockchains, user, userRole, colorScheme } =
     useLoaderData<AccountIdLoaderData>()
+
+  // Ensure the document color scheme attribute matches the server-provided color scheme
+  useEffect(() => {
+    if (document.documentElement.getAttribute('data-mantine-color-scheme') !== colorScheme) {
+      document.documentElement.setAttribute('data-mantine-color-scheme', colorScheme)
+    }
+  }, [colorScheme])
 
   return (
     <RootAppShell account={account} accounts={accounts} user={user} userRole={userRole}>

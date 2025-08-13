@@ -10,7 +10,7 @@ const colorSchemeStorage = createCookieSessionStorage({
   // TODO: Sign the cookie with a secret
   cookie: {
     name: "grove_color_scheme",
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     // secrets: [sessionSecret],
     sameSite: "lax",
     path: "/",
