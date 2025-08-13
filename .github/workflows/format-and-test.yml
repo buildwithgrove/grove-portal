@@ -43,6 +43,7 @@ jobs:
         env:
           NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
       - name: Build application for E2E
         run: pnpm run build
