@@ -10,7 +10,6 @@ import {
 } from "@mantine/core"
 import { LoaderFunction, MetaFunction, redirect } from "@remix-run/node"
 import { NavLink, useNavigate, useParams } from "@remix-run/react"
-import React from "react"
 import invariant from "tiny-invariant"
 import { AccountPlan } from "~/components/AccountPlan"
 import { initPortalClient } from "~/models/portal/portal.server"

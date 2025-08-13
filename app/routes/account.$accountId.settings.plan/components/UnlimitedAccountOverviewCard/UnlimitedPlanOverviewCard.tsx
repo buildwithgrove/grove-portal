@@ -1,7 +1,6 @@
 import { Divider, Button, Group, Text, Stack, Box, Grid, SimpleGrid } from "@mantine/core"
 import { Form, useLocation } from "@remix-run/react"
 import { ArrowUpRight, Circle } from "lucide-react"
-import React from "react"
 import { TitledCard } from "~/components/TitledCard"
 import { Account, RoleName } from "~/models/portal/sdk"
 import { Stripe } from "~/models/stripe/stripe.server"

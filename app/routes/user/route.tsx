@@ -1,18 +1,19 @@
-import { Stack, Button } from "@mantine/core"
-import { json, LoaderFunction } from "@remix-run/node"
+import { Account, RoleName, SortOrder, User } from "~/models/portal/sdk"
+import { Button, Stack } from "@mantine/core"
+import { LoaderFunction, json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
+
 import { ArrowLeft } from "lucide-react"
-import React, { useEffect } from "react"
+import { ColorScheme } from "~/root"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
 import LinkTabs from "~/components/LinkTabs"
 import RootAppShell from "~/components/RootAppShell/RootAppShell"
-import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, RoleName, SortOrder, User } from "~/models/portal/sdk"
-import { ColorScheme } from "~/root"
-import { getUserAccountRole } from "~/utils/accountUtils"
-import { getErrorMessage } from "~/utils/catchError"
 import { getColorSchemeSession } from "~/utils/colorScheme.server"
+import { getErrorMessage } from "~/utils/catchError"
+import { getUserAccountRole } from "~/utils/accountUtils"
+import { initPortalClient } from "~/models/portal/portal.server"
 import { requireUser } from "~/utils/user.server"
+import { useEffect } from "react"
 
 export type UserAccountLoaderData = {
   accounts: Account[]

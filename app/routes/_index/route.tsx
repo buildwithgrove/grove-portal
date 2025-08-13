@@ -1,5 +1,4 @@
 import { LoaderFunction } from "@remix-run/node"
-import React from "react"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView/ErrorBoundaryView"
 import { redirectToUserAccount, requireUser } from "~/utils/user.server"
 

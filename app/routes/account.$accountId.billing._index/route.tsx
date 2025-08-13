@@ -1,19 +1,18 @@
-import { json, LoaderFunction, redirect } from "@remix-run/node"
+import { LoaderFunction, json, redirect } from "@remix-run/node"
+import { STRIPE_RECORDS_LIMIT, Stripe, stripe } from "~/models/stripe/stripe.server"
 import { useLoaderData, useOutletContext } from "@remix-run/react"
-import invariant from "tiny-invariant"
-import { getBillingPeriodRelays } from "~/models/portal/dwh.server"
-import { initPortalClient } from "~/models/portal/portal.server"
-import { D2Stats } from "~/models/portal/sdk"
-import { Stripe, stripe, STRIPE_RECORDS_LIMIT } from "~/models/stripe/stripe.server"
+
 import { AccountBillingOutletContext } from "~/routes/account.$accountId.billing/route"
 import AccountBillingView from "~/routes/account.$accountId.billing._index/view"
-import { getErrorMessage } from "~/utils/catchError"
 import { dayjs } from "~/utils/dayjs"
+import { getBillingPeriodRelays } from "~/models/portal/dwh.server"
+import { getErrorMessage } from "~/utils/catchError"
 import { getRequiredServerEnvVar } from "~/utils/environment"
+import { initPortalClient } from "~/models/portal/portal.server"
+import invariant from "tiny-invariant"
 import { requireUser } from "~/utils/user.server"
 
-
-//TODO: Implement historical usage graphs and more insights about overall billing utilization
+// TODO_IMPROVE: Implement historical usage graphs and more insights about overall billing utilization
 export type AccountBillingLoaderData = {
   invoices: Stripe.Invoice[]
   currentMonthRelays: number

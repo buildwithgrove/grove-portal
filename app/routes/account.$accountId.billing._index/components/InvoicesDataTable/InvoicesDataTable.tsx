@@ -1,7 +1,6 @@
 import { Button, Menu, NumberFormatter, Text } from "@mantine/core"
 import { useNavigate, useParams } from "@remix-run/react"
 import { DataTable } from "mantine-datatable"
-import React from "react"
 import ContextMenuTarget from "~/components/ContextMenuTarget"
 import { Stripe } from "~/models/stripe/stripe.server"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"

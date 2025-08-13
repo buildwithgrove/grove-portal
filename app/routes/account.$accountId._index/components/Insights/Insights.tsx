@@ -1,6 +1,5 @@
 import { Card, SimpleGrid, Skeleton, Stack, Text, Title } from "@mantine/core"
 import { useLocation, useNavigation, useSearchParams } from "@remix-run/react"
-import React from "react"
 import InsightsControls, {
   DEFAULT_DWH_PERIOD,
 } from "app/routes/account.$accountId._index/components/InsightsControls"

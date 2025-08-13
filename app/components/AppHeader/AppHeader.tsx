@@ -1,3 +1,4 @@
+import { User } from "~/models/portal/sdk"
 import {
   ActionIcon,
   Box,
@@ -7,19 +8,16 @@ import {
   MantineProvider,
   useMantineColorScheme,
 } from "@mantine/core"
-import { useFetcher } from "@remix-run/react"
-import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
-import React from "react"
-import AccountDrawer from "~/components/AccountDrawer"
-import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
-import { Account, User } from "~/models/portal/sdk"
-import { ColorScheme } from "~/root"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
+import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
 import { DISCORD_PATH, DOCS_PATH } from "~/utils/utils"
+
+import { ColorScheme } from "~/root"
+import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
+import { useFetcher } from "@remix-run/react"
 
 type HeaderProps = {
   user?: User
-  accounts: Account[]
   opened: boolean
   toggle: () => void
 }
@@ -154,7 +152,7 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
         <ActionIcon
           aria-label="toggle color scheme"
           variant="filled"
-          color={colorScheme === "dark" ? "green.7" : "green.7"}
+          color="green.7"
           size={40}
           radius="xl"
           onClick={handleColorSchemeToggle}

@@ -11,7 +11,6 @@ import {
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react"
-import React from "react"
 import invariant from "tiny-invariant"
 import AccountForm from "./components/AccountForm"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"

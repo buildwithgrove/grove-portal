@@ -1,5 +1,4 @@
 import { Divider, Card, Drawer, Group, Stack, Text } from "@mantine/core"
-import React from "react"
 import { TitledCard } from "~/components/TitledCard"
 import { Blockchain, D2Log } from "~/models/portal/sdk"
 import { getChainName } from "~/utils/chainUtils"

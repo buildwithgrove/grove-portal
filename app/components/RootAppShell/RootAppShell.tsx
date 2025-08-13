@@ -35,7 +35,7 @@ export const RootAppShell = ({
       pb={50}
     >
       <AppShell.Header withBorder={false}>
-        <AppHeader accounts={accounts} opened={opened} toggle={toggle} user={user} />
+        <AppHeader opened={opened} toggle={toggle} user={user} />
       </AppShell.Header>
       {account && userRole && (
         <Sidebar

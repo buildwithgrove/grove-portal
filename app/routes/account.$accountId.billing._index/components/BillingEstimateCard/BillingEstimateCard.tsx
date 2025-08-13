@@ -1,10 +1,10 @@
-import { Stack, Text, Title, Alert, NumberFormatter } from "@mantine/core"
+import { Alert, NumberFormatter, Stack, Text, Title } from "@mantine/core"
+import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
+
 import { Info } from "lucide-react"
-import React from "react"
 import { Stripe } from "~/models/stripe/stripe.server"
 import TitledCard from "~/components/TitledCard/TitledCard"
 import { dayjs } from "~/utils/dayjs"
-import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
 
 export type BillingEstimateCardProps = {
   totalRelays: number

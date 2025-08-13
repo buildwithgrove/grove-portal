@@ -1,5 +1,4 @@
 import { Container, Stack, Text } from "@mantine/core"
-import React from "react"
 import PortalLoader from "~/components/PortalLoader"
 export function PortalMaintenanceView() {
   return (

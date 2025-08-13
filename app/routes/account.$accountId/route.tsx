@@ -1,16 +1,17 @@
-import { json, LoaderFunction } from "@remix-run/node"
+import { Account, Blockchain, RoleName, SortOrder, User } from "~/models/portal/sdk"
+import { LoaderFunction, json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
-import React, { useEffect } from "react"
-import invariant from "tiny-invariant"
+import { redirectToUserAccount, requireUser } from "~/utils/user.server"
+
+import { ColorScheme } from "~/root"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
 import RootAppShell from "~/components/RootAppShell/RootAppShell"
-import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, Blockchain, RoleName, SortOrder, User } from "~/models/portal/sdk"
-import { ColorScheme } from "~/root"
-import { getUserAccountRole } from "~/utils/accountUtils"
-import { getErrorMessage } from "~/utils/catchError"
 import { getColorSchemeSession } from "~/utils/colorScheme.server"
-import { redirectToUserAccount, requireUser } from "~/utils/user.server"
+import { getErrorMessage } from "~/utils/catchError"
+import { getUserAccountRole } from "~/utils/accountUtils"
+import { initPortalClient } from "~/models/portal/portal.server"
+import invariant from "tiny-invariant"
+import { useEffect } from "react"
 
 export type AccountIdLoaderData = {
   account: Account

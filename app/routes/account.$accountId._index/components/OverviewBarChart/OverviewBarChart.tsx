@@ -1,5 +1,4 @@
 import { Box, Text } from "@mantine/core"
-import React from "react"
 import BarChart from "~/components/BarChart"
 import { ChartData } from "~/types/global"
 

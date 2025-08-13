@@ -1,7 +1,8 @@
+import { Account, PayPlanType, RoleName } from "~/models/portal/sdk"
 import { Container, Stack, Title } from "@mantine/core"
 import React, { useMemo } from "react"
+
 import LinkTabs from "~/components/LinkTabs"
-import { Account, PayPlanType, RoleName } from "~/models/portal/sdk"
 
 type AccountSettingsLayoutViewProps = {
   account: Account

@@ -1,5 +1,4 @@
 import { Box, Stack, Text } from "@mantine/core"
-import React from "react"
 import { ClientOnly } from "remix-utils/client-only"
 import groveTreeAnimation from "./grove-tree.json"
 

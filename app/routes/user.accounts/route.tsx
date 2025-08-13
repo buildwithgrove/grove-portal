@@ -1,6 +1,5 @@
 import { ActionFunction, json, MetaFunction } from "@remix-run/node"
 import { useOutletContext } from "@remix-run/react"
-import React from "react"
 import invariant from "tiny-invariant"
 import UserAccounts from "./view"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
@@ -57,7 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
         accountName: invitedAccountName,
         userRole: invitedUserRole as RoleName,
       }).catch((error) => {
-        console.log(error)
+        // Silently handle error - user will see error state
         message =
           message + " however something went wrong while sending the notification."
       })

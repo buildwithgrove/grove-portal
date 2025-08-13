@@ -1,6 +1,5 @@
 import { Button, Image, Stack, Text, Title } from "@mantine/core"
 import { Link } from "@remix-run/react"
-import React from "react"
 
 type NotFound404Props = {
   message?: string

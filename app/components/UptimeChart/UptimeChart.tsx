@@ -1,5 +1,4 @@
 import { MantineTheme, useMantineTheme } from "@mantine/core"
-import React from "react"
 import { ResponsiveContainer, BarChart, Bar, Cell } from "recharts"
 
 type UptimeChartProps = {

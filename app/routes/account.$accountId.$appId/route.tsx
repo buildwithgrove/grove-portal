@@ -6,7 +6,6 @@ import {
   redirect,
 } from "@remix-run/node"
 import { Outlet, useActionData, useLoaderData, useOutletContext } from "@remix-run/react"
-import React from "react"
 import invariant from "tiny-invariant"
 import { AccountIdLoaderData } from "../account.$accountId/route"
 import AppIdLayoutView from "./view"

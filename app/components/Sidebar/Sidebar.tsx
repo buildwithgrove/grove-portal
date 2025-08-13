@@ -1,4 +1,11 @@
 import {
+  Account,
+  PayPlanType,
+  PortalApp,
+  RoleName,
+  User as UserType,
+} from "~/models/portal/sdk"
+import {
   ActionIcon,
   AppShell,
   Box,
@@ -6,29 +13,23 @@ import {
   Divider,
   Group,
   ScrollArea,
-  Text,
   Stack,
+  Text,
   useMantineColorScheme,
 } from "@mantine/core"
-import { Link, useParams, useFetcher } from "@remix-run/react"
-import { Plus, User, TowerControl, LogOut, X } from "lucide-react"
+import {
+  InternalLink,
+  NavButton,
+  SidebarApps,
+  SidebarNavRoute,
+} from "~/components/Sidebar/components"
+import { Link, useFetcher, useParams } from "@remix-run/react"
+import { LogOut, Plus, TowerControl, User, X } from "lucide-react"
 import React, { useMemo, useState } from "react"
+
 import AccountSelect from "~/components/AccountSelect"
 import GroveLogo from "~/components/GroveLogo"
 import Identicon from "~/components/Identicon"
-import {
-  InternalLink,
-  SidebarApps,
-  SidebarNavRoute,
-  NavButton,
-} from "~/components/Sidebar/components"
-import {
-  Account,
-  PayPlanType,
-  PortalApp,
-  RoleName,
-  User as UserType,
-} from "~/models/portal/sdk"
 
 type SidebarProps = {
   account: Account
@@ -88,7 +89,8 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
   const logoutFetcher = useFetcher()
   const { colorScheme: mantineColorScheme } = useMantineColorScheme()
 
-  // Ensure color scheme is always defined to prevent render issues
+  // Ensure color scheme is always defined to prevent render issues.
+  // Default to light if not defined.
   const colorScheme = mantineColorScheme || "light"
 
   const accountRoutes = useMemo(() => {

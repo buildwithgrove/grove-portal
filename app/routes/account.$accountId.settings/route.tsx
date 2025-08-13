@@ -1,10 +1,10 @@
 import { Outlet, useActionData, useRouteLoaderData } from "@remix-run/react"
-import React from "react"
-import ErrorBoundaryView from "~/components/ErrorBoundaryView/ErrorBoundaryView"
-import useActionNotification from "~/hooks/useActionNotification"
+
 import { AccountIdLoaderData } from "~/routes/account.$accountId/route"
 import AccountSettingsLayoutView from "~/routes/account.$accountId.settings/view"
 import { ActionDataStruct } from "~/types/global"
+import ErrorBoundaryView from "~/components/ErrorBoundaryView/ErrorBoundaryView"
+import useActionNotification from "~/hooks/useActionNotification"
 
 export default function AccountSettings() {
   const { account, accounts, user, userRole } = useRouteLoaderData(

@@ -1,7 +1,6 @@
 import { Button, Divider, Group, Stack, Text, Title } from "@mantine/core"
 import { NavLink, useParams } from "@remix-run/react"
 import { ArrowLeft } from "lucide-react"
-import React from "react"
 import { Stripe } from "~/models/stripe/stripe.server"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { formatStripeDate } from "~/utils/billingUtils"

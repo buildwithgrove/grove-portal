@@ -1,6 +1,5 @@
 import { Button, Stack, Title } from "@mantine/core"
 import { Link, useParams } from "@remix-run/react"
-import React from "react"
 import { EmptyState } from "~/components/EmptyState"
 import { Blockchain, PortalApp, RoleName } from "~/models/portal/sdk"
 import { AnnouncementAlert } from "~/routes/account.$accountId._index/components/AnnouncementAlert"

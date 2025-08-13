@@ -1,6 +1,5 @@
 import { Divider, Box, Group, Text, Button } from "@mantine/core"
 import { useParams, useSearchParams } from "@remix-run/react"
-import React from "react"
 import ChainSelectItem from "~/components/ChainSelectItem"
 import FluidSelect from "~/components/FluidSelect"
 import { Blockchain, PortalApp } from "~/models/portal/sdk"

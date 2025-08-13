@@ -1,4 +1,3 @@
-import React from "react"
 import classes from "./GroveLogo.module.css"
 
 type GroveLogoProps = {

@@ -10,9 +10,28 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    target: 'es2022',
+    cssTarget: 'chrome115',
+    rollupOptions: {
+      onwarn(warning, defaultHandler) {
+        if (warning.code === 'EVAL' && warning.id?.includes('lottie-web')) {
+          return
+        }
+        defaultHandler(warning)
+      },
+    },
+  },
   plugins: [
     remix({
       presets: [vercelPreset()],
+      future: {
+        v3_fetcherPersist: true,
+        v3_lazyRouteDiscovery: true,
+        v3_relativeSplatPath: true,
+        v3_singleFetch: true,
+        v3_throwAbortReason: true,
+      },
     }),
     tsconfigPaths(),
   ],

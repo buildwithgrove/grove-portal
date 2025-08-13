@@ -1,6 +1,5 @@
 import { json, LoaderFunction, MetaFunction } from "@remix-run/node"
 import { useLoaderData, useOutletContext } from "@remix-run/react"
-import React from "react"
 import invariant from "tiny-invariant"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
 import { initPortalClient } from "~/models/portal/portal.server"

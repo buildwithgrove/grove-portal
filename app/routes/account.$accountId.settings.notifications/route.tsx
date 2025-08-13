@@ -1,16 +1,18 @@
-import { ActionFunction, json, MetaFunction } from "@remix-run/node"
-import { useOutletContext } from "@remix-run/react"
-import invariant from "tiny-invariant"
-import { initPortalClient } from "~/models/portal/portal.server"
+import { ActionFunction, MetaFunction, json } from "@remix-run/node"
 import { NotificationEventEnum, NotificationType, RoleName } from "~/models/portal/sdk"
+
 import { AccountIdLoaderData } from "~/routes/account.$accountId/route"
 import AccountNotificationsView from "~/routes/account.$accountId.settings.notifications/view"
 import { ActionDataStruct } from "~/types/global"
 import { getErrorMessage } from "~/utils/catchError"
-import { seo_title_append } from "~/utils/seo"
+import { initPortalClient } from "~/models/portal/portal.server"
+import invariant from "tiny-invariant"
 import { requireUser } from "~/utils/user.server"
+import { seo_title_append } from "~/utils/seo"
+import { useOutletContext } from "@remix-run/react"
 
-//TODO: Ensure that notifications respect the rate limits set in Envoy and make this more apparent to the end user
+// TODO_TECHDEBT: Ensure that notifications respect the rate limits set in Envoy
+// and make this more apparent to the end user
 export const meta: MetaFunction = () => {
   return [{ title: `Account Notifications ${seo_title_append}` }]
 }

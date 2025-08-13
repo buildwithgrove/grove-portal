@@ -1,35 +1,20 @@
 # Grove Portal UI <!-- omit in toc -->
 
 <div align="center">
-<h1>Grove Portal UI</h1>
 <img src="https://storage.googleapis.com/grove-brand-assets/Presskit/Logo%20Joined-2.png" alt="Grove logo" width="500"/>
 </div>
 <br/>
 
 ## Overview <!-- omit in toc -->
 
-Grove Portal UI implements the interface for Grove's users and customers.
+[Grove Portal UI](https://github.com/buildwithgrove/grove-portal) implements the interface for Grove's users and customers at [portal.grove.city/](https://portal.grove.city/).
 
-This portal allows users to manage their Grove services, subscriptions, configurations and more.
+This [portal](https://portal.grove.city/) allows users to manage their Grove services, subscriptions, configurations and more.
 
-## Development Quickstart <!-- omit in toc -->
-
-1. **Get Environment Variables**
-
-   - Download `.env` from [1Password](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&h=buildwithgrove.1password.com)
-   - If the link ☝️ doesn't work for you, look for a file named `Grove Portal - Portal UI - .env (PROD)`
-
-2. **Install Dependencies, Build & Run**
-
-   ```sh
-   make portal_install_and_run
-   ```
-
-3. **Open Application**
-   - Visit [http://localhost:3000](http://localhost:3000)
-
-## Table of Contents <!-- omit in toc -->
-
+- [Development Quickstart](#development-quickstart)
+  - [1. Get Environment Variables](#1-get-environment-variables)
+  - [2. Install Dependencies, Build \& Run](#2-install-dependencies-build--run)
+  - [3. Open Application](#3-open-application)
 - [Run with **Remix**](#run-with-remix)
 - [Deployment Workflow](#deployment-workflow)
 - [Development](#development)
@@ -38,6 +23,30 @@ This portal allows users to manage their Grove services, subscriptions, configur
   - [Stripe Webhook Forwarding](#stripe-webhook-forwarding)
   - [Environment Variables](#environment-variables)
   - [Backend](#backend)
+
+## Development Quickstart
+
+### 1. Get Environment Variables
+
+Use the [1Password CLI](https://developer.1password.com/docs/cli/get-started/):
+
+```sh
+op item get c5cretuyeauiubm3uaqojdy4zm --fields notesPlain --format json | jq -r '.value' > .env
+```
+
+Or download `.env` from [1Password](https://start.1password.com/open/i?a=4PU7ZENUCRCRTNSQWQ7PWCV2RM&v=kudw25ob4zcynmzmv2gv4qpkuq&i=c5cretuyeauiubm3uaqojdy4zm&h=buildwithgrove.1password.com)
+
+If the link ☝️ doesn't work for you, look for a file named `Grove Portal - Portal UI - .env (PROD)`
+
+### 2. Install Dependencies, Build & Run
+
+```sh
+make portal_install_and_run
+```
+
+### 3. Open Application
+
+- Visit [http://localhost:3000](http://localhost:3000)
 
 ## Run with **Remix**
 

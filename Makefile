@@ -11,12 +11,24 @@ list: ## List all make targets
 help: ## Prints all the targets in all the Makefiles
 	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-60s\033[0m %s\n", $$1, $$2}'
 
+
+#############################
+#### Portal Install & Run ###
+#############################
+
+.PHONY: portal_install_and_run
+portal_install_and_run: check_deps_all ## Run Portal locally after ensuring all dependencies are installed & built
+	pnpm install
+	pnpm build
+	pnpm dev
+
 #############################
 #### Environment Checkers ###
 #############################
 
 .PHONY: check_deps_all
-check_deps_all: check_version_pnpm check_version_node check_version_stripe ## Ensure everything is installed
+# Internal helper target - ensure everything is installed
+check_deps_all: check_version_pnpm check_version_node check_version_stripe
 
 .PHONY: check_version_pnpm
 # Internal helper target - check pnpm version
@@ -61,13 +73,3 @@ check_version_stripe:
 		exit 1 ; \
 	fi ; \
 	echo "Stripe CLI version $$version found."
-
-#############################
-#### Portal Install & Run ###
-#############################
-
-.PHONY: portal_install_and_run
-portal_install_and_run: check_deps_all # Install all dependencies, build them and run Portal locally
-	pnpm install
-	pnpm build
-	pnpm dev
