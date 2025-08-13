@@ -12,6 +12,7 @@ jobs:
   format-and-test:
     name: Format, Build & Test
     runs-on: ubuntu-latest
+    environment: CI
 
     steps:
       - name: Checkout code
