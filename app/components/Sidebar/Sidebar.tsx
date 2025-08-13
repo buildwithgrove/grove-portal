@@ -86,7 +86,10 @@ const getAccountRoutes = (
 export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarProps) => {
   const { accountId } = useParams()
   const logoutFetcher = useFetcher()
-  const { colorScheme } = useMantineColorScheme()
+  const { colorScheme: mantineColorScheme } = useMantineColorScheme()
+
+  // Ensure color scheme is always defined to prevent render issues
+  const colorScheme = mantineColorScheme || "light"
 
   const accountRoutes = useMemo(() => {
     return getAccountRoutes(account, userRole)

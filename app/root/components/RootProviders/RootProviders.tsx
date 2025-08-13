@@ -15,12 +15,17 @@ const RootProviders = ({
   colorScheme?: ColorScheme
 }) => {
   const { state } = useNavigation()
+
   useEffect(() => {
     if (state === "loading") nprogress.start()
     if (state === "idle") nprogress.complete()
   }, [state])
+
+  // Use the server-provided colorScheme directly, fallback to dark
+  const effectiveColorScheme = colorScheme ?? "dark"
+
   return (
-    <MantineProvider forceColorScheme={colorScheme ?? "dark"} theme={portalTheme}>
+    <MantineProvider forceColorScheme={effectiveColorScheme} theme={portalTheme}>
       <NavigationProgress />
       <Notifications position="bottom-center" />
       <ModalsProvider>{children}</ModalsProvider>

@@ -1,4 +1,12 @@
-import { ActionIcon, Box, Burger, Button, Flex, MantineProvider, useMantineColorScheme } from "@mantine/core"
+import {
+  ActionIcon,
+  Box,
+  Burger,
+  Button,
+  Flex,
+  MantineProvider,
+  useMantineColorScheme,
+} from "@mantine/core"
 import { useFetcher } from "@remix-run/react"
 import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
 import React from "react"
@@ -61,109 +69,109 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
           </ActionIcon>
         </MantineProvider>
       </Box>
-      
+
       {/* Right side - Navigation buttons */}
       <Flex align="center" gap="sm">
-      {/* Mobile: Circular ActionIcon, Desktop: Button with text */}
-      <Box hiddenFrom="sm">
-        <ActionIcon
-          component="a"
-          href={DOCS_PATH}
-          target="_blank"
-          rel="noreferrer"
-          variant="filled"
-          color="green.7"
-          size={40}
-          radius="xl"
-          styles={{
-            root: {
-              color: "white",
-            },
-          }}
-        >
-          <BookOpen size={16} />
-        </ActionIcon>
-      </Box>
-      <Box visibleFrom="sm">
-        <Button
-          component="a"
-          href={DOCS_PATH}
-          target="_blank"
-          rel="noreferrer"
-          variant="filled"
-          color="green.7"
-          size="sm"
-          leftSection={<BookOpen size={16} />}
-          styles={{
-            root: {
-              color: "white",
-            },
-          }}
-        >
-          Docs
-        </Button>
-      </Box>
+        {/* Mobile: Circular ActionIcon, Desktop: Button with text */}
+        <Box hiddenFrom="sm">
+          <ActionIcon
+            component="a"
+            href={DOCS_PATH}
+            target="_blank"
+            rel="noreferrer"
+            variant="filled"
+            color="green.7"
+            size={40}
+            radius="xl"
+            styles={{
+              root: {
+                color: "white",
+              },
+            }}
+          >
+            <BookOpen size={16} />
+          </ActionIcon>
+        </Box>
+        <Box visibleFrom="sm">
+          <Button
+            component="a"
+            href={DOCS_PATH}
+            target="_blank"
+            rel="noreferrer"
+            variant="filled"
+            color="green.7"
+            size="sm"
+            leftSection={<BookOpen size={16} />}
+            styles={{
+              root: {
+                color: "white",
+              },
+            }}
+          >
+            Docs
+          </Button>
+        </Box>
 
-      {/* Mobile: Circular ActionIcon, Desktop: Button with text */}
-      <Box hiddenFrom="sm">
+        {/* Mobile: Circular ActionIcon, Desktop: Button with text */}
+        <Box hiddenFrom="sm">
+          <ActionIcon
+            component="a"
+            href={DISCORD_PATH}
+            target="_blank"
+            rel="noreferrer"
+            variant="filled"
+            color="green.7"
+            size={40}
+            radius="xl"
+            styles={{
+              root: {
+                color: "white",
+              },
+            }}
+          >
+            <LifeBuoy size={16} />
+          </ActionIcon>
+        </Box>
+        <Box visibleFrom="sm">
+          <Button
+            component="a"
+            href={DISCORD_PATH}
+            target="_blank"
+            rel="noreferrer"
+            variant="filled"
+            color="green.7"
+            size="sm"
+            leftSection={<LifeBuoy size={16} />}
+            styles={{
+              root: {
+                color: "white",
+              },
+            }}
+          >
+            Support
+          </Button>
+        </Box>
         <ActionIcon
-          component="a"
-          href={DISCORD_PATH}
-          target="_blank"
-          rel="noreferrer"
+          aria-label="toggle color scheme"
           variant="filled"
-          color="green.7"
+          color={colorScheme === "dark" ? "green.7" : "green.7"}
           size={40}
           radius="xl"
+          onClick={handleColorSchemeToggle}
           styles={{
             root: {
               color: "white",
             },
           }}
         >
-          <LifeBuoy size={16} />
+          <Contrast size={16} />
         </ActionIcon>
-      </Box>
-      <Box visibleFrom="sm">
-        <Button
-          component="a"
-          href={DISCORD_PATH}
-          target="_blank"
-          rel="noreferrer"
-          variant="filled"
-          color="green.7"
-          size="sm"
-          leftSection={<LifeBuoy size={16} />}
-          styles={{
-            root: {
-              color: "white",
-            },
-          }}
-        >
-          Support
-        </Button>
-      </Box>
-      <ActionIcon
-        aria-label="toggle color scheme"
-        variant="filled"
-        color={colorScheme === "dark" ? "green.7" : "green.7"}
-        size={40}
-        radius="xl"
-        onClick={handleColorSchemeToggle}
-        styles={{
-          root: {
-            color: "white",
-          },
-        }}
-      >
-        <Contrast size={16} />
-      </ActionIcon>
-      {user && (
-        <NovuNotificationPopover
-          colorScheme={colorScheme as ColorScheme}
-          subscriberId={user.portalUserID}
-        />
-      )}
+        {user && (
+          <NovuNotificationPopover
+            colorScheme={colorScheme as ColorScheme}
+            subscriberId={user.portalUserID}
+          />
+        )}
       </Flex>
     </Flex>
   )

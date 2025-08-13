@@ -16,7 +16,7 @@ export default function AccountSettings() {
   useActionNotification(actionData)
 
   return (
-    <AccountSettingsLayoutView account={account}>
+    <AccountSettingsLayoutView account={account} userRole={userRole}>
       <Outlet context={{ account, accounts, user, userRole }} />
     </AccountSettingsLayoutView>
   )

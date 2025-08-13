@@ -10,6 +10,7 @@ import { getErrorMessage } from "~/utils/catchError"
 import { seo_title_append } from "~/utils/seo"
 import { requireUser } from "~/utils/user.server"
 
+//TODO: Ensure that notifications respect the rate limits set in Envoy and make this more apparent to the end user
 export const meta: MetaFunction = () => {
   return [{ title: `Account Notifications ${seo_title_append}` }]
 }
