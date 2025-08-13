@@ -11,11 +11,11 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    target: 'es2022',
-    cssTarget: 'chrome115',
+    target: "es2022",
+    cssTarget: "chrome115",
     rollupOptions: {
       onwarn(warning, defaultHandler) {
-        if (warning.code === 'EVAL' && warning.id?.includes('lottie-web')) {
+        if (warning.code === "EVAL" && warning.id?.includes("lottie-web")) {
           return
         }
         defaultHandler(warning)
