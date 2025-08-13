@@ -28,8 +28,8 @@ jobs:
           node-version: "22"
           cache: "pnpm"
 
-      - name: Install dependencies and build
-        run: make portal_install_and_run
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Format code and generate types
         run: make portal_format
