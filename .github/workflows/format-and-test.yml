@@ -1,14 +1,16 @@
-name: E2E Tests
+name: Format and Test
 
 on:
   push:
     branches:
       - "wip/**"
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
-  e2e-tests:
-    name: End-to-End Tests
+  format-and-test:
+    name: Format, Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +28,22 @@ jobs:
           node-version: "22"
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies and build
+        run: make portal_install_and_run &
+        # Run in background and kill after deps are installed
 
-      - name: Build application
+      - name: Wait for dependencies
+        run: |
+          sleep 10
+          pkill -f "pnpm.*dev" || true
+
+      - name: Format code and generate types
+        run: make portal_format
+
+      - name: Run unit tests
+        run: make portal_test
+
+      - name: Build application for E2E
         run: pnpm run build
 
       - name: Run E2E tests
@@ -50,3 +64,11 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/coverage-summary.json
+          flags: unittests
+          name: grove-portal-coverage
+        continue-on-error: true
