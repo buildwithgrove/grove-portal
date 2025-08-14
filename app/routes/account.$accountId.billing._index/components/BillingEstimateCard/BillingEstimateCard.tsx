@@ -1,6 +1,7 @@
 import { Alert, NumberFormatter, Stack, Text, Title } from "@mantine/core"
 import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
 
+import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 import { Info } from "lucide-react"
 import { Stripe } from "~/models/stripe/stripe.server"
 import TitledCard from "~/components/TitledCard/TitledCard"
@@ -31,10 +32,20 @@ export const BillingEstimateCard = ({
   }
 
   // Calculate billing estimate using real pricing
+  // First N relays (Defined in app/utils/planUtils.ts are free, then $5 per 1M unit
   const oneUnit = 1_000_000 // 1 unit = 1M relays
   const units = Math.floor(totalRelays / oneUnit) + 1
   const unitPrice = getUnitPrice()
-  let estimatedCost = units * unitPrice
+  let estimatedCost = 0
+
+  if (totalRelays <= FREE_TIER_MONTHLY_RELAY_LIMIT) {
+    estimatedCost = 0
+  } else {
+    // Calculate units for relays above the free tier
+    const billableRelays = totalRelays
+    const units = Math.floor(billableRelays / 1_000_000) + 1
+    estimatedCost = units * unitPrice
+  }
 
   // Apply any discounts from subscription or upcoming invoice
   let discountAmount = 0
@@ -89,7 +100,7 @@ export const BillingEstimateCard = ({
     ) {
       return formatStripeDate(subscription.current_period_end as number, "MMMM D, YYYY")
     } else {
-      return dayjs().add(1, "month").format("MMMM 1, YYYY")
+      return dayjs().add(1, "month").startOf("month").format("MMMM D, YYYY")
     }
   }
 
@@ -110,8 +121,12 @@ export const BillingEstimateCard = ({
         </Title>
 
         <Text c="dimmed" size="sm">
-          Based on {new Intl.NumberFormat().format(totalRelays)} relays this month (
-          {units} units × ${unitPrice}/unit with 1M relays per unit)
+          Based on {new Intl.NumberFormat().format(totalRelays)} relays this month
+          {totalRelays > FREE_TIER_MONTHLY_RELAY_LIMIT &&
+            (() => {
+              const units = Math.floor(totalRelays / 1_000_000) + 1
+              return ` (${units} units × $${unitPrice}/unit)`
+            })()}
         </Text>
 
         {discountText && (
