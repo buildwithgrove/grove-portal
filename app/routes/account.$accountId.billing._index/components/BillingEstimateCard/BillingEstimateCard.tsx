@@ -5,6 +5,7 @@ import { Stripe } from "~/models/stripe/stripe.server"
 import TitledCard from "~/components/TitledCard/TitledCard"
 import { dayjs } from "~/utils/dayjs"
 import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
+import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 
 export type BillingEstimateCardProps = {
   totalRelays: number
@@ -30,9 +31,18 @@ export const BillingEstimateCard = ({
   }
 
   // Calculate billing estimate using real pricing
-  const units = Math.floor(totalRelays / 1_000_000) + 1
+  // First N relays (Defined in app/utils/planUtils.ts are free, then $5 per 1M unit
   const unitPrice = getUnitPrice()
-  let estimatedCost = units * unitPrice
+  let estimatedCost = 0
+
+  if (totalRelays <= FREE_TIER_MONTHLY_RELAY_LIMIT) {
+    estimatedCost = 0
+  } else {
+    // Calculate units for relays above the free tier
+    const billableRelays = totalRelays
+    const units = Math.floor(billableRelays / 1_000_000) + 1
+    estimatedCost = units * unitPrice
+  }
 
   // Apply any discounts from subscription or upcoming invoice
   let discountAmount = 0
@@ -79,15 +89,15 @@ export const BillingEstimateCard = ({
   // Get next billing date from subscription or use fallback
   const getNextBillingDate = () => {
     if (upcomingInvoice?.period_end) {
-      return formatStripeDate(upcomingInvoice.period_end, "Do MMM")
+      return formatStripeDate(upcomingInvoice.period_end, "MMMM D, YYYY")
     } else if (
       subscription &&
       "current_period_end" in subscription &&
       subscription.current_period_end
     ) {
-      return formatStripeDate(subscription.current_period_end as number, "Do MMM")
+      return formatStripeDate(subscription.current_period_end as number, "MMMM D, YYYY")
     } else {
-      return `1st ${dayjs().add(1, "month").format("MMM")}`
+      return dayjs().add(1, "month").startOf("month").format("MMMM D, YYYY")
     }
   }
 
@@ -108,8 +118,12 @@ export const BillingEstimateCard = ({
         </Title>
 
         <Text c="dimmed" size="sm">
-          Based on {new Intl.NumberFormat().format(totalRelays)} relays this month (
-          {units} units × ${unitPrice}/unit)
+          Based on {new Intl.NumberFormat().format(totalRelays)} relays this month
+          {totalRelays > FREE_TIER_MONTHLY_RELAY_LIMIT &&
+            (() => {
+              const units = Math.floor(totalRelays / 1_000_000) + 1
+              return ` (${units} units × $${unitPrice}/unit)`
+            })()}
         </Text>
 
         {discountText && (

@@ -12,7 +12,6 @@ import { dayjs } from "~/utils/dayjs"
 import { getRequiredServerEnvVar } from "~/utils/environment"
 import { requireUser } from "~/utils/user.server"
 
-
 //TODO: Implement historical usage graphs and more insights about overall billing utilization
 export type AccountBillingLoaderData = {
   invoices: Stripe.Invoice[]
