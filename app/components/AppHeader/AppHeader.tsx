@@ -7,19 +7,17 @@ import {
   MantineProvider,
   useMantineColorScheme,
 } from "@mantine/core"
-import { useFetcher } from "@remix-run/react"
-import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
-import React from "react"
-import AccountDrawer from "~/components/AccountDrawer"
-import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
-import { Account, User } from "~/models/portal/sdk"
-import { ColorScheme } from "~/root"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
+import { BookOpen, Contrast, LifeBuoy } from "lucide-react"
 import { DISCORD_PATH, DOCS_PATH } from "~/utils/utils"
+
+import { ColorScheme } from "~/root"
+import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
+import { User } from "~/models/portal/sdk"
+import { useFetcher } from "@remix-run/react"
 
 type HeaderProps = {
   user?: User
-  accounts: Account[]
   opened: boolean
   toggle: () => void
 }

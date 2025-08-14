@@ -1,5 +1,4 @@
 import { Box } from "@mantine/core"
-import React from "react"
 import { Blockchain } from "~/models/portal/sdk"
 import { AppInsightsData } from "~/routes/account.$accountId.$appId.insights/route"
 import Insights from "~/routes/account.$accountId._index/components/Insights"

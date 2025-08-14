@@ -1,12 +1,13 @@
-import { Divider, Button, Group, Text, Stack } from "@mantine/core"
-import { Link } from "@remix-run/react"
+import { Button, Divider, Group, Stack, Text } from "@mantine/core"
+
+import { Account } from "~/models/portal/sdk"
 import { ArrowUpRight } from "lucide-react"
+import { DISCORD_PATH } from "~/utils/utils"
+import { Link } from "@remix-run/react"
 import React from "react"
 import { TitledCard } from "~/components/TitledCard"
-import { Account } from "~/models/portal/sdk"
 import { commify } from "~/utils/formattingUtils"
 import { getPlanName } from "~/utils/planUtils"
-import { DISCORD_PATH } from "~/utils/utils"
 
 interface EnterpriseAccountOverviewCardProps {
   account: Account

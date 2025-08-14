@@ -1,6 +1,5 @@
 import { Box, Button, Stack, Text, Title } from "@mantine/core"
 import { Link, useParams } from "@remix-run/react"
-import React from "react"
 import LogsControls from "app/routes/account.$accountId.logs/components/LogsControls"
 import { EmptyState } from "~/components/EmptyState"
 import { Blockchain, RoleName } from "~/models/portal/sdk"

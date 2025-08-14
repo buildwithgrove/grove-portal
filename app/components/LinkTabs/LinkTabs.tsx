@@ -1,6 +1,5 @@
 import { Flex, Button, ScrollArea } from "@mantine/core"
 import { NavLink } from "@remix-run/react"
-import React from "react"
 
 import classes from "./LinkTabs.module.css"
 

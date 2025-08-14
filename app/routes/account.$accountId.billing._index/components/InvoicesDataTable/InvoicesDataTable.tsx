@@ -1,7 +1,6 @@
 import { Button, Menu, NumberFormatter, Text } from "@mantine/core"
 import { useNavigate, useParams } from "@remix-run/react"
 import { DataTable } from "mantine-datatable"
-import React from "react"
 import ContextMenuTarget from "~/components/ContextMenuTarget"
 import { Stripe } from "~/models/stripe/stripe.server"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
@@ -79,12 +78,12 @@ const InvoicesDataTable = ({ invoices, usageRecords }: InvoicesDataTableProps) =
           accessor: "period_start",
           title: "Start Date",
           render: ({ period_start }) =>
-            formatStripeDate(period_start, "Do MMM YYYY, HH:mm"),
+            formatStripeDate(period_start, "MMMM D, YYYY, HH:mm"),
         },
         {
           accessor: "period_end",
           title: "End Date",
-          render: ({ period_end }) => formatStripeDate(period_end, "Do MMM YYYY, HH:mm"),
+          render: ({ period_end }) => formatStripeDate(period_end, "MMMM D, YYYY, HH:mm"),
         },
         {
           accessor: "action",

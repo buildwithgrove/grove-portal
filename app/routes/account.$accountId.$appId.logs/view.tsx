@@ -1,5 +1,4 @@
 import { Stack, Text } from "@mantine/core"
-import React from "react"
 import LogsControls from "app/routes/account.$accountId.logs/components/LogsControls"
 import { Blockchain } from "~/models/portal/sdk"
 import { AppLogsData } from "~/routes/account.$accountId.$appId.logs/route"

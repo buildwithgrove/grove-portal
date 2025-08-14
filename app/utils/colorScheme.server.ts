@@ -1,5 +1,5 @@
-import { createCookieSessionStorage } from "@remix-run/node"
 import { ColorScheme } from "~/root"
+import { createCookieSessionStorage } from "@remix-run/node"
 
 // const sessionSecret = ""
 // if (!sessionSecret) {
@@ -7,10 +7,10 @@ import { ColorScheme } from "~/root"
 // }
 
 const colorSchemeStorage = createCookieSessionStorage({
-  // TODO: Sign the cookie with a secret
   cookie: {
     name: "grove_color_scheme",
     secure: process.env.NODE_ENV === "production",
+    // TODO_TECHDEBT: Sign the cookie with a secret
     // secrets: [sessionSecret],
     sameSite: "lax",
     path: "/",

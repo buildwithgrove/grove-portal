@@ -1,7 +1,6 @@
 import { ActionIcon, Button, Group, Menu, Text } from "@mantine/core"
 import { Form, Link, useNavigation } from "@remix-run/react"
 import { ArrowUpRight, Minus, Ellipsis, Pencil } from "lucide-react"
-import React from "react"
 import { RoleName, User } from "~/models/portal/sdk"
 import useTeamModals from "~/routes/account.$accountId.settings.members/hooks/useTeamModals"
 import { TableUserAccount } from "~/routes/user.accounts/components/AccountsTable"

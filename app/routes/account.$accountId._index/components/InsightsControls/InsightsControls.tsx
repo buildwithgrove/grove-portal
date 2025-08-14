@@ -1,6 +1,6 @@
+import React, { useMemo } from "react"
 import { Divider, Box, Group, Text, Button } from "@mantine/core"
 import { useParams, useSearchParams } from "@remix-run/react"
-import React from "react"
 import ChainSelectItem from "~/components/ChainSelectItem"
 import FluidSelect from "~/components/FluidSelect"
 import { Blockchain, PortalApp } from "~/models/portal/sdk"
@@ -42,7 +42,7 @@ const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
       : []),
   ]
 
-  const chainsSelectItems = React.useMemo(() => {
+  const chainsSelectItems = useMemo(() => {
     return chains.length > 0
       ? [
           { value: "all", label: "All Services" },

@@ -1,5 +1,4 @@
 import { Stack, Text, Title } from "@mantine/core"
-import React from "react"
 import { AccountBillingOutletContext } from "~/routes/account.$accountId.billing/route"
 import InvoiceHeader from "~/routes/account.$accountId.billing.$invoiceId/components/InvoiceHeader"
 import InvoicePaymentMethod from "~/routes/account.$accountId.billing.$invoiceId/components/InvoicePaymentMethod"

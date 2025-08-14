@@ -1,5 +1,4 @@
 import { Box, LoadingOverlay, Space, Text } from "@mantine/core"
-import React from "react"
 import { type AxisDomain } from "recharts/types/util/types"
 import chartLoaderAnimation from "./chart-loader.json"
 import PortalLoader from "~/components/PortalLoader"

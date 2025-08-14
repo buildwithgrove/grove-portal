@@ -1,6 +1,5 @@
 import { Text } from "@mantine/core"
 import { useFetcher } from "@remix-run/react"
-import React from "react"
 import useActionNotification, {
   ActionNotificationData,
 } from "~/hooks/useActionNotification"

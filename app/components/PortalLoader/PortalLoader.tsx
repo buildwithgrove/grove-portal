@@ -1,5 +1,6 @@
 import { Box, Stack, Text } from "@mantine/core"
-import React from "react"
+import { createElement, useEffect, useState } from "react"
+
 import { ClientOnly } from "remix-utils/client-only"
 import groveTreeAnimation from "./grove-tree.json"
 
@@ -41,24 +42,24 @@ const PortalLoader = ({
 
 // This component only renders on the client side
 function ClientSideLottie({ message, size = "md", loaderAnimation }: PortalLoaderProps) {
-  const [lottieModule, setLottieModule] = React.useState<any>(null)
-  const [lottieView, setLottieView] = React.useState<any>(null)
+  const [lottieModule, setLottieModule] = useState<any>(null)
+  const [lottieView, setLottieView] = useState<any>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Dynamic import for client-side only
     import("lottie-react").then((module) => {
       setLottieModule(module)
     })
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (lottieModule) {
       const { useLottie } = lottieModule
       // We can't use useLottie hook here, so we'll create the animation manually
       try {
         const lottieInstance = lottieModule.default
         setLottieView(
-          React.createElement(lottieInstance, {
+          createElement(lottieInstance, {
             animationData: loaderAnimation,
             loop: true,
             autoplay: true,

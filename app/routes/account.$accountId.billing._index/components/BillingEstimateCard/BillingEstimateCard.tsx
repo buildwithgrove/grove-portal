@@ -1,11 +1,11 @@
-import { Stack, Text, Title, Alert, NumberFormatter } from "@mantine/core"
+import { Alert, NumberFormatter, Stack, Text, Title } from "@mantine/core"
+import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
+
+import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 import { Info } from "lucide-react"
-import React from "react"
 import { Stripe } from "~/models/stripe/stripe.server"
 import TitledCard from "~/components/TitledCard/TitledCard"
 import { dayjs } from "~/utils/dayjs"
-import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
-import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 
 export type BillingEstimateCardProps = {
   totalRelays: number
@@ -14,6 +14,7 @@ export type BillingEstimateCardProps = {
   isLoading?: boolean
 }
 
+// TODO: Need to add support for free tier plans and pricing: https://github.com/buildwithgrove/grove-portal/pull/730#issuecomment-3184904755
 export const BillingEstimateCard = ({
   totalRelays,
   subscription,
@@ -32,6 +33,8 @@ export const BillingEstimateCard = ({
 
   // Calculate billing estimate using real pricing
   // First N relays (Defined in app/utils/planUtils.ts are free, then $5 per 1M unit
+  const oneUnit = 1_000_000 // 1 unit = 1M relays
+  const units = Math.floor(totalRelays / oneUnit) + 1
   const unitPrice = getUnitPrice()
   let estimatedCost = 0
 

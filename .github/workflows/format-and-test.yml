@@ -1,0 +1,54 @@
+name: Format and Test
+
+on:
+  push:
+    branches:
+      - "wip/**"
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  format-and-test:
+    name: Format, Build & Test
+    runs-on: ubuntu-latest
+    environment: CI
+    env:
+      PORTAL_API_URL: ${{ secrets.PORTAL_API_URL }}
+      PORTAL_ADMIN_KEY: ${{ secrets.PORTAL_ADMIN_KEY }}
+      NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+      AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+      AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
+      AUTH0_SCOPE: ${{ secrets.AUTH0_SCOPE }}
+      KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+      KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+      # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format code and generate types
+        run: make portal_format
+
+      - name: Run unit tests
+        run: make portal_test
+# TODO_IMPROVE: Add E2E Cypress tests: https://docs.cypress.io/app/continuous-integration/github-actions

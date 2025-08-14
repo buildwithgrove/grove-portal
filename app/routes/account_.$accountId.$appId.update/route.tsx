@@ -6,7 +6,6 @@ import {
   redirect,
 } from "@remix-run/node"
 import { useFetcher, useLoaderData } from "@remix-run/react"
-import React from "react"
 import invariant from "tiny-invariant"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
 import RouteModal from "~/components/RouteModal"

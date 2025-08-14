@@ -1,5 +1,4 @@
 import { Avatar, Flex, Stack, Text } from "@mantine/core"
-import React from "react"
 import { Blockchain } from "~/models/portal/sdk"
 
 type ChainProps = {

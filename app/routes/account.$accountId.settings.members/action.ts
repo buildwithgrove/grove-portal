@@ -74,7 +74,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         targetedUserId: invitedUserId,
         targetedUserEmail: user_email,
       }).catch((error) => {
-        console.log(error)
+        // Handle error silently - user will see error message
         message =
           message + ", however something went wrong while sending the notification."
       })
@@ -109,7 +109,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         targetedUserId: user_id,
         targetedUserEmail: user_email,
       }).catch((error) => {
-        console.log(error)
+        // Handle error silently - user will see error message
         message =
           message + ", however something went wrong while sending the notification."
       })
@@ -145,7 +145,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         targetedUserEmail: user_email,
         userRole: user_role as RoleName,
       }).catch((error) => {
-        console.log(error)
+        // Handle error silently - user will see error message
         message =
           message + ", however something went wrong while sending the notification."
       })
@@ -186,7 +186,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         targetedUserEmail: user_email,
         userRole: user_role as RoleName,
       }).catch((error) => {
-        console.log(error)
+        // Handle error silently - user will see error message
         message =
           message + ", however something went wrong while sending the notification."
       })
@@ -221,7 +221,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         targetedUserId: user_id,
         targetedUserEmail: user_email,
       }).catch((error) => {
-        console.log(error)
+        // Handle error silently - user will see error message
         message =
           message + ", however something went wrong while sending the notification."
       })

@@ -1,6 +1,5 @@
 import { Stack, Text, Title, Tooltip } from "@mantine/core"
 import { DataTable } from "mantine-datatable"
-import React from "react"
 import { Stripe } from "~/models/stripe/stripe.server"
 import { CHARGE_STATUS_COLOR } from "~/utils/billingUtils"
 

@@ -1,15 +1,16 @@
+import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
+import { Blockchain, PortalApp } from "~/models/portal/sdk"
 import { Divider, Stack, Title } from "@mantine/core"
 import { FetcherWithComponents, useFetcher } from "@remix-run/react"
-import React, { useEffect, useMemo } from "react"
+import { useEffect, useMemo } from "react"
+
 import ChainSandboxBody from "~/components/ChainSandbox/components/ChainSandboxBody"
 import ChainSandboxHeaders from "~/components/ChainSandbox/components/ChainSandboxHeaders"
 import ChainSandboxInputs from "~/components/ChainSandbox/components/ChainSandboxInputs"
-import useChainSandboxContext from "~/components/ChainSandbox/state"
 import CodeEditor from "~/components/CodeEditor"
-import { Blockchain, PortalApp } from "~/models/portal/sdk"
 import { SandboxRequestData } from "~/routes/api.sandbox/route"
-import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { getAppEndpointUrl } from "~/utils/chainUtils"
+import useChainSandboxContext from "~/components/ChainSandbox/state"
 
 type ChainSandboxProps = {
   apps?: PortalApp[]

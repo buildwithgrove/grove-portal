@@ -1,6 +1,5 @@
 import { Table, Box, LoadingOverlay } from "@mantine/core"
 import cx from "clsx"
-import React from "react"
 import classes from "./DataTable.module.css"
 import { DataTableBody } from "./DataTableBody"
 import { DataTablePagination } from "./DataTablePagination"

@@ -1,6 +1,5 @@
 import { json, LoaderFunction } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
-import React from "react"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
 import { User } from "~/models/portal/sdk"
 import { requireUser } from "~/utils/user.server"

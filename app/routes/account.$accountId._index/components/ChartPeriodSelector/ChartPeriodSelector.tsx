@@ -1,7 +1,6 @@
 import { Button, Group, Text, Tooltip, useMantineTheme } from "@mantine/core"
 import { Form, useSearchParams } from "@remix-run/react"
 import { Info } from "lucide-react"
-import React from "react"
 
 export const ChartPeriodSelector = () => {
   const theme = useMantineTheme()

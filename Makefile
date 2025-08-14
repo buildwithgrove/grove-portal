@@ -11,12 +11,50 @@ list: ## List all make targets
 help: ## Prints all the targets in all the Makefiles
 	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-60s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: trigger_ci
+trigger_ci: ## Trigger the CI pipeline by submitting an empty commit; See https://github.com/pokt-network/pocket/issues/900 for details
+	git commit --allow-empty -m "Empty commit"
+	git push
+
+
+#############################
+#### Portal Install & Run ###
+#############################
+
+.PHONY: portal_install_and_run
+portal_install_and_run: check_deps_all ## Run Portal locally after ensuring all dependencies are installed & built
+	pnpm install
+	pnpm build
+	pnpm dev
+
+.PHONY: portal_format
+portal_format: check_deps_all ## Generate types and format the code
+	pnpm run generate:types
+	pnpm run format
+	pnpm run lint:fix
+	pnpm run typecheck
+
+.PHONY: portal_test
+portal_test: ## Run unit tests
+	pnpm run test:unit:run
+
+#############################
+#### Development Helpers ####
+#############################
+
+.PHONY: todos
+todos: ## Show all TODO items in the codebase
+	@echo "📝 TODOs found in codebase:"
+	@echo "=========================="
+	@rg -n "TODO|FIXME|XXX|HACK" --type js --type ts --type json --type md --type yaml -g "*.tsx" -g "*.jsx" -g "*.yml" . || echo "No TODOs found!"
+
 #############################
 #### Environment Checkers ###
 #############################
 
 .PHONY: check_deps_all
-check_deps_all: check_version_pnpm check_version_node check_version_stripe ## Ensure everything is installed
+# Internal helper target - ensure everything is installed
+check_deps_all: check_version_pnpm check_version_node # check_version_stripe
 
 .PHONY: check_version_pnpm
 # Internal helper target - check pnpm version
@@ -61,13 +99,3 @@ check_version_stripe:
 		exit 1 ; \
 	fi ; \
 	echo "Stripe CLI version $$version found."
-
-#############################
-#### Portal Install & Run ###
-#############################
-
-.PHONY: portal_install_and_run
-portal_install_and_run: check_deps_all # Install all dependencies, build them and run Portal locally
-	pnpm install
-	pnpm build
-	pnpm dev

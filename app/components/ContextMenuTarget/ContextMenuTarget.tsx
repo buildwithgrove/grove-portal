@@ -1,6 +1,5 @@
 import { ActionIcon, Menu } from "@mantine/core"
 import { Ellipsis } from "lucide-react"
-import React from "react"
 
 const ContextMenuTarget = ({
   variant = "outline",

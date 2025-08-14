@@ -1,5 +1,4 @@
 import { Container } from "@mantine/core"
-import React from "react"
 
 type AccountBillingLayoutViewProps = {
   children: React.ReactNode

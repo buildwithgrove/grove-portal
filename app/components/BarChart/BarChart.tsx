@@ -1,16 +1,18 @@
-import { Box, Text, useMantineTheme } from "@mantine/core"
-import React, { useState } from "react"
 import {
-  CartesianGrid,
   Bar,
+  CartesianGrid,
+  Cell,
   BarChart as RechartsBarChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  Cell,
 } from "recharts"
+import { Box, Text, useMantineTheme } from "@mantine/core"
+import React, { useState } from "react"
+
 import { ChartData } from "~/types/global"
+
 type BarChartProps = {
   data: ChartData[]
   xAxisDataKey: string
