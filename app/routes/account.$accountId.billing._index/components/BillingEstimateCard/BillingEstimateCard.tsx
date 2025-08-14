@@ -5,6 +5,7 @@ import { Stripe } from "~/models/stripe/stripe.server"
 import TitledCard from "~/components/TitledCard/TitledCard"
 import { dayjs } from "~/utils/dayjs"
 import { formatStripeDate, getStripeAmount } from "~/utils/billingUtils"
+import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 
 export type BillingEstimateCardProps = {
   totalRelays: number
@@ -30,11 +31,11 @@ export const BillingEstimateCard = ({
   }
 
   // Calculate billing estimate using real pricing
-  // First 150,000 relays are free, then $5 per 1M unit
+  // First N relays (Defined in app/utils/planUtils.ts are free, then $5 per 1M unit
   const unitPrice = getUnitPrice()
   let estimatedCost = 0
-  
-  if (totalRelays <= 150_000) {
+
+  if (totalRelays <= FREE_TIER_MONTHLY_RELAY_LIMIT) {
     estimatedCost = 0
   } else {
     // Calculate units for relays above the free tier
@@ -118,10 +119,11 @@ export const BillingEstimateCard = ({
 
         <Text c="dimmed" size="sm">
           Based on {new Intl.NumberFormat().format(totalRelays)} relays this month
-          {totalRelays > 150_000 && (() => {
-            const units = Math.floor(totalRelays / 1_000_000) + 1
-            return ` (${units} units × $${unitPrice}/unit)`
-          })()}
+          {totalRelays > FREE_TIER_MONTHLY_RELAY_LIMIT &&
+            (() => {
+              const units = Math.floor(totalRelays / 1_000_000) + 1
+              return ` (${units} units × $${unitPrice}/unit)`
+            })()}
         </Text>
 
         {discountText && (

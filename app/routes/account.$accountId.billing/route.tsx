@@ -16,7 +16,7 @@ import { requireUser } from "~/utils/user.server"
 import { UsageRecordSummary, InvoiceUsageData } from "~/types/stripe-custom"
 
 //TODO: Figure out how to have anyone who has _ever_ had PLAN_UNLIMITED (has at least 1 invoice)
-// always maintain access to the billing page. 
+// always maintain access to the billing page.
 export const meta: MetaFunction = () => {
   return [
     {
