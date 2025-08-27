@@ -161,8 +161,8 @@ const AppEndpointsTable = ({
                         variant="subtle"
                         component="a"
                         href={
-                          chain.blockchain && CHAIN_DOCS_URL[chain.blockchain]
-                            ? `${DOCS_PATH}/${CHAIN_DOCS_URL[chain.blockchain]}`
+                          chain.blockchain
+                            ? `${DOCS_PATH}/service-apis/${chain.blockchain}-api`
                             : DOCS_PATH
                         }
                         target="_blank"
