@@ -170,7 +170,7 @@ importers:
         version: 2.20.2(class-transformer@0.5.1)(class-validator@0.14.0)
       '@remix-run/dev':
         specifier: ^2.16.8
-        version: 2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
+        version: 2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
       '@remix-run/testing':
         specifier: ^2.16.8
         version: 2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
@@ -221,10 +221,10 @@ importers:
         version: 3.2.29
       '@vercel/remix':
         specifier: ^2.16.6
-        version: 2.16.6(@remix-run/dev@2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))))(@remix-run/node@2.16.8(typescript@5.8.3))(@remix-run/server-runtime@2.16.8(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 2.16.6(@remix-run/dev@2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))))(@remix-run/node@2.16.8(typescript@5.8.3))(@remix-run/server-runtime@2.16.8(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@vitejs/plugin-react':
         specifier: ^4.5.2
-        version: 4.5.2(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
+        version: 4.5.2(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
       '@vitest/coverage-v8':
         specifier: ^1.6.1
         version: 1.6.1(vitest@1.6.1(@edge-runtime/vm@3.2.0)(@types/node@18.19.111)(jsdom@20.0.3)(sugarss@4.0.1(postcss@8.5.4)))
@@ -298,11 +298,11 @@ importers:
         specifier: ^8.34.0
         version: 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       vite:
-        specifier: ^5.4.19
-        version: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+        specifier: ^5.4.20
+        version: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
       vite-tsconfig-paths:
         specifier: ^4.3.2
-        version: 4.3.2(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
+        version: 4.3.2(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
       vitest:
         specifier: ^1.6.1
         version: 1.6.1(@edge-runtime/vm@3.2.0)(@types/node@18.19.111)(jsdom@20.0.3)(sugarss@4.0.1(postcss@8.5.4))
@@ -616,6 +616,10 @@ packages:
     resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/runtime@7.28.4':
+    resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/template@7.27.2':
     resolution: {integrity: sha512-LPDZ85aEJyYSd18/DkjNh4/y1ntkE5KwUHWTiqgRxruuZL2F1yuHligVHLvcHY2vMHXttKFpJn6LwfI7cw7ODw==}
     engines: {node: '>=6.9.0'}
@@ -642,6 +646,9 @@ packages:
 
   '@codemirror/language@6.11.1':
     resolution: {integrity: sha512-5kS1U7emOGV84vxC+ruBty5sUgcD0te6dyupyRVG2zaSjhTDM73LhVKUtVwiqSe6QwmEoA4SCiU8AKPFyumAWQ==}
+
+  '@codemirror/language@6.11.3':
+    resolution: {integrity: sha512-9HBM2XnwDj7fnu0551HkGdrUrrqmYq/WC5iv6nbY2WdicXdGbhR/gfbZOH73Aqj4351alY1+aoG9rCNfiwS1RA==}
 
   '@codemirror/legacy-modes@6.5.1':
     resolution: {integrity: sha512-DJYQQ00N1/KdESpZV7jg9hafof/iBNp9h7TYo1SLMk86TWl9uDsVdho2dzd81K+v4retmK6mdC7WpuOQDytQqw==}
@@ -1929,8 +1936,8 @@ packages:
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
 
-  '@types/validator@13.15.1':
-    resolution: {integrity: sha512-9gG6ogYcoI2mCMLdcO0NYI0AYrbxIjv0MDmy/5Ywo6CpWWrqYayc+mmgxRsCgtcGJm9BSbXkMsmxGah1iGHAAQ==}
+  '@types/validator@13.15.3':
+    resolution: {integrity: sha512-7bcUmDyS6PN3EuD9SlGGOxM77F8WLVsrwkxyWxKnxzmXoequ6c7741QBrANq6htVRGOITJ7z72mTP6Z4XyuG+Q==}
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -4525,8 +4532,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.12.9:
-    resolution: {integrity: sha512-VWwAdNeJgN7jFOD+wN4qx83DTPMVPPAUyx9/TUkBXKLiNkuWWk6anV0439tgdtwaJDrEdqkvdN22iA6J4bUCZg==}
+  libphonenumber-js@1.12.15:
+    resolution: {integrity: sha512-TMDCtIhWUDHh91wRC+wFuGlIzKdPzaTUHHVrIZ3vPUEoNaXFLrsIQ1ZpAeZeXApIF6rvDksMTvjrIQlLKaYxqQ==}
 
   lilconfig@3.1.3:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
@@ -6766,8 +6773,8 @@ packages:
       vite:
         optional: true
 
-  vite@5.4.19:
-    resolution: {integrity: sha512-qO3aKv3HoQC8QKiNSTuUM1l9o/XX3+c+VTgLHbJWHZGeTPVAg2XwazI9UWzoxjIJCGCV2zU60uqMzjeLZuULqA==}
+  vite@5.4.20:
+    resolution: {integrity: sha512-j3lYzGC3P+B5Yfy/pfKNgVEg4+UtcIJcVRt2cDjIOmhLourAqPqf8P7acgxeiSgUB7E3p2P8/3gNIgDLpwzs4g==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -7443,6 +7450,9 @@ snapshots:
 
   '@babel/runtime@7.27.6': {}
 
+  '@babel/runtime@7.28.4':
+    optional: true
+
   '@babel/template@7.27.2':
     dependencies:
       '@babel/code-frame': 7.27.1
@@ -7470,7 +7480,7 @@ snapshots:
 
   '@codemirror/autocomplete@6.18.4':
     dependencies:
-      '@codemirror/language': 6.11.1
+      '@codemirror/language': 6.11.3
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.37.1
       '@lezer/common': 1.2.3
@@ -7488,6 +7498,15 @@ snapshots:
       '@lezer/json': 1.0.3
 
   '@codemirror/language@6.11.1':
+    dependencies:
+      '@codemirror/state': 6.5.2
+      '@codemirror/view': 6.37.1
+      '@lezer/common': 1.2.3
+      '@lezer/highlight': 1.2.1
+      '@lezer/lr': 1.4.2
+      style-mod: 4.1.2
+
+  '@codemirror/language@6.11.3':
     dependencies:
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.37.1
@@ -7518,7 +7537,7 @@ snapshots:
 
   '@codemirror/theme-one-dark@6.1.2':
     dependencies:
-      '@codemirror/language': 6.11.1
+      '@codemirror/language': 6.11.3
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.37.1
       '@lezer/highlight': 1.2.1
@@ -8650,7 +8669,7 @@ snapshots:
 
   '@remix-run/css-bundle@2.16.8': {}
 
-  '@remix-run/dev@2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))':
+  '@remix-run/dev@2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/generator': 7.27.5
@@ -8712,7 +8731,7 @@ snapshots:
     optionalDependencies:
       '@remix-run/serve': 2.16.8(typescript@5.8.3)
       typescript: 5.8.3
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -9168,7 +9187,7 @@ snapshots:
 
   '@types/unist@2.0.11': {}
 
-  '@types/validator@13.15.1':
+  '@types/validator@13.15.3':
     optional: true
 
   '@types/ws@8.18.1':
@@ -9424,7 +9443,7 @@ snapshots:
       lodash: 4.17.21
       mlly: 1.7.4
       outdent: 0.8.0
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
       vite-node: 1.6.1(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
     transitivePeerDependencies:
       - '@types/node'
@@ -9494,9 +9513,9 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/remix@2.16.6(@remix-run/dev@2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))))(@remix-run/node@2.16.8(typescript@5.8.3))(@remix-run/server-runtime@2.16.8(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@vercel/remix@2.16.6(@remix-run/dev@2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))))(@remix-run/node@2.16.8(typescript@5.8.3))(@remix-run/server-runtime@2.16.8(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@remix-run/dev': 2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
+      '@remix-run/dev': 2.16.8(@remix-run/react@2.16.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3))(@remix-run/serve@2.16.8(typescript@5.8.3))(@types/node@18.19.111)(babel-plugin-macros@3.1.0)(sugarss@4.0.1(postcss@8.5.4))(ts-node@10.9.1(@types/node@18.19.111)(typescript@5.8.3))(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))
       '@remix-run/node': 2.16.8(typescript@5.8.3)
       '@remix-run/server-runtime': 2.16.8(typescript@5.8.3)
       '@vercel/static-config': 3.0.0
@@ -9511,7 +9530,7 @@ snapshots:
       json-schema-to-ts: 1.6.4
       ts-morph: 12.0.0
 
-  '@vitejs/plugin-react@4.5.2(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))':
+  '@vitejs/plugin-react@4.5.2(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)))':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.27.4)
@@ -9519,7 +9538,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.11
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
     transitivePeerDependencies:
       - supports-color
 
@@ -9837,7 +9856,7 @@ snapshots:
 
   babel-plugin-macros@3.1.0:
     dependencies:
-      '@babel/runtime': 7.27.6
+      '@babel/runtime': 7.28.4
       cosmiconfig: 7.1.0
       resolve: 1.22.10
     optional: true
@@ -10121,8 +10140,8 @@ snapshots:
 
   class-validator@0.14.0:
     dependencies:
-      '@types/validator': 13.15.1
-      libphonenumber-js: 1.12.9
+      '@types/validator': 13.15.3
+      libphonenumber-js: 1.12.15
       validator: 13.15.15
     optional: true
 
@@ -10179,7 +10198,7 @@ snapshots:
     dependencies:
       '@codemirror/autocomplete': 6.18.4
       '@codemirror/commands': 6.8.1
-      '@codemirror/language': 6.11.1
+      '@codemirror/language': 6.11.3
       '@codemirror/lint': 6.8.5
       '@codemirror/search': 6.5.8
       '@codemirror/state': 6.5.2
@@ -12292,7 +12311,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.9:
+  libphonenumber-js@1.12.15:
     optional: true
 
   lilconfig@3.1.3: {}
@@ -14855,7 +14874,7 @@ snapshots:
       debug: 4.4.1(supports-color@8.1.1)
       pathe: 1.1.2
       picocolors: 1.1.1
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -14873,7 +14892,7 @@ snapshots:
       debug: 4.4.1(supports-color@8.1.1)
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -14885,18 +14904,18 @@ snapshots:
       - supports-color
       - terser
 
-  vite-tsconfig-paths@4.3.2(typescript@5.8.3)(vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))):
+  vite-tsconfig-paths@4.3.2(typescript@5.8.3)(vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))):
     dependencies:
       debug: 4.4.1(supports-color@8.1.1)
       globrex: 0.1.2
       tsconfck: 3.1.6(typescript@5.8.3)
     optionalDependencies:
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)):
+  vite@5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4)):
     dependencies:
       esbuild: 0.17.19
       postcss: 8.5.4
@@ -14930,7 +14949,7 @@ snapshots:
       strip-literal: 2.1.1
       tinybench: 2.9.0
       tinypool: 0.8.4
-      vite: 5.4.19(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
+      vite: 5.4.20(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
       vite-node: 1.6.1(@types/node@18.19.111)(sugarss@4.0.1(postcss@8.5.4))
       why-is-node-running: 2.3.0
     optionalDependencies:

@@ -56,7 +56,7 @@ export default function UnlimitedPlanOverviewCard({
             </Group>
             <Divider />
             <Group justify="space-between">
-              <Text>Free Daily Relays</Text> <Text>150,000</Text>
+              <Text>Free Monthly Relays</Text> <Text>1,000,000</Text>
             </Group>
             <Divider />
           </Stack>
