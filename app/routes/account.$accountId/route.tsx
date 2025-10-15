@@ -19,14 +19,9 @@ import { useEffect } from "react"
  * Fetches all active services with their associated endpoints from the portal database.
  * 
  * This function:
- * 1. Fetches all active services from the /services endpoint
- * 2. Filters out specific services (BE2A and any service containing "wss")
- * 3. Fetches all service endpoints from the /service_endpoints endpoint
- * 4. Joins services with their endpoints and adds computed properties
- * 
- * @param token - JWT access token for authentication
- * @returns Array of services with their endpoints and metadata
- * @throws Response with 500 status if either API call fails
+ *    1. Fetches all active services from the /services endpoint
+ *    2. Fetches all service endpoints from the /service_endpoints endpoint
+ *    3. Joins services with their endpoints and adds computed properties
  */
 async function fetchServicesWithEndpoints(token: string): Promise<ServiceWithEndpoints[]> {
   const portalDb = initPortalDbClient({ token })

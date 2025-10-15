@@ -1,20 +1,3 @@
-query blockchains($active: Boolean, $sortOrder: SortOrder) {
-  blockchains(active: $active, sortOrder: $sortOrder) {
-    id
-    ticker
-    blockchain
-    blockchainAliases
-    active
-    description
-    enforceResult
-    chainIDCheck
-    logLimitBlocks
-    path
-    scheme
-    websocketsEnabled
-  }
-}
-
 query getUserJWT($username: String!, $password: String!) {
   getUserJWT(username: $username, password: $password)
 }
