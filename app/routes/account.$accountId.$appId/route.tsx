@@ -12,7 +12,8 @@ import AppIdLayoutView from "./view"
 import ErrorBoundaryView from "app/components/ErrorBoundaryView"
 import useActionNotification from "~/hooks/useActionNotification"
 import { initPortalClient } from "~/models/portal/portal.server"
-import { Blockchain, PortalApp, RoleName } from "~/models/portal/sdk"
+import { PortalApp, RoleName } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { ActionDataStruct } from "~/types/global"
 import { getUserAccountRole } from "~/utils/accountUtils"
 import { getErrorMessage } from "~/utils/catchError"
@@ -54,13 +55,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     const getUserPortalAppResponse =
       userRole === RoleName.Member
         ? await portal.getMemberUserPortalApp({
-            portalAppID: appId,
-            accountID: accountId,
-          })
+          portalAppID: appId,
+          accountID: accountId,
+        })
         : await portal.getUserPortalApp({
-            portalAppID: appId,
-            accountID: accountId,
-          })
+          portalAppID: appId,
+          accountID: accountId,
+        })
 
     return json<AppIdLoaderData>({
       app: getUserPortalAppResponse.getUserPortalApp as PortalApp,
@@ -134,12 +135,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export type AppIdOutletContext = AppIdLoaderData & {
   userRole: RoleName
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
 export default function AppIdLayout() {
   const { app } = useLoaderData<AppIdLoaderData>()
-  const { userRole, blockchains } = useOutletContext<AccountIdLoaderData>()
+  const { userRole, services } = useOutletContext<AccountIdLoaderData>()
   const actionData = useActionData() as ActionDataStruct<AppIdActionData>
 
   // handle all notifications at the layout level
@@ -150,7 +151,7 @@ export default function AppIdLayout() {
       <Outlet
         context={{
           app,
-          blockchains,
+          services,
           userRole,
         }}
       />

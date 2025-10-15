@@ -63,8 +63,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function AppInsights() {
   const { logs, meta } = useLoaderData<AppLogsData>()
-  const { blockchains } = useOutletContext<AppIdOutletContext>()
-  return <AppLogs blockchains={blockchains} logs={logs} meta={meta} />
+  const { services } = useOutletContext<AppIdOutletContext>()
+  return <AppLogs services={services} logs={logs} meta={meta} />
 }
 
 export function ErrorBoundary() {

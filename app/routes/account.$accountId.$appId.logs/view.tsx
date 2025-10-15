@@ -1,14 +1,14 @@
 import { Stack, Text } from "@mantine/core"
 import LogsControls from "app/routes/account.$accountId.logs/components/LogsControls"
-import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { AppLogsData } from "~/routes/account.$accountId.$appId.logs/route"
 import LogsTable from "~/routes/account.$accountId.logs/components/LogsTable"
 
 type AppLogsProps = AppLogsData & {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
-const AppLogs = ({ logs, meta, blockchains }: AppLogsProps) => {
+const AppLogs = ({ logs, meta, services }: AppLogsProps) => {
   return (
     <Stack mt={22}>
       <Text>
@@ -16,7 +16,7 @@ const AppLogs = ({ logs, meta, blockchains }: AppLogsProps) => {
         past 24 hours.
       </Text>
       <LogsControls />
-      <LogsTable blockchains={blockchains} logs={logs} meta={meta} />
+      <LogsTable services={services} logs={logs} meta={meta} />
     </Stack>
   )
 }

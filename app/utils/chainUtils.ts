@@ -1,5 +1,5 @@
 import { getRequiredClientEnvVar } from "./environment"
-import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { KeyValuePair } from "~/types/global"
 
 export const CHAIN_DOCS_URL: KeyValuePair<string> = {
@@ -57,9 +57,9 @@ export const CHAIN_DOCS_URL: KeyValuePair<string> = {
   "zksync-era": "zksync-era-api/intro",
 }
 
-// evmChains is an array of the relay chain IDs for EVM chains.
+// evmServices is an array of the relay chain IDs for EVM chains.
 // It must be updated whenever a new EVM chain is added to the relay.
-export const evmChains = [
+export const evmServices = [
   "1234", // xrplevm
   "F001", // arbitrum-one
   "F002", // arbitrum-sepolia-testnet
@@ -143,28 +143,28 @@ export const evmMethods = [
   "eth_syncing",
 ]
 
-// isEvmChain uses the relay chain IDs defined in the evmChains array in this file
-// Using the chain ID is more reliable than using the blockchain alias as it is strictly
+// isEvmService uses the relay chain IDs defined in the evmServices array in this file
+// Using the chain ID is more reliable than using the service_id as it is strictly
 // one to one.
-export const isEvmChain = (chain: Blockchain | null): boolean =>
-  !!chain && evmChains.includes(chain.id)
+export const isEvmService = (service: ServiceWithEndpoints | null): boolean =>
+  !!service && evmServices.includes(service.service_id)
 
 export const getAppEndpointUrl = (
-  chain: Blockchain | undefined | null,
+  service: ServiceWithEndpoints | undefined | null,
   appId: string | undefined,
 ) => {
   let env = "city"
 
-  return `https://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
+  return `https://${service?.service_id}.rpc.grove.${env}/v1/${appId}`
 }
 
 export const getAppWebSocketUrl = (
-  chain: Blockchain | undefined | null,
+  service: ServiceWithEndpoints | undefined | null,
   appId: string | undefined,
 ) => {
   let env = "city"
 
-  return `wss://${chain?.blockchain}.rpc.grove.${env}/v1/${appId}`
+  return `wss://${service?.service_id}.rpc.grove.${env}/v1/${appId}`
 }
 
 // Blockchain name to hex chainID mapping
@@ -225,48 +225,48 @@ export const BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID: KeyValuePair<string> = {
   "zksync-era": "F02B",
 }
 
-export const getChainName = ({
+export const getServiceName = ({
   chainId,
-  chains,
+  services,
 }: {
   chainId: string | undefined
-  chains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }): string => {
   if (!chainId) {
     return ""
   }
-  const chain = chains.find((chain) => chain.id === chainId)
-  return chain?.blockchain ?? chainId
+  const service = services.find((service) => service.service_id === chainId)
+  return service?.service_id ?? chainId
 }
 
-// Helper function to match legacy chainID format with blockchain entries
-export const matchLegacyChainIdToBlockchain = (
-  legacyChainId: string | null | undefined,
-  blockchains: Blockchain[],
-): Blockchain | undefined => {
-  if (!legacyChainId) return undefined
+// Helper function to match legacy chainID format with service entries
+export const matchLegacyServiceIdToService = (
+  legacyServiceId: string | null | undefined,
+  services: ServiceWithEndpoints[],
+): ServiceWithEndpoints | undefined => {
+  if (!legacyServiceId) return undefined
 
-  // Try to find blockchain by matching hex chainID from legacy chainID
-  // First reverse lookup from hex chainID to blockchain name
-  const hexChainId = Object.keys(BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID).find(
-    (blockchainName) => BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID[blockchainName] === legacyChainId,
+  // Try to find service by matching hex chainID from legacy chainID
+  // First reverse lookup from hex chainID to service name
+  const hexServiceId = Object.keys(BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID).find(
+    (serviceName) => BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID[serviceName] === legacyServiceId,
   )
 
-  if (hexChainId) {
-    return blockchains.find((chain) => chain.blockchain === hexChainId)
+  if (hexServiceId) {
+    return services.find((service) => service.service_id === hexServiceId)
   }
 
-  // Fallback: try direct blockchain name match
-  return blockchains.find((chain) => chain.blockchain === legacyChainId)
+  // Fallback: try direct service name match
+  return services.find((service) => service.service_id === legacyServiceId)
 }
 
 // Helper function to convert blockchain name to hex chainID for API calls
-export const blockchainNameToHexChainId = (blockchainName: string): string => {
+export const blockchainNameToHexServiceId = (blockchainName: string): string => {
   // Direct lookup in the mapping
-  const hexChainId = BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID[blockchainName]
+  const hexServiceId = BLOCKCHAIN_NAME_TO_HEX_CHAIN_ID[blockchainName]
 
-  if (hexChainId) {
-    return hexChainId
+  if (hexServiceId) {
+    return hexServiceId
   }
 
   // Fallback: return the blockchain name as-is if not found in mapping

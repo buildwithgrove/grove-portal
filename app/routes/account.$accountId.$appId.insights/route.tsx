@@ -86,12 +86,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function ApplicationInsights() {
   const { total, aggregate, realtimeDataChains } = useLoaderData<typeof loader>()
-  const { blockchains } = useOutletContext<AppIdOutletContext>()
+  const { services } = useOutletContext<AppIdOutletContext>()
 
   return (
     <ApplicationInsightsView
       aggregate={aggregate}
-      blockchains={blockchains}
+      services={services}
       realtimeDataChains={realtimeDataChains}
       total={total}
     />

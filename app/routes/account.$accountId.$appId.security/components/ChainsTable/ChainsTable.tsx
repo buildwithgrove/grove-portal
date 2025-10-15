@@ -5,40 +5,40 @@ import { useMemo } from "react"
 import Chain from "~/components/Chain"
 import CopyTextButton from "~/components/CopyTextButton"
 import { DataTable } from "~/components/DataTable"
-import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { getAppEndpointUrl } from "~/utils/chainUtils"
 
 type ChainsTableProps = {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   selectedBlockchainsIds: string[]
   onDeleteChain: (chainId: string) => void
   readOnly?: boolean
 }
 
 const ChainsTable = ({
-  blockchains,
+  services,
   selectedBlockchainsIds,
   onDeleteChain,
   readOnly,
 }: ChainsTableProps) => {
   const { appId } = useParams()
 
-  const selectedBlockChains = useMemo(
+  const selectedServices = useMemo(
     () =>
-      blockchains.filter(({ id: blockchainID }) =>
-        selectedBlockchainsIds.some((id) => blockchainID === id),
+      services.filter(({ service_id }) =>
+        selectedBlockchainsIds.some((id) => service_id === id),
       ),
-    [blockchains, selectedBlockchainsIds],
+    [services, selectedBlockchainsIds],
   )
 
   return (
-    selectedBlockChains && (
+    selectedServices && (
       <DataTable
-        data={selectedBlockChains.map((chain) => {
+        data={selectedServices.map((service) => {
           return {
             chain: {
-              element: <Chain chain={chain} />,
-              value: `${chain?.description} ${chain?.blockchain}`,
+              element: <Chain chain={service} />,
+              value: `${service?.service_name} ${service?.service_id}`,
               cellProps: {
                 style: { minWidth: "250px" },
                 width: "30%",
@@ -46,20 +46,20 @@ const ChainsTable = ({
             },
             endpointUrl: {
               element: (
-                <TextInput readOnly miw={300} value={getAppEndpointUrl(chain, appId)} />
+                <TextInput readOnly miw={300} value={getAppEndpointUrl(service, appId)} />
               ),
             },
             action: {
               element: (
                 <Flex gap="lg" justify="flex-end">
-                  <CopyTextButton value={getAppEndpointUrl(chain, appId)} />
+                  <CopyTextButton value={getAppEndpointUrl(service, appId)} />
                   {!readOnly && (
                     <ActionIcon
-                      aria-label={`Delete ${chain.description}`}
+                      aria-label={`Delete ${service.service_name}`}
                       radius="xl"
                       size={40}
                       variant="outline"
-                      onClick={() => onDeleteChain(chain.id)}
+                      onClick={() => onDeleteChain(service.service_id)}
                     >
                       <Trash2 size={18} />
                     </ActionIcon>

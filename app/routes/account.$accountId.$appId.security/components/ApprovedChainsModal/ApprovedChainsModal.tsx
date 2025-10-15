@@ -7,16 +7,17 @@ import ModalHeader from "~/components/ModalHeader"
 import PortalLoader from "~/components/PortalLoader"
 import useModals from "~/hooks/useModals"
 import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import ChainsTable from "~/routes/account.$accountId.$appId.security/components/ChainsTable"
 
 type ApprovedChainsModalProps = {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   approvedChainsIds: string[]
   dispatch: Dispatch<SecurityReducerActions>
 }
 
 const ApprovedChainsModal = ({
-  blockchains,
+  services,
   approvedChainsIds,
   dispatch,
 }: ApprovedChainsModalProps) => {
@@ -32,7 +33,7 @@ const ApprovedChainsModal = ({
           !selectedBlockchainsIds.some((id) => id === blockchainID) &&
           !approvedChainsIds.some((id) => id === blockchainID),
       ),
-    [blockchains, selectedBlockchainsIds, approvedChainsIds],
+    [services, selectedBlockchainsIds, approvedChainsIds],
   )
 
   const deleteSelectedChain = (chainId: string) => {

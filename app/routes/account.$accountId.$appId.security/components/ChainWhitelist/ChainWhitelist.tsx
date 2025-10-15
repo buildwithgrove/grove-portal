@@ -4,6 +4,7 @@ import { SecurityReducerActions } from "../../utils/stateReducer"
 import { BlockchainWhitelist } from "../../utils/utils"
 import useModals from "~/hooks/useModals"
 import { Blockchain, WhitelistContracts, WhitelistMethods } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import AddSettingsButton from "~/routes/account.$accountId.$appId.security/components/AddSettingsButton"
 import ChainWhitelistModal from "~/routes/account.$accountId.$appId.security/components/ChainWhitelistModal"
 import ChainWhitelistTable from "~/routes/account.$accountId.$appId.security/components/ChainWhitelistTable"
@@ -11,7 +12,7 @@ import ChainWhitelistTable from "~/routes/account.$accountId.$appId.security/com
 type ChainWhitelistProps = {
   dispatch: Dispatch<SecurityReducerActions>
   whitelists: WhitelistContracts[] | WhitelistMethods[]
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   type: "contracts" | "methods"
   readOnly: boolean
 }
@@ -30,7 +31,7 @@ export const whitelistInfo = {
 const ChainWhitelist = ({
   dispatch,
   whitelists,
-  blockchains,
+  services,
   type,
   readOnly,
 }: ChainWhitelistProps) => {

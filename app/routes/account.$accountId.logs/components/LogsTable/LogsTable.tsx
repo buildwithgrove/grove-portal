@@ -4,18 +4,19 @@ import React, { useState } from "react"
 import classes from "./LogsTable.module.css"
 import { DataTable } from "~/components/DataTable"
 import { EmptyState } from "~/components/EmptyState"
-import { Blockchain, D2Log, D2Meta } from "~/models/portal/sdk"
+import { D2Log, D2Meta } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import LogsSideDrawer from "~/routes/account.$accountId.logs/components/LogsSideDrawer"
-import { getChainName } from "~/utils/chainUtils"
+import { getServiceName } from "~/utils/chainUtils"
 import { dayjs } from "~/utils/dayjs"
 
 type LogsTableProps = {
   logs: D2Log[]
   meta?: D2Meta
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
-const LogsTable = ({ logs, meta, blockchains }: LogsTableProps) => {
+const LogsTable = ({ logs, meta, services }: LogsTableProps) => {
   const [selectedLogsItem, setSelectedLogsItem] = useState<D2Log | undefined>()
   const navigation = useNavigation()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -29,7 +30,7 @@ const LogsTable = ({ logs, meta, blockchains }: LogsTableProps) => {
   return (
     <Box>
       <LogsSideDrawer
-        blockchains={blockchains}
+        services={services}
         logsItem={selectedLogsItem}
         onSideDrawerClose={() => setSelectedLogsItem(undefined)}
       />
@@ -47,13 +48,13 @@ const LogsTable = ({ logs, meta, blockchains }: LogsTableProps) => {
               value: log?.chainMethod ? log?.chainMethod : "-",
             },
             service: {
-              element: getChainName({
+              element: getServiceName({
                 chainId: log.chainID as string,
-                chains: blockchains,
+                services: services,
               }),
-              value: getChainName({
+              value: getServiceName({
                 chainId: log.chainID as string,
-                chains: blockchains,
+                services: services,
               }),
             },
             status: {

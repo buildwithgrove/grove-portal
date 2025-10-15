@@ -2,17 +2,17 @@ import { Drawer } from "@mantine/core"
 import React, { useEffect } from "react"
 import ChainSandbox from "app/components/ChainSandbox"
 import useChainSandboxContext from "~/components/ChainSandbox/state"
-import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 
 type ChainSandboxSideDrawerProps = {
-  blockchain?: Blockchain
-  chains: Blockchain[]
+  service?: ServiceWithEndpoints
+  services: ServiceWithEndpoints[]
   onSideDrawerClose: () => void
 }
 
 const ChainSandboxSideDrawer = ({
-  blockchain,
-  chains,
+  service,
+  services,
   onSideDrawerClose,
 }: ChainSandboxSideDrawerProps) => {
   const { dispatch } = useChainSandboxContext()
@@ -23,10 +23,10 @@ const ChainSandboxSideDrawer = ({
     route is loaded, since this is how Mantine Drawer works.
   */
   useEffect(() => {
-    if (blockchain) {
-      dispatch({ type: "SET_SELECTED_CHAIN", payload: blockchain })
+    if (service) {
+      dispatch({ type: "SET_SELECTED_SERVICE", payload: service })
     }
-  }, [blockchain, dispatch])
+  }, [service, dispatch])
 
   const handleSideDrawerClose = () => {
     dispatch({ type: "RESET_STATE" })
@@ -35,13 +35,13 @@ const ChainSandboxSideDrawer = ({
 
   return (
     <Drawer
-      opened={!!blockchain}
+      opened={!!service}
       padding="lg"
       position="right"
       size={800}
       onClose={handleSideDrawerClose}
     >
-      <ChainSandbox chains={chains} />
+      <ChainSandbox services={services} />
     </Drawer>
   )
 }

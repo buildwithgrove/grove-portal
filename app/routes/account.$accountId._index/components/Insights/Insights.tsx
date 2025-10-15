@@ -4,11 +4,12 @@ import InsightsControls, {
   DEFAULT_DWH_PERIOD,
 } from "app/routes/account.$accountId._index/components/InsightsControls"
 import TitledCard from "~/components/TitledCard"
-import { Blockchain, D2Chain, D2Stats, PortalApp } from "~/models/portal/sdk"
+import { D2Chain, D2Stats, PortalApp } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { AccountAppsOverview } from "~/routes/account.$accountId._index/components/AccountAppsOverview"
 import { OverviewSparkline } from "~/routes/account.$accountId._index/components/OverviewSparkline"
 import useAggregateChartData from "~/routes/account.$accountId._index/hooks/useAggregateChartData"
-import { matchLegacyChainIdToBlockchain } from "~/utils/chainUtils"
+import { matchLegacyServiceIdToService } from "~/utils/chainUtils"
 import { commify } from "~/utils/formattingUtils"
 
 const ChartHeader = ({
@@ -37,12 +38,12 @@ type InsightsProps = {
   total: D2Stats
   aggregate: D2Stats[]
   realtimeDataChains: D2Chain[]
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
 export const Insights = ({
   apps,
-  blockchains,
+  services,
   aggregate,
   total,
   realtimeDataChains,
@@ -62,17 +63,17 @@ export const Insights = ({
     aggregatedErrorData,
   } = useAggregateChartData({ data: aggregate, period: periodParam })
 
-  const availableChains = blockchains.filter((blockchain) =>
+  const availableServices = services.filter((service) =>
     realtimeDataChains.some(({ chainID }) => {
       if (!chainID) return false
-      const matchedBlockchain = matchLegacyChainIdToBlockchain(chainID, blockchains)
-      return matchedBlockchain?.id === blockchain.id
+      const matchedService = matchLegacyServiceIdToService(chainID, services)
+      return matchedService?.service_id === service.service_id
     }),
   )
 
   return (
     <Stack gap="xl">
-      <InsightsControls apps={apps} chains={availableChains} />
+      <InsightsControls apps={apps} services={availableServices} />
       <TitledCard>
         <Card.Section>
           <AccountAppsOverview isLoading={isLoading} total={total} />

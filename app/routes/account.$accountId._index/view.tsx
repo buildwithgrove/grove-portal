@@ -1,7 +1,8 @@
 import { Button, Stack, Title } from "@mantine/core"
 import { Link, useParams } from "@remix-run/react"
 import { EmptyState } from "~/components/EmptyState"
-import { Blockchain, PortalApp, RoleName } from "~/models/portal/sdk"
+import { PortalApp, RoleName } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { AnnouncementAlert } from "~/routes/account.$accountId._index/components/AnnouncementAlert"
 import Insights from "~/routes/account.$accountId._index/components/Insights"
 import { AccountInsightsData } from "~/routes/account.$accountId._index/route"
@@ -12,7 +13,7 @@ const ANNOUNCEMENT_ALERT = getRequiredClientEnvVar("FLAG_ANNOUNCEMENT_ALERT")
 type AccountInsightsViewProps = Omit<AccountInsightsData, "account"> & {
   apps: PortalApp[]
   userRole: RoleName
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
 export const AccountInsightsView = ({
@@ -20,7 +21,7 @@ export const AccountInsightsView = ({
   total,
   userRole,
   aggregate,
-  blockchains,
+  services,
   realtimeDataChains,
 }: AccountInsightsViewProps) => {
   const { accountId } = useParams()
@@ -61,7 +62,7 @@ export const AccountInsightsView = ({
           <Insights
             aggregate={aggregate}
             apps={apps}
-            blockchains={blockchains}
+            services={services}
             realtimeDataChains={realtimeDataChains}
             total={total}
           />

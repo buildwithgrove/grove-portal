@@ -18,19 +18,20 @@ import ModalHeader from "~/components/ModalHeader"
 import PortalLoader from "~/components/PortalLoader"
 import useModals from "~/hooks/useModals"
 import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import AddSettingsButton from "~/routes/account.$accountId.$appId.security/components/AddSettingsButton"
 import { whitelistInfo } from "~/routes/account.$accountId.$appId.security/components/ChainWhitelist"
 import ChainWhitelistTable from "~/routes/account.$accountId.$appId.security/components/ChainWhitelistTable"
 import { BlockchainWhitelist } from "~/routes/account.$accountId.$appId.security/utils/utils"
 
 type ChainWhitelistModalProps = {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   dispatch: Dispatch<SecurityReducerActions>
   type: "contracts" | "methods"
 }
 
 const ChainWhitelistModal = ({
-  blockchains,
+  services,
   dispatch,
   type,
 }: ChainWhitelistModalProps) => {

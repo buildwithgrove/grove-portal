@@ -1,13 +1,14 @@
-import { Blockchain, D2Log } from "~/models/portal/sdk"
+import { D2Log } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { Card, Divider, Drawer, Group, Stack, Text } from "@mantine/core"
 
 import React from "react"
 import { TitledCard } from "~/components/TitledCard"
 import { dayjs } from "~/utils/dayjs"
-import { getChainName } from "~/utils/chainUtils"
+import { getServiceName } from "~/utils/chainUtils"
 
 type LogsSideDrawerProps = {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   logsItem?: D2Log
   onSideDrawerClose: () => void
 }
@@ -15,7 +16,7 @@ type LogsSideDrawerProps = {
 const LogsSideDrawer = ({
   logsItem,
   onSideDrawerClose,
-  blockchains,
+  services,
 }: LogsSideDrawerProps) => {
   const cardItems = [
     {
@@ -36,7 +37,7 @@ const LogsSideDrawer = ({
     },
     {
       label: "Service",
-      value: getChainName({ chainId: logsItem?.chainID as string, chains: blockchains }),
+      value: getServiceName({ chainId: logsItem?.chainID as string, services: services }),
     },
     {
       label: "Method",

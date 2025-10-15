@@ -77,11 +77,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function AccountLogs() {
   const { apps, logs, meta } = useLoaderData<AccountLogsData>()
-  const { blockchains, userRole } = useOutletContext<AccountIdLoaderData>()
+  const { services, userRole } = useOutletContext<AccountIdLoaderData>()
   return (
     <AccountLogsView
       apps={apps}
-      blockchains={blockchains}
+      services={services}
       logs={logs}
       meta={meta}
       userRole={userRole}

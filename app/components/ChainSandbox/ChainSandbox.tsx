@@ -1,5 +1,5 @@
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
-import { Blockchain, PortalApp } from "~/models/portal/sdk"
+import { PortalApp } from "~/models/portal/sdk"
 import { Divider, Stack, Title } from "@mantine/core"
 import { FetcherWithComponents, useFetcher } from "@remix-run/react"
 import { useEffect, useMemo } from "react"
@@ -11,19 +11,20 @@ import CodeEditor from "~/components/CodeEditor"
 import { SandboxRequestData } from "~/routes/api.sandbox/route"
 import { getAppEndpointUrl } from "~/utils/chainUtils"
 import useChainSandboxContext from "~/components/ChainSandbox/state"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 
 type ChainSandboxProps = {
   apps?: PortalApp[]
-  chains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
-const ChainSandbox = ({ apps, chains }: ChainSandboxProps) => {
+const ChainSandbox = ({ apps, services }: ChainSandboxProps) => {
   const chainFetcher: FetcherWithComponents<SandboxRequestData> = useFetcher()
   const { state, dispatch } = useChainSandboxContext()
   const {
     selectedApp,
     includeSecretKey,
-    selectedChain,
+    selectedService,
     responseData,
     chainRestPath,
     requestPayload,
@@ -35,8 +36,8 @@ const ChainSandbox = ({ apps, chains }: ChainSandboxProps) => {
   const secretKey = selectedApp?.settings?.secretKey as string
 
   const chainUrl = useMemo(
-    () => `${getAppEndpointUrl(selectedChain, appId)}${chainRestPath || ""}`.trim(),
-    [selectedChain, appId, chainRestPath],
+    () => `${getAppEndpointUrl(selectedService, appId)}${chainRestPath || ""}`.trim(),
+    [selectedService, appId, chainRestPath],
   )
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const ChainSandbox = ({ apps, chains }: ChainSandboxProps) => {
     trackEvent({
       category: AnalyticCategories.app,
       action: AnalyticActions.app_chain_sandbox_edit_body,
-      label: `App ID: ${appId}, Blockchain: ${selectedChain?.blockchain}`,
+      label: `App ID: ${appId}, Service: ${selectedService?.service_id}`,
       value: requestPayload,
     })
     chainFetcher.submit(
@@ -65,11 +66,11 @@ const ChainSandbox = ({ apps, chains }: ChainSandboxProps) => {
     )
   }
 
-  return selectedChain ? (
+  return selectedService ? (
     <Stack>
       <ChainSandboxInputs
         apps={apps}
-        chains={chains}
+        services={services}
         isLoading={chainFetcher.state === "submitting"}
         onSendRequest={sendRequest}
       />

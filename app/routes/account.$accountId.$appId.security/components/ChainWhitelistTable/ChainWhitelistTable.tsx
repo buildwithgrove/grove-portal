@@ -5,17 +5,18 @@ import Chain from "~/components/Chain"
 import CopyTextButton from "~/components/CopyTextButton"
 import { DataTable } from "~/components/DataTable"
 import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { BlockchainWhitelist } from "~/routes/account.$accountId.$appId.security/utils/utils"
 
 type ChainsTableProps = {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   blockchainWhitelist: BlockchainWhitelist[]
   readOnly?: boolean
   onDelete: (val: BlockchainWhitelist) => void
 }
 
 const ChainWhitelistTable = ({
-  blockchains,
+  services,
   blockchainWhitelist,
   readOnly,
   onDelete,

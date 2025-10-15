@@ -5,16 +5,17 @@ import ChainSandbox from "app/components/ChainSandbox"
 import { ChainSandboxProvider } from "~/components/ChainSandbox/state"
 import { DEFAULT_EVM_METHOD } from "~/components/ChainSandbox/state/stateReducer"
 import { EmptyState } from "~/components/EmptyState"
-import { Blockchain, PortalApp, RoleName } from "~/models/portal/sdk"
-import { isEvmChain } from "~/utils/chainUtils"
+import { PortalApp, RoleName } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
+import { isEvmService } from "~/utils/chainUtils"
 
 type SandboxViewProps = {
   portalApps: PortalApp[]
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   userRole: RoleName
 }
 
-const SandboxView = ({ portalApps, blockchains, userRole }: SandboxViewProps) => {
+const SandboxView = ({ portalApps, services, userRole }: SandboxViewProps) => {
   const { accountId } = useParams()
 
   const apps = useMemo(() => {
@@ -48,11 +49,11 @@ const SandboxView = ({ portalApps, blockchains, userRole }: SandboxViewProps) =>
       <ChainSandboxProvider
         initialStateValue={{
           selectedApp: apps[0],
-          selectedChain: blockchains[0],
-          selectedMethod: isEvmChain(blockchains[0]) ? DEFAULT_EVM_METHOD : "",
+          selectedService: services[0],
+          selectedMethod: isEvmService(services[0]) ? DEFAULT_EVM_METHOD : "",
         }}
       >
-        <ChainSandbox apps={apps} chains={blockchains} />
+        <ChainSandbox apps={apps} services={services} />
       </ChainSandboxProvider>
     </Stack>
   )

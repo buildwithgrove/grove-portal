@@ -1,8 +1,8 @@
 import { Avatar, Flex, Stack, Text } from "@mantine/core"
-import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 
 type ChainProps = {
-  chain: Blockchain
+  chain: ServiceWithEndpoints
   variant?: "default" | "compact"
 }
 const Chain = ({ chain, variant = "default" }: ChainProps) => {
@@ -11,7 +11,7 @@ const Chain = ({ chain, variant = "default" }: ChainProps) => {
       <Avatar
         radius={40}
         size={variant === "compact" ? 18 : 40}
-        src={`/chain-logos/${chain.blockchain}.svg`}
+        src={`/chain-logos/${chain.service_id}.svg`}
       />
       <Stack gap={0} w={200}>
         <Text
@@ -19,11 +19,11 @@ const Chain = ({ chain, variant = "default" }: ChainProps) => {
           fw={variant === "compact" ? 400 : 600}
           fz={variant === "compact" ? 14 : 16}
         >
-          {chain?.description}
+          {chain?.service_name}
         </Text>
         {variant === "default" ? (
           <Text c="dimmed" fz="xs">
-            {chain?.blockchain}
+            {chain?.service_id}
           </Text>
         ) : null}
       </Stack>

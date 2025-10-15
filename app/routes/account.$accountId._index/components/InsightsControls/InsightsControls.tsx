@@ -3,13 +3,14 @@ import { Divider, Box, Group, Text, Button } from "@mantine/core"
 import { useParams, useSearchParams } from "@remix-run/react"
 import ChainSelectItem from "~/components/ChainSelectItem"
 import FluidSelect from "~/components/FluidSelect"
-import { Blockchain, PortalApp } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
+import { PortalApp } from "~/models/portal/sdk"
 import { getAppNameWithEmoji } from "~/utils/accountUtils"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 
 type InsightsControlsProps = {
   apps?: PortalApp[]
-  chains: Blockchain[]
+  services: ServiceWithEndpoints[]
 }
 
 export const DEFAULT_DWH_PERIOD = "24hr"
@@ -23,48 +24,46 @@ const getDownloadCsvUrl = ({
   accountId: string
   appId: string | undefined
 }) => {
-  return `/api/${accountId}/insights-csv${
-    searchParams.toString().length > 0 ? `?${searchParams}` : ""
-  }${
-    appId ? `${searchParams.toString().length > 0 ? "&" : "?"}appId=${appId}` : ""
-  }`.trim()
+  return `/api/${accountId}/insights-csv${searchParams.toString().length > 0 ? `?${searchParams}` : ""
+    }${appId ? `${searchParams.toString().length > 0 ? "&" : "?"}appId=${appId}` : ""
+    }`.trim()
 }
 
-const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
+const InsightsControls = ({ apps, services }: InsightsControlsProps) => {
   const { accountId, appId } = useParams()
   const appsSelectItems = [
     { value: "all", label: "All Applications" },
     ...(apps && apps.length > 0
       ? apps.map((app) => ({
-          value: app?.id ?? "",
-          label: getAppNameWithEmoji(app),
-        }))
+        value: app?.id ?? "",
+        label: getAppNameWithEmoji(app),
+      }))
       : []),
   ]
 
-  const chainsSelectItems = useMemo(() => {
-    return chains.length > 0
+  const servicesSelectItems = useMemo(() => {
+    return services.length > 0
       ? [
-          { value: "all", label: "All Services" },
-          ...(chains.length > 0
-            ? chains.map((chain) => ({
-                value: chain.blockchain,
-                label: chain.description ?? chain.blockchain,
-                chain,
-              }))
-            : []),
-        ]
+        { value: "all", label: "All Services" },
+        ...(services.length > 0
+          ? services.map((service) => ({
+            value: service.service_id,
+            label: service.service_name ?? service.service_id,
+            service,
+          }))
+          : []),
+      ]
       : []
-  }, [chains])
+  }, [services])
 
   const [searchParams, setSearchParams] = useSearchParams()
   const periodParam = searchParams.get("period") ?? DEFAULT_DWH_PERIOD
   const appParam = searchParams.get("app") ?? "all"
   const chainParam = searchParams.get("chain")
     ? (searchParams.get("chain") as string)
-    : chains.length > 0
-    ? "all"
-    : undefined
+    : services.length > 0
+      ? "all"
+      : undefined
 
   const handleParamChange = ({
     param,
@@ -109,12 +108,12 @@ const InsightsControls = ({ apps, chains }: InsightsControlsProps) => {
             </>
           ) : null}
           <FluidSelect
-            disabled={chainsSelectItems.length === 0}
+            disabled={servicesSelectItems.length === 0}
             itemComponent={ChainSelectItem}
-            items={chainsSelectItems}
+            items={servicesSelectItems}
             placeholder="No Services"
             value={chainParam}
-            withSearch={chainsSelectItems.length > 7}
+            withSearch={servicesSelectItems.length > 7}
             onSelect={(chain: string) => {
               trackEvent({
                 category: AnalyticCategories.account,

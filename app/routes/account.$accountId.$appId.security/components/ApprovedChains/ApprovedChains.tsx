@@ -3,20 +3,21 @@ import React, { Dispatch } from "react"
 import { SecurityReducerActions } from "../../utils/stateReducer"
 import useModals from "~/hooks/useModals"
 import { Blockchain } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import AddSettingsButton from "~/routes/account.$accountId.$appId.security/components/AddSettingsButton"
 import ApprovedChainsModal from "~/routes/account.$accountId.$appId.security/components/ApprovedChainsModal"
 import ChainsTable from "~/routes/account.$accountId.$appId.security/components/ChainsTable"
 
 type ApprovedChainsFormProps = {
   approvedChainsIds: string[]
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   dispatch: Dispatch<SecurityReducerActions>
   readOnly: boolean
 }
 
 const ApprovedChains = ({
   approvedChainsIds,
-  blockchains,
+  services,
   dispatch,
   readOnly,
 }: ApprovedChainsFormProps) => {

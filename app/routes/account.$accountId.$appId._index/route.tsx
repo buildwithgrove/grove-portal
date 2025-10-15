@@ -93,7 +93,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export const Application = () => {
-  const { app, blockchains, userRole } = useOutletContext<AppIdOutletContext>()
+  const { app, services, userRole } = useOutletContext<AppIdOutletContext>()
   const [searchTerm, setSearchTerm] = useState("")
   const [debouncedSearchTerm] = useDebouncedValue(searchTerm, 200)
   const [scroll, scrollTo] = useWindowScroll()
@@ -113,7 +113,7 @@ export const Application = () => {
       <Divider />
       <AppEndpointsTable
         app={app}
-        blockchains={blockchains}
+        services={services}
         readOnly={userRole === "MEMBER"}
         searchTerm={debouncedSearchTerm}
       />

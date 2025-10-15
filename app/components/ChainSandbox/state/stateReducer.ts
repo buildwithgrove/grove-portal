@@ -1,12 +1,13 @@
-import { Blockchain, PortalApp } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
+import { PortalApp } from "~/models/portal/sdk"
 import { KeyValuePair } from "~/types/global"
-import { isEvmChain } from "~/utils/chainUtils"
+import { isEvmService } from "~/utils/chainUtils"
 export const DEFAULT_EVM_METHOD = "eth_blockNumber"
 export type HttpMethod = "POST" | "GET"
 export type ChainSandboxStateType = {
   selectedMethod?: string
   includeSecretKey: boolean
-  selectedChain: Blockchain | null
+  selectedService: ServiceWithEndpoints | null
   selectedApp: PortalApp | null
   responseData: any
   chainRestPath: string
@@ -19,7 +20,7 @@ export type ChainSandboxStateType = {
 export type ChainSandboxActionType =
   | { type: "SET_SELECTED_METHOD"; payload: string | undefined }
   | { type: "SET_INCLUDE_SECRET_KEY"; payload: boolean }
-  | { type: "SET_SELECTED_CHAIN"; payload: Blockchain | null }
+  | { type: "SET_SELECTED_SERVICE"; payload: ServiceWithEndpoints | null }
   | { type: "SET_SELECTED_APP"; payload: PortalApp }
   | { type: "SET_RESPONSE_DATA"; payload: any }
   | { type: "SET_CHAIN_REST_PATH"; payload: string }
@@ -38,11 +39,11 @@ const reducer = (
       return { ...state, selectedMethod: action.payload }
     case "SET_INCLUDE_SECRET_KEY":
       return { ...state, includeSecretKey: action.payload }
-    case "SET_SELECTED_CHAIN":
+    case "SET_SELECTED_SERVICE":
       return {
         ...state,
-        selectedChain: action.payload,
-        selectedMethod: isEvmChain(action.payload) ? DEFAULT_EVM_METHOD : undefined,
+        selectedService: action.payload,
+        selectedMethod: isEvmService(action.payload) ? DEFAULT_EVM_METHOD : undefined,
         chainRestPath: "",
         responseData: undefined,
         httpMethod: "POST",
@@ -67,7 +68,7 @@ const reducer = (
         chainUrl: "",
         chainRestPath: "",
         httpMethod: "POST",
-        selectedChain: null,
+        selectedService: null,
         responseData: undefined,
         selectedMethod: undefined,
         includeSecretKey: false,

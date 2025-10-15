@@ -11,22 +11,21 @@ import useActionNotification, {
   ActionNotificationData,
 } from "~/hooks/useActionNotification"
 import {
-  type Blockchain,
-  BlockchainsQuery,
   PortalApp,
   type RoleName,
   WhitelistContracts,
   WhitelistMethods,
 } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 
 type SecurityViewProps = {
   app: PortalApp
-  blockchains: BlockchainsQuery["blockchains"]
+  services: ServiceWithEndpoints[]
   userRole: RoleName
 }
 
-export const SecurityView = ({ app, blockchains, userRole }: SecurityViewProps) => {
+export const SecurityView = ({ app, services, userRole }: SecurityViewProps) => {
   const [state, dispatch] = useReducer(
     securityReducer,
     app.whitelists ?? DEFAULT_WHITELISTS,
@@ -68,7 +67,7 @@ export const SecurityView = ({ app, blockchains, userRole }: SecurityViewProps) 
       <Divider />
       <ApprovedChains
         approvedChainsIds={state.blockchains as string[]}
-        blockchains={blockchains as Blockchain[]}
+        services={services}
         dispatch={dispatch}
         readOnly={isReadOnly}
       />
@@ -86,7 +85,7 @@ export const SecurityView = ({ app, blockchains, userRole }: SecurityViewProps) 
       />
       <Divider />
       <ChainWhitelist
-        blockchains={blockchains as Blockchain[]}
+        services={services}
         dispatch={dispatch}
         readOnly={isReadOnly}
         type="contracts"
@@ -94,7 +93,7 @@ export const SecurityView = ({ app, blockchains, userRole }: SecurityViewProps) 
       />
       <Divider />
       <ChainWhitelist
-        blockchains={blockchains as Blockchain[]}
+        services={services}
         dispatch={dispatch}
         readOnly={isReadOnly}
         type="methods"

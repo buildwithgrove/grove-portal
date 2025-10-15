@@ -15,19 +15,20 @@ import { HttpMethod } from "~/components/ChainSandbox/state/stateReducer"
 import ChainSelectItem from "~/components/ChainSelectItem"
 import CopyTextButton from "~/components/CopyTextButton"
 import FluidSelect from "~/components/FluidSelect"
-import { Blockchain, PortalApp } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
+import { PortalApp } from "~/models/portal/sdk"
 import { getAppNameWithEmoji } from "~/utils/accountUtils"
 import {
   CHAIN_DOCS_URL,
   evmMethods,
   getAppEndpointUrl,
-  isEvmChain,
+  isEvmService,
 } from "~/utils/chainUtils"
 import { DOCS_PATH } from "~/utils/utils"
 
 type ChainSandboxInputsProps = {
   apps?: PortalApp[]
-  chains: Blockchain[]
+  services: ServiceWithEndpoints[]
   isLoading: boolean
   onSendRequest: () => void
 }
@@ -39,36 +40,42 @@ const httpMethods: HttpMethodOption[] = [
   { value: "GET", label: "GET" },
 ]
 
+// Utility function to check if service has JSON-RPC endpoints
+const isRpcService = (service: ServiceWithEndpoints | null): boolean => {
+  if (!service) return false
+  return service.endpoints.some((endpoint) => endpoint.endpoint_type === "JSON-RPC")
+}
+
 const ChainSandboxInputs = ({
   apps,
-  chains,
+  services,
   isLoading,
   onSendRequest,
 }: ChainSandboxInputsProps) => {
   const { state, dispatch } = useChainSandboxContext()
-  const { selectedChain, selectedApp, selectedMethod, chainRestPath, httpMethod } = state
+  const { selectedService, selectedApp, selectedMethod, chainRestPath, httpMethod } = state
   const appId = selectedApp?.id
-  const isRpc = selectedChain?.enforceResult === "JSON"
+  const isRpc = isRpcService(selectedService)
 
-  const chainsSelectItems = chains?.map((chain) => ({
-    value: chain.blockchain,
-    label: chain.description ?? chain.blockchain,
-    chain,
+  const servicesSelectItems = services?.map((service) => ({
+    value: service.service_id,
+    label: service.service_name ?? service.service_id,
+    service,
   }))
 
   const appsSelectItems = [
     ...(apps && apps.length > 0
       ? apps.map((app) => ({
-          value: app?.id ?? "",
-          label: getAppNameWithEmoji(app),
-        }))
+        value: app?.id ?? "",
+        label: getAppNameWithEmoji(app),
+      }))
       : []),
   ]
 
-  const handleChainSelect = (chainId: string) => {
-    const chain = chains.find((chain) => chain.blockchain === chainId)
-    if (chain) {
-      dispatch({ type: "SET_SELECTED_CHAIN", payload: chain })
+  const handleServiceSelect = (serviceId: string) => {
+    const service = services.find((service) => service.service_id === serviceId)
+    if (service) {
+      dispatch({ type: "SET_SELECTED_SERVICE", payload: service })
     }
   }
 
@@ -79,15 +86,15 @@ const ChainSandboxInputs = ({
     }
   }
 
-  const chainMethods = useMemo(
+  const serviceMethods = useMemo(
     () =>
-      isEvmChain(selectedChain)
+      isEvmService(selectedService)
         ? evmMethods.map((method) => ({ value: method, label: method }))
         : [],
-    [selectedChain],
+    [selectedService],
   )
 
-  return selectedChain ? (
+  return selectedService ? (
     <Stack gap="xl">
       <Group>
         <Group className="bordered-container" gap={0} pos="relative">
@@ -105,20 +112,20 @@ const ChainSandboxInputs = ({
           <FluidSelect
             withSearch
             itemComponent={ChainSelectItem}
-            items={chainsSelectItems}
-            value={selectedChain?.blockchain}
-            onSelect={handleChainSelect}
+            items={servicesSelectItems}
+            value={selectedService?.service_id}
+            onSelect={handleServiceSelect}
           />
           <Divider orientation="vertical" />
           {isRpc ? (
             <Tooltip
-              disabled={chainMethods.length > 0}
+              disabled={serviceMethods.length > 0}
               label="Currently, methods are only available for EVM chains. Enter a method in the body instead."
             >
               <FluidSelect
                 withSearch
-                disabled={chainMethods.length === 0}
-                items={chainMethods}
+                disabled={serviceMethods.length === 0}
+                items={serviceMethods}
                 placeholder="Select Method"
                 value={selectedMethod}
                 onSelect={(method) =>
@@ -148,18 +155,18 @@ const ChainSandboxInputs = ({
           >
             Send Request
           </Button>
-          {selectedChain && (
+          {selectedService && (
             <Tooltip withArrow label="View Documentation">
               <ActionIcon
-                aria-label={`View documentation for ${selectedChain.description}`}
+                aria-label={`View documentation for ${selectedService.service_name}`}
                 color="gray"
                 radius="xl"
                 size={36}
                 variant="subtle"
                 component="a"
                 href={
-                  selectedChain.blockchain && CHAIN_DOCS_URL[selectedChain.blockchain]
-                    ? `${DOCS_PATH}/${CHAIN_DOCS_URL[selectedChain.blockchain]}`
+                  selectedService.service_id && CHAIN_DOCS_URL[selectedService.service_id]
+                    ? `${DOCS_PATH}/${CHAIN_DOCS_URL[selectedService.service_id]}`
                     : DOCS_PATH
                 }
                 target="_blank"
@@ -180,12 +187,12 @@ const ChainSandboxInputs = ({
             rightSection={
               <CopyTextButton
                 size={16}
-                value={getAppEndpointUrl(selectedChain, appId)}
+                value={getAppEndpointUrl(selectedService, appId)}
                 variant="transparent"
                 width={28}
               />
             }
-            value={getAppEndpointUrl(selectedChain, appId)}
+            value={getAppEndpointUrl(selectedService, appId)}
           />
         </Stack>
         {!isRpc ? (

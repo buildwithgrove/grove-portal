@@ -88,13 +88,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function AccountInsights() {
   const { account, total, aggregate, realtimeDataChains } =
     useLoaderData() as AccountInsightsData
-  const { blockchains, userRole } = useOutletContext<AccountIdLoaderData>()
+  const { services, userRole } = useOutletContext<AccountIdLoaderData>()
 
   return (
     <AccountInsightsView
       aggregate={aggregate}
       apps={account?.portalApps as PortalApp[]}
-      blockchains={blockchains}
+      services={services}
       realtimeDataChains={realtimeDataChains}
       total={total}
       userRole={userRole}

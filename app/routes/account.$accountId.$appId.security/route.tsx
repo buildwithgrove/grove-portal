@@ -117,10 +117,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export const AppSecurity = () => {
-  const { app, blockchains, userRole } = useOutletContext<AppIdOutletContext>()
+  const { app, services, userRole } = useOutletContext<AppIdOutletContext>()
   const actionData = useActionData() as ActionDataStruct<SecurityActionData>
   useActionNotification(actionData)
-  return <SecurityView app={app} blockchains={blockchains} userRole={userRole} />
+  return <SecurityView app={app} services={services} userRole={userRole} />
 }
 
 export default AppSecurity

@@ -19,7 +19,8 @@ import { DataTable } from "~/components/DataTable"
 import useActionNotification, {
   ActionNotificationData,
 } from "~/hooks/useActionNotification"
-import { Blockchain, PortalApp } from "~/models/portal/sdk"
+import { PortalApp } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import ChainSandboxSideDrawer from "~/routes/account.$accountId.$appId._index/components/ChainSandboxSideDrawer"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { CHAIN_DOCS_URL, getAppEndpointUrl, getAppWebSocketUrl } from "~/utils/chainUtils"
@@ -27,14 +28,14 @@ import { DOCS_PATH } from "~/utils/utils"
 
 type AppEndpointsProps = {
   app: PortalApp
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   searchTerm: string
   readOnly: boolean
 }
 
 const AppEndpointsTable = ({
   app,
-  blockchains,
+  services,
   searchTerm,
   readOnly,
 }: AppEndpointsProps) => {
@@ -42,55 +43,55 @@ const AppEndpointsTable = ({
   const fetcher = useFetcher()
   const fetcherData = fetcher.data as ActionNotificationData
   const navigation = useNavigation()
-  const [selectedBlockchain, setSelectedBlockchain] = useState<Blockchain>()
+  const [selectedService, setSelectedService] = useState<ServiceWithEndpoints>()
   const favoriteChains = app.settings.favoritedChainIDs
 
   // handle notification for menu fetcher action
   useActionNotification(fetcherData)
 
-  const chains = useMemo(() => {
-    const fav = blockchains
-      .filter((chain) => favoriteChains?.includes(chain.id))
+  const servicesWithFavorites = useMemo(() => {
+    const fav = services
+      .filter((service) => favoriteChains?.includes(service.service_id))
       .map((c) => ({
         ...c,
         favorite: true,
       }))
 
-    const other = blockchains
-      .filter((chain) => !favoriteChains?.includes(chain.id))
+    const other = services
+      .filter((service) => !favoriteChains?.includes(service.service_id))
       .map((c) => ({
         ...c,
         favorite: false,
       }))
 
     return [...fav, ...other]
-  }, [favoriteChains, blockchains])
+  }, [favoriteChains, services])
 
   return (
     <>
       <ChainSandboxProvider initialStateValue={{ selectedApp: app }}>
         <ChainSandboxSideDrawer
-          blockchain={selectedBlockchain}
-          chains={chains}
-          onSideDrawerClose={() => setSelectedBlockchain(undefined)}
+          service={selectedService}
+          services={servicesWithFavorites}
+          onSideDrawerClose={() => setSelectedService(undefined)}
         />
       </ChainSandboxProvider>
-      {blockchains && (
+      {services && (
         <DataTable
-          data={chains.map((chain) => {
+          data={servicesWithFavorites.map((service) => {
             return {
               chain: {
                 element: (
                   <Flex gap="sm">
                     <FavoriteChain
-                      blockchain={chain}
+                      service={service}
                       favoriteChains={favoriteChains}
                       readOnly={navigation.state !== "idle"}
                     />
-                    <Chain chain={chain} />
+                    <Chain chain={service} />
                   </Flex>
                 ),
-                value: `${chain.description} ${chain.blockchain}`,
+                value: `${service.service_name} ${service.service_id}`,
                 cellProps: {
                   style: { minWidth: "340px" },
                   width: "35%",
@@ -105,26 +106,26 @@ const AppEndpointsTable = ({
                       rightSection={
                         <CopyTextButton
                           size={16}
-                          value={getAppEndpointUrl(chain, appId)}
+                          value={getAppEndpointUrl(service, appId)}
                           variant="transparent"
                           width={28}
                         />
                       }
-                      value={getAppEndpointUrl(chain, appId)}
+                      value={getAppEndpointUrl(service, appId)}
                     />
-                    {chain.websocketsEnabled && (
+                    {service.hasWebsocket && (
                       <TextInput
                         readOnly
                         miw={300}
                         rightSection={
                           <CopyTextButton
                             size={16}
-                            value={getAppWebSocketUrl(chain, appId)}
+                            value={getAppWebSocketUrl(service, appId)}
                             variant="transparent"
                             width={28}
                           />
                         }
-                        value={getAppWebSocketUrl(chain, appId)}
+                        value={getAppWebSocketUrl(service, appId)}
                       />
                     )}
                   </Stack>
@@ -135,17 +136,17 @@ const AppEndpointsTable = ({
                   <Flex gap="lg" justify="flex-end">
                     <Tooltip withArrow label="Try in Sandbox">
                       <ActionIcon
-                        aria-label={`Open Chain Sandbox for ${chain.description}`}
+                        aria-label={`Open Chain Sandbox for ${service.service_name}`}
                         color="gray"
                         radius="xl"
                         size={40}
                         variant="subtle"
                         onClick={() => {
-                          setSelectedBlockchain(chain)
+                          setSelectedService(service)
                           trackEvent({
                             category: AnalyticCategories.app,
                             action: AnalyticActions.app_chain_sandbox_try,
-                            label: `Blockchain: ${chain.blockchain}`,
+                            label: `Service: ${service.service_id}`,
                           })
                         }}
                       >
@@ -154,15 +155,15 @@ const AppEndpointsTable = ({
                     </Tooltip>
                     <Tooltip withArrow label="Documentation">
                       <ActionIcon
-                        aria-label={`View documentation for ${chain.description}`}
+                        aria-label={`View documentation for ${service.service_name}`}
                         color="gray"
                         radius="xl"
                         size={40}
                         variant="subtle"
                         component="a"
                         href={
-                          chain.blockchain
-                            ? `${DOCS_PATH}/service-apis/${chain.blockchain}-api`
+                          service.service_id
+                            ? `${DOCS_PATH}/service-apis/${service.service_id}-api`
                             : DOCS_PATH
                         }
                         target="_blank"
@@ -171,7 +172,7 @@ const AppEndpointsTable = ({
                           trackEvent({
                             category: AnalyticCategories.app,
                             action: AnalyticActions.app_chain_docs,
-                            label: chain.id,
+                            label: service.service_id,
                           })
                         }}
                       >
@@ -185,7 +186,7 @@ const AppEndpointsTable = ({
                           <Menu.Item
                             leftSection={
                               <Star
-                                fill={chain.favorite ? "currentColor" : "none"}
+                                fill={service.favorite ? "currentColor" : "none"}
                                 size={18}
                               />
                             }
@@ -193,14 +194,13 @@ const AppEndpointsTable = ({
                               trackEvent({
                                 category: AnalyticCategories.app,
                                 action: AnalyticActions.app_chain_favorite,
-                                label: `${chain.favorite ? "Remove" : "Add"} favorite ${
-                                  chain.id
-                                }`,
+                                label: `${service.favorite ? "Remove" : "Add"} favorite ${service.service_id
+                                  }`,
                               })
                               fetcher.submit(
                                 {
-                                  isFavorite: String(!chain.favorite),
-                                  chainId: chain.id,
+                                  isFavorite: String(!service.favorite),
+                                  chainId: service.service_id,
                                   favoriteChains: JSON.stringify(favoriteChains),
                                 },
                                 {
@@ -209,7 +209,7 @@ const AppEndpointsTable = ({
                               )
                             }}
                           >
-                            {chain.favorite ? "Remove favorite" : "Mark as favorite"}
+                            {service.favorite ? "Remove favorite" : "Mark as favorite"}
                           </Menu.Item>
                         </Menu.Dropdown>
                       </Menu>

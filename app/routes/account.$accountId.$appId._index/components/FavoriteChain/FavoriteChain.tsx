@@ -4,11 +4,12 @@ import cx from "clsx"
 import { Star } from "lucide-react"
 import { useEffect, useState } from "react"
 import classes from "./FavoriteChain.module.css"
-import { Blockchain, Maybe } from "~/models/portal/sdk"
+import { Maybe } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 
 type FavoriteChainProps = {
-  blockchain: Blockchain & {
+  service: ServiceWithEndpoints & {
     favorite: boolean
   }
   favoriteChains?: Maybe<string[]>
@@ -16,24 +17,24 @@ type FavoriteChainProps = {
 }
 
 export const FavoriteChain = ({
-  blockchain,
+  service,
   favoriteChains,
   readOnly,
 }: FavoriteChainProps) => {
-  const [isFavorite, setIsFavorite] = useState(blockchain.favorite)
+  const [isFavorite, setIsFavorite] = useState(service.favorite)
 
   useEffect(() => {
-    if (favoriteChains?.includes(blockchain.id)) {
+    if (favoriteChains?.includes(service.service_id)) {
       setIsFavorite(true)
     } else {
       setIsFavorite(false)
     }
-  }, [blockchain, favoriteChains])
+  }, [service, favoriteChains])
 
   return (
     <Form method="post" style={{ cursor: readOnly ? "not-allowed" : "pointer" }}>
-      <input hidden readOnly name="isFavorite" value={String(!blockchain.favorite)} />
-      <input hidden readOnly name="chainId" value={blockchain.id} />
+      <input hidden readOnly name="isFavorite" value={String(!service.favorite)} />
+      <input hidden readOnly name="chainId" value={service.service_id} />
       <input
         hidden
         readOnly
@@ -41,13 +42,13 @@ export const FavoriteChain = ({
         value={JSON.stringify(favoriteChains) ?? "[]"}
       />
       <ActionIcon
-        aria-label={`Set blockchain ${blockchain.blockchain} as favorite`}
+        aria-label={`Set service ${service.service_id} as favorite`}
         className={cx(classes.favoriteChain, {
           [classes.isFavorite]: isFavorite,
         })}
         disabled={readOnly}
         size="xl"
-        title={`Set blockchain ${blockchain.blockchain} as favorite`}
+        title={`Set service ${service.service_id} as favorite`}
         type="submit"
         variant={readOnly ? "transparent" : "subtle"}
         onClick={() => {
@@ -55,7 +56,7 @@ export const FavoriteChain = ({
           trackEvent({
             category: AnalyticCategories.app,
             action: AnalyticActions.app_chain_favorite,
-            label: `${blockchain.favorite ? "Remove" : "Add"} favorite ${blockchain.id}`,
+            label: `${service.favorite ? "Remove" : "Add"} favorite ${service.service_id}`,
           })
         }}
       >

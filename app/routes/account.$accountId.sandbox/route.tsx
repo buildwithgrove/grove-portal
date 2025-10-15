@@ -44,9 +44,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     const getUserAccountPortalAppsResponse =
       userRole === RoleName.Member
         ? await portal.getMemberUserAccountPortalApps({
-            accountID: accountId,
-            accepted: true,
-          })
+          accountID: accountId,
+          accepted: true,
+        })
         : await portal.getUserAccountPortalApps({ accountID: accountId, accepted: true })
 
     return json<SandboxLoaderData>({
@@ -61,12 +61,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 }
 
 export default function Sandbox() {
-  const { blockchains, userRole } = useOutletContext<AccountIdLoaderData>()
+  const { services, userRole } = useOutletContext<AccountIdLoaderData>()
   const { accountApps } = useLoaderData<SandboxLoaderData>()
 
   return (
     <SandboxView
-      blockchains={blockchains}
+      services={services}
       portalApps={accountApps as PortalApp[]}
       userRole={userRole}
     />

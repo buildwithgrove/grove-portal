@@ -2,12 +2,13 @@ import { Box, Button, Stack, Text, Title } from "@mantine/core"
 import { Link, useParams } from "@remix-run/react"
 import LogsControls from "app/routes/account.$accountId.logs/components/LogsControls"
 import { EmptyState } from "~/components/EmptyState"
-import { Blockchain, RoleName } from "~/models/portal/sdk"
+import { RoleName } from "~/models/portal/sdk"
+import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import LogsTable from "~/routes/account.$accountId.logs/components/LogsTable"
 import { AccountLogsData } from "~/routes/account.$accountId.logs/route"
 
 type AccountLogsViewProps = AccountLogsData & {
-  blockchains: Blockchain[]
+  services: ServiceWithEndpoints[]
   userRole: RoleName
 }
 
@@ -15,7 +16,7 @@ const AccountLogsView = ({
   logs,
   meta,
   apps,
-  blockchains,
+  services,
   userRole,
 }: AccountLogsViewProps) => {
   const { accountId } = useParams()
@@ -30,7 +31,7 @@ const AccountLogsView = ({
         </Text>
       </Box>
       <LogsControls apps={apps} />
-      <LogsTable blockchains={blockchains} logs={logs} meta={meta} />
+      <LogsTable services={services} logs={logs} meta={meta} />
     </Stack>
   ) : (
     <EmptyState
