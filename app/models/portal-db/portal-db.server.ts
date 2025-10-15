@@ -6,9 +6,6 @@ type Headers = {
     [key: string]: string
 }
 
-// TODO: Replace with actual JWT token retrieval
-const HARDCODED_JWT = "your-jwt-token-here"
-
 function initPortalDbClient(headers: Headers = {}) {
     const { token, ...rest } = headers
 
@@ -16,8 +13,11 @@ function initPortalDbClient(headers: Headers = {}) {
         baseUrl: getRequiredClientEnvVar("PORTAL_DB_API_URL"),
         headers: {
             ...(token && { Authorization: `Bearer ${token}` }),
+            "Connection": "close",
             ...rest,
         },
+        // Use native fetch to avoid Remix's fetch polyfill issues
+        fetch: (input: Request) => fetch(input),
     })
 }
 

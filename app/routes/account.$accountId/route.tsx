@@ -15,6 +15,68 @@ import type { ServiceWithEndpoints } from "~/models/portal-db/types"
 import invariant from "tiny-invariant"
 import { useEffect } from "react"
 
+/**
+ * Fetches all active services with their associated endpoints from the portal database.
+ * 
+ * This function:
+ * 1. Fetches all active services from the /services endpoint
+ * 2. Filters out specific services (BE2A and any service containing "wss")
+ * 3. Fetches all service endpoints from the /service_endpoints endpoint
+ * 4. Joins services with their endpoints and adds computed properties
+ * 
+ * @param token - JWT access token for authentication
+ * @returns Array of services with their endpoints and metadata
+ * @throws Response with 500 status if either API call fails
+ */
+async function fetchServicesWithEndpoints(token: string): Promise<ServiceWithEndpoints[]> {
+  const portalDb = initPortalDbClient({ token })
+
+  // Fetch services and endpoints in parallel to avoid connection reuse issues
+  const [servicesResult, endpointsResult] = await Promise.all([
+    portalDb.GET("/services", {
+      params: {
+        query: {
+          active: "eq.true",
+          order: "service_name.asc",
+        },
+      },
+    }),
+    portalDb.GET("/service_endpoints"),
+  ])
+
+  const { data: services, error: servicesError } = servicesResult
+  const { data: endpoints, error: endpointsError } = endpointsResult
+
+  if (servicesError || !services) {
+    throw new Response("Failed to fetch services from portal database", { status: 500 })
+  }
+
+  if (endpointsError) {
+    throw new Response("Failed to fetch service endpoints from portal database", { status: 500 })
+  }
+
+  // Filter out specific services
+  // BE2A is a legacy/deprecated service
+  // Services with "wss" in their ID are websocket-only variants that are handled separately
+  const filteredServices = services.filter(
+    (service) => service.service_id !== "BE2A" && !service.service_id?.includes("wss")
+  )
+
+  // Join services with their endpoints and compute metadata
+  const servicesWithEndpoints: ServiceWithEndpoints[] = filteredServices.map(service => {
+    const serviceEndpoints = endpoints?.filter(ep => ep.service_id === service.service_id) ?? []
+
+    return {
+      ...service,
+      endpoints: serviceEndpoints,
+      // Determine if this service has WebSocket support by checking endpoint types
+      hasWebsocket: serviceEndpoints.some(ep => ep.endpoint_type === "WSS"),
+    }
+  })
+
+  return servicesWithEndpoints
+}
+
 export type AccountIdLoaderData = {
   account: Account
   accounts: Account[]
@@ -36,7 +98,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const colorScheme = sessionColorScheme || systemPreferredColorScheme || "dark"
 
   const portal = initPortalClient({ token: user.accessToken })
-  const portalDb = initPortalDbClient({ token: user.accessToken })
   const { accountId } = params
   invariant(accountId, "AccountId must be set")
   let userAccounts
@@ -50,55 +111,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       user.user.portalUserID,
     ) as RoleName
 
-    // Step 1: Fetch active services
-    const { data: services, error: servicesError } = await portalDb.GET("/services", {
-      params: {
-        query: {
-          active: "eq.true",
-          order: "service_name.asc",
-        },
-      },
-    })
-
-    if (servicesError) {
-      throw new Response("Failed to fetch services", { status: 500 })
-    }
-
-    // Filter out unwanted services
-    // TODO_IN_THIS_PR(@commoddity): CALRIFY: Why do we need to do this?
-    const filteredServices = services?.filter(
-      (service) => service.service_id !== "BE2A" && !service.service_id?.includes("wss")
-    ) ?? []
-
-    // Step 2: Fetch endpoints for these services
-    const serviceIds = filteredServices.map(s => s.service_id).join(",")
-    const { data: endpoints, error: endpointsError } = await portalDb.GET("/service_endpoints", {
-      params: {
-        query: {
-          service_id: `in.(${serviceIds})`,
-        },
-      },
-    })
-
-    if (endpointsError) {
-      throw new Response("Failed to fetch service endpoints", { status: 500 })
-    }
-
-    // Step 3: Join services with their endpoints
-    const servicesWithEndpoints: ServiceWithEndpoints[] = filteredServices.map(service => {
-      const serviceEndpoints = endpoints?.filter(ep => ep.service_id === service.service_id) ?? []
-      return {
-        ...service,
-        endpoints: serviceEndpoints,
-        hasWebsocket: serviceEndpoints.some(ep => ep.endpoint_type === "WSS"),
-      }
-    })
+    // Fetch all services with their endpoints from the portal database
+    const services = await fetchServicesWithEndpoints(user.accessToken)
 
     return json<AccountIdLoaderData>({
       account: account.getUserAccount as Account,
       accounts: userAccounts.getUserAccounts as Account[],
       user: user.user,
-      services: servicesWithEndpoints,
+      services,
       userRole,
       colorScheme,
     })
