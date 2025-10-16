@@ -9,9 +9,11 @@ import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analyti
 import { formatTimestampShort } from "~/utils/dayjs"
 import { getPlanName } from "~/utils/planUtils"
 import { capitalizeFirstLetter } from "~/utils/utils"
+import { PortalAccount } from "~/models/portal-db/types"
+import { toPayPlanType } from "~/utils/planUtils"
 
 interface UnlimitedPlanOverviewCardProps {
-  account: Account
+  account: PortalAccount
   userRole: RoleName
   subscription?: Stripe.Subscription
 }
@@ -24,7 +26,7 @@ export default function UnlimitedPlanOverviewCard({
   const location = useLocation()
   const { openStopSubscriptionModal } = useSubscriptionModals()
 
-  const accountPlanType = account.planType
+  const accountPlanType = toPayPlanType(account.portal_plan_type)
 
   return (
     <TitledCard header={() => <Text fw={600}>Current plan</Text>}>
@@ -64,7 +66,7 @@ export default function UnlimitedPlanOverviewCard({
 
         {userRole !== RoleName.Member && (
           <Box mt="auto">
-            <Form action={`/api/stripe/portal-session/${account.id}`} method="post">
+            <Form action={`/api/stripe/portal-session/${account.portal_account_id}`} method="post">
               <input hidden defaultValue={location.pathname} name="return-path" />
               {subscription && (
                 <input hidden defaultValue={subscription.id} name="subscription-id" />
@@ -92,7 +94,7 @@ export default function UnlimitedPlanOverviewCard({
                       trackEvent({
                         category: AnalyticCategories.account,
                         action: AnalyticActions.account_plan_manage,
-                        label: account.id,
+                        label: account.portal_account_id,
                       })
                     }}
                   >

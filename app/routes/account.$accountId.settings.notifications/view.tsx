@@ -8,6 +8,8 @@ import { Account, RoleName } from "~/models/portal/sdk"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { formatNumberToSICompact } from "~/utils/formattingUtils"
 import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
+import { PortalAccount } from "~/models/portal-db/types"
+import { AccountNotification } from "~/models/portal/sdk"
 
 type NotificationLevel = "quarter" | "half" | "threeQuarters" | "full"
 
@@ -38,7 +40,7 @@ function getUsagePercentage(usageLevel: string): string {
 }
 
 type NotificationsAlertFormProps = {
-  account: Account
+  account: PortalAccount
   userRole: RoleName
 }
 
@@ -46,7 +48,11 @@ export default function AccountNotificationsView({
   account,
   userRole,
 }: NotificationsAlertFormProps) {
-  const { notifications } = account
+  // TODO_IN_THIS_PR(@commoddity): Get notifications from the new portal-db types once SDK regenerated
+  // const { notifications } = account
+  // For now, we'll use an empty array
+  const notifications: AccountNotification[] = []
+
   const fetcher = useFetcher()
   const fetcherData = fetcher.data as ActionNotificationData
   useActionNotification(fetcherData)
@@ -56,7 +62,7 @@ export default function AccountNotificationsView({
   const getNotificationCheckedState = useCallback(
     (level: NotificationLevel) =>
       Object.keys(notificationEvents).length > 0 &&
-      notificationEvents.hasOwnProperty(level)
+        notificationEvents.hasOwnProperty(level)
         ? (notificationEvents[level] as boolean)
         : DEFAULT_ALERT_PERCENTAGES[level],
     [notificationEvents],

@@ -35,8 +35,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 export { action }
 
 export default function AccountMembers() {
-  const { userRole, account, user } = useOutletContext<AccountIdLoaderData>()
-  return <MembersView account={account} user={user} userRole={userRole} />
+  const { userRole, portalAccount, user, accountRbac } = useOutletContext<AccountIdLoaderData>()
+  return <MembersView account={portalAccount} user={user} userRole={userRole} rbac={accountRbac} />
 }
 
 export function ErrorBoundary() {

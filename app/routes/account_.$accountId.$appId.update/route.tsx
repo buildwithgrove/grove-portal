@@ -14,8 +14,9 @@ import useActionNotification, {
 } from "~/hooks/useActionNotification"
 import { initPortalClient } from "~/models/portal/portal.server"
 import { PortalApp, RoleName, UpdatePortalApp } from "~/models/portal/sdk"
+import type { PortalAccountRbac } from "~/models/portal-db/types"
 import AppForm from "~/routes/account_.$accountId.create/components/AppForm"
-import { getUserAccountRole } from "~/utils/accountUtils"
+import { getUserAccountRoleFromRbac } from "~/utils/accountUtils"
 import { getErrorMessage } from "~/utils/catchError"
 import { seo_title_append } from "~/utils/seo"
 import { requireUser } from "~/utils/user.server"
@@ -32,7 +33,7 @@ type UpdateAppLoaderData = {
   app: PortalApp
 }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ request, params, context }) => {
   const user = await requireUser(request)
   const portal = initPortalClient({ token: user.accessToken })
   const { accountId, appId } = params
@@ -50,17 +51,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       return redirect(`/account/${accountId}`)
     }
 
-    const getUserAccountResponse = await portal.getUserAccount({
-      accountID: accountId,
-      accepted: true,
-    })
+    // Get account RBAC data from parent route context
+    const { accountRbac } = context as { accountRbac: PortalAccountRbac[] }
 
-    if (!getUserAccountResponse) {
-      return redirect(`/account/${params.accountId}`)
-    }
-
-    const userRole = getUserAccountRole(
-      getUserAccountResponse.getUserAccount.users,
+    const userRole = getUserAccountRoleFromRbac(
+      accountRbac,
       user.user.portal_user_id,
     )
 

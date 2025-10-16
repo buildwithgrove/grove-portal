@@ -4,19 +4,20 @@ import useActionNotification, {
   ActionNotificationData,
 } from "~/hooks/useActionNotification"
 import useModals from "~/hooks/useModals"
-import { Account, AccountUser } from "~/models/portal/sdk"
+import { AccountUser } from "~/models/portal/sdk"
+import type { PortalAccount } from "~/models/portal-db/types"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { capitalizeFirstLetter } from "~/utils/utils"
 
 type useTeamModalsProps = {
-  account: Account
+  account: PortalAccount
 }
 
 type TeamActionProps = Pick<AccountUser, "email" | "roleName" | "id">
 const useTeamModals = ({ account }: useTeamModalsProps) => {
   const fetcher = useFetcher()
   const { openConfirmationModal } = useModals()
-  const { id: accountId } = account
+  const { portal_account_id } = account
   const fetcherData = fetcher.data as ActionNotificationData
 
   useActionNotification(fetcherData)
@@ -25,18 +26,18 @@ const useTeamModals = ({ account }: useTeamModalsProps) => {
     trackEvent({
       category: AnalyticCategories.account,
       action: AnalyticActions.account_team_remove,
-      label: accountId,
+      label: portal_account_id,
     })
     fetcher.submit(
       {
         user_delete: "true",
         user_id: id,
         user_email: email,
-        account_name: account.name as string,
+        account_name: account.user_account_name as string,
       },
       {
         method: "POST",
-        action: `/account/${accountId}/settings/members`,
+        action: `/account/${portal_account_id}/settings/members`,
       },
     )
   }
@@ -45,18 +46,18 @@ const useTeamModals = ({ account }: useTeamModalsProps) => {
     trackEvent({
       category: AnalyticCategories.account,
       action: AnalyticActions.account_team_leave,
-      label: accountId,
+      label: portal_account_id,
     })
     fetcher.submit(
       {
         user_leave: "true",
         user_id: id,
         user_email: email,
-        account_name: account.name as string,
+        account_name: account.user_account_name as string,
       },
       {
         method: "POST",
-        action: `/account/${accountId}/settings/members`,
+        action: `/account/${portal_account_id}/settings/members`,
       },
     )
   }
@@ -65,7 +66,7 @@ const useTeamModals = ({ account }: useTeamModalsProps) => {
     trackEvent({
       category: AnalyticCategories.account,
       action: AnalyticActions.account_team_change_role,
-      label: accountId,
+      label: portal_account_id,
     })
     fetcher.submit(
       {
@@ -73,11 +74,11 @@ const useTeamModals = ({ account }: useTeamModalsProps) => {
         user_id: id,
         user_role: roleName,
         user_email: email,
-        account_name: account.name as string,
+        account_name: account.user_account_name as string,
       },
       {
         method: "POST",
-        action: `/account/${accountId}/settings/members`,
+        action: `/account/${portal_account_id}/settings/members`,
       },
     )
   }
@@ -86,19 +87,19 @@ const useTeamModals = ({ account }: useTeamModalsProps) => {
     trackEvent({
       category: AnalyticCategories.account,
       action: AnalyticActions.account_team_resend,
-      label: accountId,
+      label: portal_account_id,
     })
     fetcher.submit(
       {
         user_resend: "true",
         user_email: email,
-        account_name: account.name as string,
+        account_name: account.user_account_name as string,
         user_role: roleName,
         user_id: id,
       },
       {
         method: "POST",
-        action: `/account/${accountId}/settings/members`,
+        action: `/account/${portal_account_id}/settings/members`,
       },
     )
   }

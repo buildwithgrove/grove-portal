@@ -13,7 +13,8 @@ export const meta: MetaFunction = () => {
 }
 
 export default function AccountSettings() {
-  const { account, userRole } = useOutletContext<AccountIdLoaderData>()
+  const { portalAccount, userRole } = useOutletContext<AccountIdLoaderData>()
 
-  return <AccountSettingsView account={account} userRole={userRole} />
+  // TODO_IN_THIS_PR(@commoddity): Update AccountSettingsView to accept PortalAccount
+  return <AccountSettingsView account={portalAccount} userRole={userRole} />
 }

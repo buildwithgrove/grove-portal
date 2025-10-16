@@ -1,11 +1,13 @@
 import { Account, PayPlanType, RoleName } from "~/models/portal/sdk"
 import { Container, Stack, Title } from "@mantine/core"
 import React, { useMemo } from "react"
+import { PortalAccount } from "~/models/portal-db/types"
+import { toPayPlanType } from "~/utils/planUtils"
 
 import LinkTabs from "~/components/LinkTabs"
 
 type AccountSettingsLayoutViewProps = {
-  account: Account
+  account: PortalAccount
   userRole: RoleName
   children: React.ReactNode
 }
@@ -32,15 +34,15 @@ export default function AccountSettingsLayoutView({
           label: "Plan",
         },
       ],
-      ...(account.planType === PayPlanType.PlanFree ||
-      userRole === RoleName.Admin ||
-      userRole === RoleName.Owner
+      ...(toPayPlanType(account.portal_plan_type) === PayPlanType.PlanFree ||
+        userRole === RoleName.Admin ||
+        userRole === RoleName.Owner
         ? [
-            {
-              to: "notifications",
-              label: "Notifications",
-            },
-          ]
+          {
+            to: "notifications",
+            label: "Notifications",
+          },
+        ]
         : []),
     ]
   }, [account, userRole])

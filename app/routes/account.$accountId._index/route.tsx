@@ -8,7 +8,9 @@ import {
   getTotalRelays,
 } from "~/models/portal/dwh.server"
 import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, D2Chain, D2Stats, PortalApp } from "~/models/portal/sdk"
+import { D2Chain, D2Stats, PortalApp } from "~/models/portal/sdk"
+import type { PortalAccountWithRelations } from "~/models/portal-db/types"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
 import { AccountIdLoaderData } from "~/routes/account.$accountId/route"
 import AccountInsightsView from "~/routes/account.$accountId._index/view"
 import { getErrorMessage } from "~/utils/catchError"
@@ -25,7 +27,7 @@ export const meta: MetaFunction = () => {
 }
 
 export type AccountInsightsData = {
-  account: Account
+  accountData: PortalAccountWithRelations
   total: D2Stats
   aggregate: D2Stats[]
   realtimeDataChains: D2Chain[]
@@ -46,7 +48,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     const { accountId } = params
     invariant(typeof accountId === "string", "AccountId must be a set url parameter")
 
-    const account = await portal.getUserAccount({ accountID: accountId, accepted: true })
+    const [accountData] = await getUserAccounts(user.accessToken, accountId)
 
     const getAggregateRelaysResponse = await getAggregateRelays({
       period,
@@ -73,7 +75,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     })
 
     return json<AccountInsightsData>({
-      account: account.getUserAccount as Account,
+      accountData,
       realtimeDataChains: getRealtimeDataChainsResponse,
       total: getTotalRelaysResponse,
       aggregate: getAggregateRelaysResponse,
@@ -86,14 +88,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 }
 
 export default function AccountInsights() {
-  const { account, total, aggregate, realtimeDataChains } =
+  const { accountData, total, aggregate, realtimeDataChains } =
     useLoaderData() as AccountInsightsData
-  const { services, userRole } = useOutletContext<AccountIdLoaderData>()
+  const { services, userRole, portalApplications } = useOutletContext<AccountIdLoaderData>()
 
   return (
     <AccountInsightsView
+      accountData={accountData}
       aggregate={aggregate}
-      apps={account?.portalApps as PortalApp[]}
+      apps={portalApplications as unknown as PortalApp[]}
       services={services}
       realtimeDataChains={realtimeDataChains}
       total={total}

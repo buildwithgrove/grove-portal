@@ -1,10 +1,9 @@
 import {
-  Account,
-  PayPlanType,
   PortalApp,
   RoleName,
   User as UserType,
 } from "~/models/portal/sdk"
+import { PayPlanType } from "~/models/portal-db/types"
 import {
   ActionIcon,
   AppShell,
@@ -29,62 +28,63 @@ import React, { useMemo, useState } from "react"
 
 import AccountSelect from "~/components/AccountSelect"
 import GroveLogo from "~/components/GroveLogo"
-import type { AuthPortalUser } from "~/models/portal-db/types"
+import type { AuthPortalUser, PortalAccount, PortalApplicationSummary } from "~/models/portal-db/types"
 
 type SidebarProps = {
-  account: Account
-  accounts: Account[]
+  account: PortalAccount
+  accounts: PortalAccount[]
+  apps?: PortalApplicationSummary[]
   userRole: RoleName
   toggle: () => void
   user: AuthPortalUser
 }
 
 const getAccountRoutes = (
-  activeAccount: Account,
+  activeAccount: PortalAccount,
   userRole: RoleName,
 ): SidebarNavRoute[] => {
-  const isFreeAccount = activeAccount?.planType === PayPlanType.PlanFree
+  const isFreeAccount = activeAccount?.portal_plan_type === PayPlanType.PlanFree
   return [
     ...(isFreeAccount && userRole !== RoleName.Member
       ? [
         {
-          to: `/account/${activeAccount?.id}/upgrade`,
+          to: `/account/${activeAccount?.portal_account_id}/upgrade`,
           label: "Upgrade to Unlimited",
           end: true,
         },
       ]
       : []),
     {
-      to: `/account/${activeAccount?.id}`,
+      to: `/account/${activeAccount?.portal_account_id}`,
       label: "Insights",
       end: true,
     },
     {
-      to: `/account/${activeAccount?.id}/logs`,
+      to: `/account/${activeAccount?.portal_account_id}/logs`,
       label: "Logs",
       end: true,
     },
     {
-      to: `/account/${activeAccount?.id}/sandbox`,
+      to: `/account/${activeAccount?.portal_account_id}/sandbox`,
       label: "Sandbox",
       end: true,
     },
     ...(!isFreeAccount && userRole !== RoleName.Member
       ? [
         {
-          to: `/account/${activeAccount?.id}/billing`,
+          to: `/account/${activeAccount?.portal_account_id}/billing`,
           label: "Billing",
         },
       ]
       : []),
     {
-      to: `/account/${activeAccount?.id}/settings`,
+      to: `/account/${activeAccount?.portal_account_id}/settings`,
       label: "Account Settings",
     },
   ]
 }
 
-export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarProps) => {
+export const Sidebar = ({ account, userRole, accounts, apps, toggle, user }: SidebarProps) => {
   const { accountId } = useParams()
   const logoutFetcher = useFetcher()
   const { colorScheme: mantineColorScheme } = useMantineColorScheme()
@@ -98,7 +98,6 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
   }, [account, userRole])
 
   const canCreateApps = userRole !== RoleName.Member
-  const { portalApps: apps } = account
 
   const logout = () => {
     logoutFetcher.submit(
@@ -197,7 +196,7 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
             </Text>
           </Box>
           <ScrollArea mah="300px" h="auto">
-            {apps && <SidebarApps apps={apps as PortalApp[]} />}
+            {apps && <SidebarApps apps={apps} />}
           </ScrollArea>
           {canCreateApps && (
             <Box mt="xs">

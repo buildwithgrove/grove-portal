@@ -3,29 +3,30 @@ import { Form, NavLink, useParams } from "@remix-run/react"
 import { useState } from "react"
 import RouteModal from "~/components/RouteModal"
 import { Account } from "~/models/portal/sdk"
+import type { PayPlanType, PortalAccount } from "~/models/portal-db/types"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 import { commify } from "~/utils/formattingUtils"
-import { isUnlimitedPlan } from "~/utils/planUtils"
+import { isUnlimitedPlan, toPayPlanType } from "~/utils/planUtils"
 
 type AccountFormProps = {
-  account: Account
+  account: PortalAccount
   redirectTo: string | null
   onSubmit: (formData: FormData) => void
 }
 
-function EnableUpdate(name: string, monthlyRelayLimit: number, account: Account) {
+function EnableUpdate(name: string, monthlyRelayLimit: number, account: PortalAccount) {
   return (
-    (name !== "" && name !== account.name) ||
-    monthlyRelayLimit !== account.monthlyUserLimit
+    (name !== "" && name !== account.user_account_name) ||
+    monthlyRelayLimit !== account.portal_account_user_limit
   )
 }
 
 const AccountForm = ({ account, redirectTo, onSubmit }: AccountFormProps) => {
   const { accountId } = useParams()
   const closeButtonRedirect = redirectTo ?? `/account/${accountId}/settings`
-  const [name, setName] = useState(account?.name ?? "")
+  const [name, setName] = useState(account?.user_account_name ?? "")
   const [monthlyRelayLimit, setMonthlyRelayLimit] = useState(
-    account?.monthlyUserLimit ?? 0,
+    account?.portal_account_user_limit ?? 0,
   )
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
@@ -57,17 +58,16 @@ const AccountForm = ({ account, redirectTo, onSubmit }: AccountFormProps) => {
           />
         </Stack>
         <Divider mb="md" mt="xl" />
-        {isUnlimitedPlan(account.planType) && (
+        {isUnlimitedPlan(toPayPlanType(account.portal_plan_type)) && (
           <>
             <RouteModal.Header
               closeButtonLink={closeButtonRedirect}
-              description={`Set a monthly relay limit to avoid extra charges. Your account will stop working once you hit this limit and will resume at the start of the next calendar month. The limit must be set in multiples of 1,000,000. ${
-                account.monthlyUserLimit > 0
-                  ? `Your current limit is ${commify(
-                      account.monthlyUserLimit,
-                    )} relays per month.`
-                  : ""
-              }`}
+              description={`Set a monthly relay limit to avoid extra charges. Your account will stop working once you hit this limit and will resume at the start of the next calendar month. The limit must be set in multiples of 1,000,000. ${account.portal_account_user_limit! > 0
+                ? `Your current limit is ${commify(
+                  account.portal_account_user_limit!,
+                )} relays per month.`
+                : ""
+                }`}
               title="Monthly Relay Limit"
             />
             <Stack gap="md" mt="sm">
@@ -112,7 +112,7 @@ const AccountForm = ({ account, redirectTo, onSubmit }: AccountFormProps) => {
               trackEvent({
                 category: AnalyticCategories.app,
                 action: AnalyticActions.account_update,
-                label: account.id,
+                label: account.portal_account_id,
               })
             }}
           >

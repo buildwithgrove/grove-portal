@@ -3,18 +3,18 @@ import { NavLink, useParams } from "@remix-run/react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import React, { useMemo } from "react"
 import Identicon from "~/components/Identicon"
-import { Account } from "~/models/portal/sdk"
-import { getPlanName } from "~/utils/planUtils"
+import type { PortalAccount } from "~/models/portal-db/types"
+import { getPlanName, toPayPlanType } from "~/utils/planUtils"
 
 type UserItemProps = {
-  account: Account
+  account: PortalAccount
   hasMultipleAccounts?: boolean
   iconOnly?: boolean
   selected?: boolean
 }
 
 type AccountSelectProps = {
-  accounts: Account[]
+  accounts: PortalAccount[]
   collapsed?: boolean
   style?: React.CSSProperties
 }
@@ -27,8 +27,8 @@ const AccountItem = ({
 }: UserItemProps) => (
   <Group>
     <Identicon
-      alt={`${account.id} profile picture`}
-      seed={account.id}
+      alt={`${account.portal_account_id} profile picture`}
+      seed={account.portal_account_id}
       size={32}
       type="account"
     />
@@ -36,11 +36,9 @@ const AccountItem = ({
       <>
         <Stack gap={0}>
           <Text truncate fw={500} fz={15} lh="17px" maw={145}>
-            {account.name ? account.name : account.id}
+            {account.user_account_name ? account.user_account_name : account.portal_account_id}
           </Text>
-          <Text fz={11}>{`${getPlanName(account.planType)} · ${
-            account?.users?.length ?? 1
-          } member${account?.users?.length > 1 ? "s" : ""}`}</Text>
+          <Text fz={11}>{`${getPlanName(toPayPlanType(account.portal_plan_type))}`}</Text>
         </Stack>
         {hasMultipleAccounts && (
           <ChevronsUpDown size={18} style={{ marginLeft: "auto", marginRight: 0 }} />
@@ -56,7 +54,7 @@ const AccountSelect = ({ accounts, collapsed, style }: AccountSelectProps) => {
   const hasMultipleAccounts = accounts.length > 1
 
   const activeAccount = useMemo(
-    () => accounts.find(({ id }) => id === accountId),
+    () => accounts.find(({ portal_account_id }) => portal_account_id === accountId),
     [accountId, accounts],
   )
 
@@ -80,16 +78,16 @@ const AccountSelect = ({ accounts, collapsed, style }: AccountSelectProps) => {
       {accounts && accounts?.length > 0 && (
         <Menu.Dropdown px={8} py="md">
           {accounts
-            .sort((a, b) => (a.id > b.id ? 1 : -1))
+            .sort((a, b) => (a.portal_account_id > b.portal_account_id ? 1 : -1))
             .map((account, index) => (
               <Menu.Item
-                key={account.id}
-                disabled={account.id === accountId}
+                key={account.portal_account_id}
+                disabled={account.portal_account_id === accountId}
                 mb={index === accounts.length - 1 ? 0 : 8}
                 p={2}
               >
-                <NavLink prefetch="intent" to={`/account/${account.id}`}>
-                  <AccountItem account={account} selected={account.id === accountId} />
+                <NavLink prefetch="intent" to={`/account/${account.portal_account_id}`}>
+                  <AccountItem account={account} selected={account.portal_account_id === accountId} />
                 </NavLink>
               </Menu.Item>
             ))}

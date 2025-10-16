@@ -4,12 +4,30 @@ import { Link, NavLink, useParams } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { EmptyState } from "~/components/EmptyState"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
-import { initPortalClient } from "~/models/portal/portal.server"
-import { Account } from "~/models/portal/sdk"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
 import { isAccountWithinAppLimit } from "~/utils/accountUtils"
 import { getErrorMessage } from "~/utils/catchError"
 import { seo_title_append } from "~/utils/seo"
 import { requireUser } from "~/utils/user.server"
+
+/**
+ * Checks if an account can create more applications.
+ * 
+ * This function uses getUserAccounts to fetch account data with applications and plan,
+ * then checks if the account is within its app creation limit.
+ */
+async function checkAppCreationLimit(
+  token: string,
+  accountId: string
+): Promise<boolean> {
+  const [accountData] = await getUserAccounts(token, accountId)
+
+  return isAccountWithinAppLimit(
+    accountData.account,
+    accountData.applications as any,
+    accountData.plan
+  )
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,22 +40,13 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
   const { accountId } = params
-
-  const portal = initPortalClient({ token: user.accessToken })
   invariant(accountId, "AccountId must be set")
-  try {
-    const getUserAccountResponse = await portal.getUserAccount({
-      accountID: accountId,
-      accepted: true,
-    })
 
-    if (!getUserAccountResponse) {
-      return redirect(`/account/${params.accountId}`)
-    }
-    const userAccount = getUserAccountResponse.getUserAccount as Account
-    const canCreateApp = isAccountWithinAppLimit(userAccount)
+  try {
+    const canCreateApp = await checkAppCreationLimit(user.accessToken, accountId)
+
     if (canCreateApp) {
-      return redirect(`/account/${params.accountId}`)
+      return redirect(`/account/${accountId}`)
     }
   } catch (error) {
     throw new Response(getErrorMessage(error), {

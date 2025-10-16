@@ -17,14 +17,49 @@ import useActionNotification, {
   ActionNotificationData,
 } from "~/hooks/useActionNotification"
 import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, PayPlanType, RoleName } from "~/models/portal/sdk"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
+import type { PortalAccountWithRelations } from "~/models/portal-db/types"
+import { PayPlanType, RoleName } from "~/models/portal/sdk"
 import { TeamActionData } from "~/routes/account.$accountId.settings.members/action"
 import { ActionDataStruct } from "~/types/global"
-import { getUserAccountRole, isAccountWithinAppLimit } from "~/utils/accountUtils"
+import { getUserAccountRoleFromRbac, isAccountWithinAppLimit } from "~/utils/accountUtils"
 import { getErrorMessage } from "~/utils/catchError"
 import { triggerAppActionNotification } from "~/utils/notifications.server"
 import { seo_title_append } from "~/utils/seo"
 import { requireUser } from "~/utils/user.server"
+
+/**
+ * Fetches account data with authorization checks for app creation.
+ * 
+ * This function uses getUserAccounts to fetch complete account data,
+ * then validates user permissions and app creation limits.
+ */
+async function fetchAccountForAppCreation(
+  token: string,
+  accountId: string,
+  userId: string
+): Promise<PortalAccountWithRelations> {
+  const [accountData] = await getUserAccounts(token, accountId)
+
+  // Check user has permission to create apps
+  const userRole = getUserAccountRoleFromRbac(accountData.rbac, userId)
+  if (!userRole || userRole === RoleName.Member) {
+    throw new Response("Unauthorized", { status: 403 })
+  }
+
+  // Check if account is within app creation limit
+  const canCreateApp = isAccountWithinAppLimit(
+    accountData.account,
+    accountData.applications,
+    accountData.plan
+  )
+
+  if (!canCreateApp) {
+    throw new Response("App limit exceeded", { status: 403 })
+  }
+
+  return accountData
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -35,37 +70,20 @@ export const meta: MetaFunction = () => {
 }
 
 type CreateAppLoaderData = {
-  account: Account
+  accountData: PortalAccountWithRelations
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
-  const portal = initPortalClient({ token: user.accessToken })
   const { accountId } = params
   invariant(accountId, "AccountId must be set")
 
   try {
-    const getUserAccountResponse = await portal.getUserAccount({
-      accountID: accountId,
-      accepted: true,
-    })
-
-    if (!getUserAccountResponse) {
-      return redirect(`/account/${params.accountId}`)
-    }
-
-    const userAccount = getUserAccountResponse.getUserAccount as Account
-    const userRole = getUserAccountRole(userAccount.users, user.user.portal_user_id)
-
-    if (!userRole || userRole === RoleName.Member) {
-      return redirect(`/account/${params.accountId}`)
-    }
-    const canCreateApp = isAccountWithinAppLimit(userAccount)
-
-    // ensure only users who can create new apps are allowed on this page
-    if (!canCreateApp) {
-      return redirect(`/account/${params.accountId}/app-limit-exceeded`)
-    }
+    const accountData = await fetchAccountForAppCreation(
+      user.accessToken,
+      accountId,
+      user.user.portal_user_id
+    )
 
     // TODO: Dynamically get the price
     //
@@ -88,9 +106,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     // )
 
     return json<CreateAppLoaderData>({
-      account: userAccount,
+      accountData,
     })
   } catch (error) {
+    // Handle authorization errors by redirecting to appropriate pages
+    if (error instanceof Response) {
+      if (error.status === 403) {
+        const errorText = await error.text()
+        if (errorText === "App limit exceeded") {
+          return redirect(`/account/${accountId}/app-limit-exceeded`)
+        }
+        return redirect(`/account/${accountId}`)
+      }
+    }
     throw new Response(getErrorMessage(error), {
       status: 500,
     })
@@ -165,14 +193,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export default function CreateApp() {
-  const { account } = useLoaderData<CreateAppLoaderData>()
+  const { accountData } = useLoaderData<CreateAppLoaderData>()
   const fetcher = useFetcher()
   const [appFromData, setAppFromData] = useState<FormData>()
   const fetcherData = fetcher.data as ActionNotificationData
   useActionNotification(fetcherData)
 
   const handleFormSubmit = (formData: FormData) => {
-    if (account.planType === PayPlanType.PlanFree) {
+    if (accountData.account.portal_plan_type === 'PLAN_FREE') {
       setAppFromData(formData)
     } else {
       fetcher.submit(formData, {

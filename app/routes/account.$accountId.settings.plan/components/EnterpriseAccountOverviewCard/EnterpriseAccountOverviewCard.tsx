@@ -8,9 +8,11 @@ import React from "react"
 import { TitledCard } from "~/components/TitledCard"
 import { commify } from "~/utils/formattingUtils"
 import { getPlanName } from "~/utils/planUtils"
+import { PortalAccount } from "~/models/portal-db/types"
+import { toPayPlanType } from "~/utils/planUtils"
 
 interface EnterpriseAccountOverviewCardProps {
-  account: Account
+  account: PortalAccount
 }
 
 export default function EnterpriseAccountOverviewCard({
@@ -19,11 +21,11 @@ export default function EnterpriseAccountOverviewCard({
   const cardItems = [
     {
       label: "Plan Type",
-      value: getPlanName(account.planType),
+      value: getPlanName(toPayPlanType(account.portal_plan_type)),
     },
     {
       label: "Custom Limit",
-      value: commify(account.enterpriseLimit),
+      value: commify(account.portal_account_user_limit!),
     },
   ]
 

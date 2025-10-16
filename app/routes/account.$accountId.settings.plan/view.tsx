@@ -3,20 +3,28 @@ import EnterpriseAccountOverviewCard from "./components/EnterpriseAccountOvervie
 import FreeAccountPlan from "./components/FreeAccountPlan"
 import UnlimitedPlanOverviewCard from "./components/UnlimitedAccountOverviewCard"
 import { AccountPlanLoaderData } from "./route"
-import { PayPlanType, RoleName } from "~/models/portal/sdk"
+import { RoleName } from "~/models/portal/sdk"
+import { toPayPlanType } from "~/utils/planUtils"
+import { PayPlanType } from "~/models/portal-db/types"
 
 export type AccountPlanViewProps = AccountPlanLoaderData & { userRole: RoleName }
 
 export const AccountPlanView = ({
-  account,
+  accountData,
   subscription,
   userRole,
 }: AccountPlanViewProps) => {
+  const account = accountData.account
+  const accountPlanType = toPayPlanType(account.portal_plan_type)
+
+  // TODO_IN_THIS_PR(@commoddity): These components still expect GraphQL Account type
+  // Need to update FreeAccountPlan, UnlimitedPlanOverviewCard, EnterpriseAccountOverviewCard
+  // to accept PortalAccount instead of Account
   return (
     <Box py={20}>
-      {account.planType === PayPlanType.PlanFree && <FreeAccountPlan account={account} />}
+      {accountPlanType === PayPlanType.PlanFree && <FreeAccountPlan account={account} />}
 
-      {account.planType === PayPlanType.PlanUnlimited && (
+      {accountPlanType === PayPlanType.PlanUnlimited && (
         <UnlimitedPlanOverviewCard
           account={account}
           subscription={subscription}
@@ -24,7 +32,7 @@ export const AccountPlanView = ({
         />
       )}
 
-      {account.planType === PayPlanType.Enterprise && (
+      {accountPlanType === PayPlanType.Enterprise && (
         <EnterpriseAccountOverviewCard account={account} />
       )}
     </Box>

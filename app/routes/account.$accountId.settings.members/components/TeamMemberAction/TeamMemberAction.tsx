@@ -1,12 +1,13 @@
 import { Flex, Menu, Text, ActionIcon } from "@mantine/core"
 import { Minus, Ellipsis, Send } from "lucide-react"
 import React, { useMemo } from "react"
-import { Account, RoleName, AccountUser } from "~/models/portal/sdk"
+import { Account, RoleName, User, AccountUser } from "~/models/portal/sdk"
+import type { PortalAccount } from "~/models/portal-db/types"
 import type { AuthPortalUser } from "~/models/portal-db/types"
 import useTeamModals from "~/routes/account.$accountId.settings.members/hooks/useTeamModals"
 
 type TeamMemberActionProps = {
-  account: Account
+  account: PortalAccount
   userRole: RoleName | null
   user?: AuthPortalUser
   teamMember: AccountUser

@@ -1,21 +1,21 @@
 import { Text } from "@mantine/core"
 import { useFetcher } from "@remix-run/react"
 import useModals from "~/hooks/useModals"
-import { Account } from "~/models/portal/sdk"
+import { PortalAccount } from "~/models/portal-db/types"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 
 const useSubscriptionModals = () => {
   const fetcher = useFetcher()
   const { openConfirmationModal } = useModals()
 
-  const stopSubscription = (account: Account) => {
-    const subscriptionID = account.integrations?.stripeSubscriptionID
+  const stopSubscription = (account: PortalAccount) => {
+    const subscriptionID = account.stripe_subscription_id
     fetcher.submit(
       {
-        "account-id": account.id,
-        "account-name": account.name ?? account.id,
+        "account-id": account.portal_account_id,
+        "account-name": account.user_account_name ?? account.portal_account_id,
         ...(subscriptionID && {
-          "subscription-id": account.integrations?.stripeSubscriptionID,
+          "subscription-id": account.stripe_subscription_id,
         }),
       },
       {
@@ -25,7 +25,7 @@ const useSubscriptionModals = () => {
     )
   }
 
-  const openStopSubscriptionModal = (account: Account) =>
+  const openStopSubscriptionModal = (account: PortalAccount) =>
     openConfirmationModal({
       title: (
         <Text fw={600} fz={14}>
@@ -46,7 +46,7 @@ const useSubscriptionModals = () => {
         trackEvent({
           category: AnalyticCategories.account,
           action: AnalyticActions.account_subscription_stop,
-          label: account.id,
+          label: account.portal_account_id,
         })
       },
     })

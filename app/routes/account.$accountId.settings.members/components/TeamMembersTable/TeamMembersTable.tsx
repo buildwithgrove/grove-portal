@@ -1,22 +1,30 @@
 import { Avatar, Flex, Group, Select, Text } from "@mantine/core"
 import { DataTable } from "~/components/DataTable"
 import Identicon from "~/components/Identicon"
-import { Account, RoleName } from "~/models/portal/sdk"
-import type { AuthPortalUser } from "~/models/portal-db/types"
+import { RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser, PortalAccount, PortalAccountRbac } from "~/models/portal-db/types"
 import TeamMemberAction from "~/routes/account.$accountId.settings.members/components/TeamMemberAction"
 import useTeamModals from "~/routes/account.$accountId.settings.members/hooks/useTeamModals"
 import { capitalizeFirstLetter } from "~/utils/utils"
 
 type TeamMembersTableProps = {
-  account: Account
+  account: PortalAccount
   userRole: RoleName | null
   user?: AuthPortalUser
+  rbac: PortalAccountRbac[]
 }
 
-const TeamMembersTable = ({ account, userRole, user }: TeamMembersTableProps) => {
+const TeamMembersTable = ({ account, userRole, user, rbac }: TeamMembersTableProps) => {
   const { openChangeRoleModal } = useTeamModals({ account })
 
-  const teamData = account.users.sort(
+  // TODO_IN_THIS_PR(@commoddity): determine how to fetch user emails for account
+  // Map RBAC data to expected format with placeholder email
+  const teamData = rbac.map((r) => ({
+    id: r.portal_user_id,
+    email: "dev@placeholder.com",
+    roleName: r.role_name as RoleName,
+    accepted: r.user_joined_account ?? false,
+  })).sort(
     (a, b) => Number(b.roleName === "OWNER") - Number(a.roleName === "OWNER"),
   )
 

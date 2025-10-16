@@ -22,3 +22,23 @@ export type ServiceWithEndpoints = Service & {
 // Auth-specific portal user type with only needed fields
 export type AuthPortalUser = Pick<PortalUser, 'portal_user_id' | 'portal_user_email' | 'signed_up'>
 
+// PayPlanType enum from portal-db
+export enum PayPlanType {
+    Enterprise = 'ENTERPRISE',
+    PlanFree = 'PLAN_FREE',
+    PlanUnlimited = 'PLAN_UNLIMITED'
+}
+
+// Simplified portal application type with only commonly needed fields
+export type PortalApplicationSummary = Pick<
+    PortalApplication,
+    'portal_application_id' | 'portal_application_name' | 'emoji' | 'secret_key_hash' | 'secret_key_required'
+>
+
+// Complete account data with related entities (replaces GraphQL getUserAccount/getUserAccounts)
+export type PortalAccountWithRelations = {
+    account: PortalAccount
+    rbac: PortalAccountRbac[]
+    applications: PortalApplicationSummary[]
+    plan: PortalPlan
+}

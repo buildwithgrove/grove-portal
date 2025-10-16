@@ -1,8 +1,8 @@
 import { redirect } from "@remix-run/node"
 import jwt_decode from "jwt-decode"
 import { authenticator, AuthUser } from "./auth.server"
-import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, RoleName } from "~/models/portal/sdk"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
+import { RoleName } from "~/models/portal/sdk"
 import type { AuthPortalUser } from "~/models/portal-db/types"
 
 export enum Permissions {
@@ -101,20 +101,39 @@ export const getUserProfile = async (request: Request) => {
   return user?.user
 }
 
+/**
+ * Redirects user to their primary account (Owner account if available, otherwise first account).
+ * 
+ * This function:
+ *    1. Fetches all user's accepted accounts using getUserAccounts
+ *    2. Determines user roles from RBAC data
+ *    3. Prioritizes Owner accounts
+ *    4. Redirects to the selected account
+ */
 export const redirectToUserAccount = async (user: AuthUser) => {
-  const portal = initPortalClient({ token: user.accessToken })
-  const accounts = await portal.getUserAccounts({ accepted: true })
-  let account = accounts.getUserAccounts[0] as Partial<Account>
+  const allAccountsData = await getUserAccounts(user.accessToken)
 
-  const owner = accounts.getUserAccounts.find(
-    (account) =>
-      account?.users.find((u) => u.id === user.user.portal_user_id)?.roleName ===
-      RoleName.Owner,
-  )
-
-  if (owner) {
-    account = owner as Account
+  if (allAccountsData.length === 0) {
+    throw new Response("No accounts found", { status: 404 })
   }
 
-  return redirect(`/account/${account.id}`)
+  // Filter to only accepted accounts
+  const acceptedAccounts = allAccountsData.filter((accountData) => {
+    const rbac = accountData.rbac.find((r) => r.portal_user_id === user.user.portal_user_id)
+    return rbac?.user_joined_account === true
+  })
+
+  let selectedAccountData = acceptedAccounts[0]
+
+  // Find Owner account if available
+  const ownerAccountData = acceptedAccounts.find((accountData) => {
+    const rbac = accountData.rbac.find((r) => r.portal_user_id === user.user.portal_user_id)
+    return rbac?.role_name === RoleName.Owner
+  })
+
+  if (ownerAccountData) {
+    selectedAccountData = ownerAccountData
+  }
+
+  return redirect(`/account/${selectedAccountData.account.portal_account_id}`)
 }

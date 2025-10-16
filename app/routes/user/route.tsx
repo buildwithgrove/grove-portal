@@ -1,5 +1,5 @@
-import { Account, RoleName, SortOrder } from "~/models/portal/sdk"
-import type { AuthPortalUser } from "~/models/portal-db/types"
+import { RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser, PortalAccount } from "~/models/portal-db/types"
 import { Button, Stack } from "@mantine/core"
 import { LoaderFunction, json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
@@ -11,26 +11,25 @@ import LinkTabs from "~/components/LinkTabs"
 import RootAppShell from "~/components/RootAppShell/RootAppShell"
 import { getColorSchemeSession } from "~/utils/colorScheme.server"
 import { getErrorMessage } from "~/utils/catchError"
-import { getUserAccountRole } from "~/utils/accountUtils"
-import { initPortalClient } from "~/models/portal/portal.server"
+import { getUserAccountRoleFromRbac } from "~/utils/accountUtils"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
 import { requireUser } from "~/utils/user.server"
 import { useEffect } from "react"
 
 export type UserAccountLoaderData = {
-  accounts: Account[]
-  pendingAccounts: Account[]
+  accounts: PortalAccount[]
+  pendingAccounts: PortalAccount[]
   user: AuthPortalUser & {
     auth0ID: string
     email_verified?: boolean
   }
-  primaryAccount?: Account
+  primaryAccount?: PortalAccount
   primaryUserRole?: RoleName
   colorScheme: ColorScheme
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
-  const portal = initPortalClient({ token: user.accessToken })
 
   // Get color scheme from session to ensure it's preserved on user routes
   const themeSession = await getColorSchemeSession(request)
@@ -41,33 +40,39 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const colorScheme = sessionColorScheme || systemPreferredColorScheme || "dark"
 
   try {
-    const accounts = await portal.getUserAccounts({
-      accepted: true,
-      sortOrder: SortOrder.Asc,
+    // Fetch all user's accounts with relations using getUserAccounts
+    const allAccountsData = await getUserAccounts(user.accessToken)
+
+    // Separate accounts based on user_joined_account status
+    const acceptedAccountsData = allAccountsData.filter((accountData) => {
+      const rbac = accountData.rbac.find((r) => r.portal_user_id === user.user.portal_user_id)
+      return rbac?.user_joined_account === true
     })
 
-    const userPendingAccounts = await portal.getUserAccounts({
-      accepted: false,
-      sortOrder: SortOrder.Asc,
+    const pendingAccountsData = allAccountsData.filter((accountData) => {
+      const rbac = accountData.rbac.find((r) => r.portal_user_id === user.user.portal_user_id)
+      return rbac?.user_joined_account === false
     })
 
-    const accountsList = accounts.getUserAccounts as Account[]
     // Find the primary account (first Owner account, or first account if no owner)
-    const primaryAccount =
-      accountsList.find((account) => {
-        const userRole = getUserAccountRole(account.users, user.user.portal_user_id)
-        return userRole === RoleName.Owner
-      }) || accountsList[0]
+    const primaryAccountData =
+      acceptedAccountsData.find((accountData) => {
+        const rbac = accountData.rbac.find((r) => r.portal_user_id === user.user.portal_user_id)
+        return rbac?.role_name === RoleName.Owner
+      }) || acceptedAccountsData[0]
 
-    const primaryUserRole = primaryAccount
-      ? (getUserAccountRole(primaryAccount.users, user.user.portal_user_id) as RoleName)
+    const primaryUserRole = primaryAccountData
+      ? (getUserAccountRoleFromRbac(
+        primaryAccountData.rbac,
+        user.user.portal_user_id
+      ) as RoleName)
       : undefined
 
     return json<UserAccountLoaderData>({
-      accounts: accountsList,
-      pendingAccounts: userPendingAccounts.getUserAccounts as Account[],
+      accounts: acceptedAccountsData.map(d => d.account),
+      pendingAccounts: pendingAccountsData.map(d => d.account),
       user: user.user,
-      primaryAccount,
+      primaryAccount: primaryAccountData?.account,
       primaryUserRole,
       colorScheme,
     })

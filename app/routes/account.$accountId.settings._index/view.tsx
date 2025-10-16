@@ -12,11 +12,12 @@ import { Link } from "@remix-run/react"
 import { Identicon } from "~/components/Identicon"
 import { Account, RoleName } from "~/models/portal/sdk"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
+import { PortalAccount } from "~/models/portal-db/types"
 import { commify } from "~/utils/formattingUtils"
-import { isUnlimitedPlan } from "~/utils/planUtils"
+import { isUnlimitedPlan, toPayPlanType } from "~/utils/planUtils"
 
 type AccountSettingsViewProps = {
-  account: Account
+  account: PortalAccount
   userRole: RoleName
 }
 
@@ -25,8 +26,8 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
     <Stack gap="xs">
       <Box py={20}>
         <Identicon
-          alt={`${account?.name ?? "account"} avatar`}
-          seed={account.id ?? "account default"}
+          alt={`${account?.user_account_name ?? "account"} avatar`}
+          seed={account.portal_account_id ?? "account default"}
           size="lg"
           type="account"
         />
@@ -36,25 +37,23 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
         <Text pt={5}>A unique image representing your account. </Text>
       </Box>
       <Divider />
-      {isUnlimitedPlan(account.planType) && (
+      {isUnlimitedPlan(toPayPlanType(account.portal_plan_type)) && (
         <>
           <Stack align="flex-start" py={20}>
             <Box>
               <Text fw={600}>Monthly Relay Limit</Text>
               <Text pt={5}>
-                {account.monthlyUserLimit === 0
-                  ? `This account has no monthly relay limit. ${
-                      userRole === RoleName.Member
-                        ? "You may set a monthly relay limit in Account Settings."
-                        : "An admin of this account may set a monthly relay limit in Account Settings."
-                    }`
+                {account.portal_account_user_limit === 0
+                  ? `This account has no monthly relay limit. ${userRole === RoleName.Member
+                    ? "You may set a monthly relay limit in Account Settings."
+                    : "An admin of this account may set a monthly relay limit in Account Settings."
+                  }`
                   : `This account has a monthly relay limit of ${commify(
-                      account.monthlyUserLimit,
-                    )} relays. Once you hit this limit, your account will stop working until the start of the next calendar month. ${
-                      userRole === RoleName.Member
-                        ? "An admin of this account may increase this limit in Account Settings."
-                        : "You may increase this limit in Account Settings."
-                    }`}
+                    account.portal_account_user_limit!,
+                  )} relays. Once you hit this limit, your account will stop working until the start of the next calendar month. ${userRole === RoleName.Member
+                    ? "An admin of this account may increase this limit in Account Settings."
+                    : "You may increase this limit in Account Settings."
+                  }`}
               </Text>
             </Box>
           </Stack>
@@ -71,7 +70,7 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
             <Button
               color="gray"
               component={Link}
-              to={`/account/${account.id}/update`}
+              to={`/account/${account.portal_account_id}/update`}
               variant="outline"
               onClick={() => {
                 trackEvent({
@@ -93,7 +92,7 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
           <Text mb="xs" pt={5}>
             This is your unique organization ID.
           </Text>
-          <CopyButton value={account.id}>
+          <CopyButton value={account.portal_account_id}>
             {({ copied, copy }) => (
               <Tooltip withArrow label={copied ? "Copied" : "Copy"}>
                 <Badge
@@ -109,11 +108,11 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
                     trackEvent({
                       category: AnalyticCategories.account,
                       action: AnalyticActions.account_copy_id,
-                      label: account.id,
+                      label: account.portal_account_id,
                     })
                   }}
                 >
-                  {account.id}
+                  {account.portal_account_id}
                 </Badge>
               </Tooltip>
             )}

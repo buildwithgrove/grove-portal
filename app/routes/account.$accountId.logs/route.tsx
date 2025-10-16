@@ -3,7 +3,9 @@ import { useLoaderData, useOutletContext } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
 import { initPortalClient } from "~/models/portal/portal.server"
+import { initPortalDbClient } from "~/models/portal-db/portal-db.server"
 import { D2Log, D2Meta, PortalApp, SortOrder } from "~/models/portal/sdk"
+import type { PortalApplication } from "~/models/portal-db/types"
 import { AccountIdLoaderData } from "~/routes/account.$accountId/route"
 import AccountLogsView from "~/routes/account.$accountId.logs/view"
 import { getErrorMessage } from "~/utils/catchError"
@@ -20,12 +22,12 @@ export const meta: MetaFunction = () => {
 }
 
 export type AccountLogsData = {
-  apps: PortalApp[]
+  apps: PortalApplication[]
   logs: D2Log[]
   meta?: D2Meta
 }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ request, params, context }) => {
   await requireUser(request)
   const user = await requireUser(request)
   const portal = initPortalClient({ token: user.accessToken })
@@ -38,16 +40,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(typeof accountId === "string", "AccountId must be a set url parameter")
 
   try {
-    const getUserAccountResponse = await portal.getUserAccount({
-      accountID: accountId,
-      accepted: true,
-      sortOrder: SortOrder.Asc,
-    })
-
-    const apps = getUserAccountResponse.getUserAccount.portalApps as PortalApp[]
+    // Get portal applications from parent route context
+    const { portalApplications } = context as { portalApplications: PortalApplication[] }
+    const apps = portalApplications
 
     let getD2LogsDataResponse
-    const appId = appIdParam ? appIdParam : apps![0]?.id
+    const appId = appIdParam ? appIdParam : apps![0]?.portal_application_id
     if (appId) {
       getD2LogsDataResponse = await portal.getD2LogsData({
         params: {

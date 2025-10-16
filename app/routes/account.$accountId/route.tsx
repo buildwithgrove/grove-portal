@@ -1,5 +1,5 @@
-import { Account, RoleName } from "~/models/portal/sdk"
-import type { AuthPortalUser } from "~/models/portal-db/types"
+import { RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser, PortalApplicationSummary } from "~/models/portal-db/types"
 import { LoaderFunction, json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { redirectToUserAccount, requireUser } from "~/utils/user.server"
@@ -8,14 +8,14 @@ import { ColorScheme } from "~/root"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
 import RootAppShell from "~/components/RootAppShell/RootAppShell"
 import { getColorSchemeSession } from "~/utils/colorScheme.server"
-import { getErrorMessage } from "~/utils/catchError"
-import { getUserAccountRole } from "~/utils/accountUtils"
-import { initPortalClient } from "~/models/portal/portal.server"
+import { getUserAccountRoleFromRbac } from "~/utils/accountUtils"
 import { initPortalDbClient } from "~/models/portal-db/portal-db.server"
-import type { ServiceWithEndpoints } from "~/models/portal-db/types"
+import type { ServiceWithEndpoints, PortalAccountWithRelations } from "~/models/portal-db/types"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
 import invariant from "tiny-invariant"
 import { useEffect } from "react"
 
+// TODO_IN_THIS_PR(@commoddity): move this function to queries.server.ts
 /**
  * Fetches all active services with their associated endpoints from the portal database.
  * 
@@ -54,6 +54,7 @@ async function fetchServicesWithEndpoints(token: string): Promise<ServiceWithEnd
   // Filter out specific services
   // BE2A is a legacy/deprecated service
   // Services with "wss" in their ID are websocket-only variants that are handled separately
+  // TODO_IN_THIS_PR(@commoddity): CLARIFY why we need to do this.
   const filteredServices = services.filter(
     (service) => service.service_id !== "BE2A" && !service.service_id?.includes("wss")
   )
@@ -73,9 +74,11 @@ async function fetchServicesWithEndpoints(token: string): Promise<ServiceWithEnd
   return servicesWithEndpoints
 }
 
+// Removed: fetchAccountData function is replaced by getUserAccounts from queries.server.ts
+
 export type AccountIdLoaderData = {
-  account: Account
-  accounts: Account[]
+  accountData: PortalAccountWithRelations
+  allUserAccounts: PortalAccountWithRelations[]
   services: ServiceWithEndpoints[]
   user: AuthPortalUser & {
     auth0ID: string
@@ -83,6 +86,11 @@ export type AccountIdLoaderData = {
   }
   userRole: RoleName
   colorScheme: ColorScheme
+  // Outlet context fields for child routes
+  portalAccount: PortalAccountWithRelations['account']
+  portalApplications: PortalAccountWithRelations['applications']
+  accountRbac: PortalAccountWithRelations['rbac']
+  portalAccounts: PortalAccountWithRelations['account'][]
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -96,54 +104,46 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const sessionColorScheme = themeSession.getColorScheme()
   const colorScheme = sessionColorScheme || systemPreferredColorScheme || "dark"
 
-  const portal = initPortalClient({ token: user.accessToken })
   const { accountId } = params
   invariant(accountId, "AccountId must be set")
-  let userAccounts
 
   try {
-    const account = await portal.getUserAccount({ accountID: accountId, accepted: true })
-    userAccounts = await portal.getUserAccounts({ accepted: true })
+    // Fetch services, specific account data, and all user accounts in parallel
+    const [services, [accountData], allUserAccounts] = await Promise.all([
+      fetchServicesWithEndpoints(user.accessToken),
+      getUserAccounts(user.accessToken, accountId), // Returns array with single account
+      getUserAccounts(user.accessToken), // Returns all user's accounts
+    ])
 
-    const userRole = getUserAccountRole(
-      account.getUserAccount.users,
+    // Get user's role for this specific account from RBAC data
+    const userRole = getUserAccountRoleFromRbac(
+      accountData.rbac,
       user.user.portal_user_id,
     ) as RoleName
 
-    // Fetch all services with their endpoints from the portal database
-    const services = await fetchServicesWithEndpoints(user.accessToken)
-
     return json<AccountIdLoaderData>({
-      account: account.getUserAccount as Account,
-      accounts: userAccounts.getUserAccounts as Account[],
+      accountData,
+      allUserAccounts,
       user: user.user,
       services,
       userRole,
       colorScheme,
+      // Outlet context fields
+      portalAccount: accountData.account,
+      portalApplications: accountData.applications,
+      accountRbac: accountData.rbac,
+      portalAccounts: allUserAccounts.map(a => a.account),
     })
   } catch (error) {
     /**
      * Handle when an invalid account is manually entered & when the user leaves the account
      */
-
-    const ownerAccount = userAccounts?.getUserAccounts?.find(
-      (account) =>
-        account?.users?.find((u) => u.id === user.user.portal_user_id)?.roleName ===
-        RoleName.Owner,
-    )
-
-    if (accountId !== ownerAccount?.id) {
-      return redirectToUserAccount(user)
-    } else {
-      throw new Response(getErrorMessage(error), {
-        status: 500,
-      })
-    }
+    return redirectToUserAccount(user)
   }
 }
 
 export default function AccountId() {
-  const { account, accounts, services, user, userRole, colorScheme } =
+  const { accountData, allUserAccounts, services, user, userRole, colorScheme } =
     useLoaderData<AccountIdLoaderData>()
 
   // Ensure the document color scheme attribute matches the server-provided color scheme
@@ -156,8 +156,24 @@ export default function AccountId() {
   }, [colorScheme])
 
   return (
-    <RootAppShell account={account} accounts={accounts} user={user} userRole={userRole}>
-      <Outlet context={{ account, accounts, services, user, userRole }} />
+    <RootAppShell
+      account={accountData.account}
+      accounts={allUserAccounts.map(a => a.account)}
+      apps={accountData.applications}
+      user={user}
+      userRole={userRole}
+    >
+      <Outlet
+        context={{
+          portalAccount: accountData.account,
+          portalApplications: accountData.applications,
+          accountRbac: accountData.rbac,
+          portalAccounts: allUserAccounts.map(a => a.account),
+          services,
+          user,
+          userRole
+        }}
+      />
     </RootAppShell>
   )
 }

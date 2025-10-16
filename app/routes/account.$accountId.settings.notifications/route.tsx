@@ -65,7 +65,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export default function AccountNotifications() {
-  const { account } = useOutletContext<AccountIdLoaderData>()
+  const { portalAccount } = useOutletContext<AccountIdLoaderData>()
 
-  return <AccountNotificationsView account={account} userRole={RoleName.Admin} />
+  return <AccountNotificationsView account={portalAccount} userRole={RoleName.Admin} />
 }

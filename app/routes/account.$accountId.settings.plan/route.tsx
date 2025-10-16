@@ -4,8 +4,9 @@ import invariant from "tiny-invariant"
 import { AccountPlanView } from "./view"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView/ErrorBoundaryView"
 import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, D2Stats, PortalApp } from "~/models/portal/sdk"
-import type { AuthPortalUser } from "~/models/portal-db/types"
+import { D2Stats, PortalApp } from "~/models/portal/sdk"
+import type { AuthPortalUser, PortalAccountWithRelations } from "~/models/portal-db/types"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
 import { Stripe, stripe } from "~/models/stripe/stripe.server"
 import { AppIdOutletContext } from "~/routes/account.$accountId.$appId/route"
 import { getErrorMessage } from "~/utils/catchError"
@@ -25,7 +26,7 @@ export type AccountAppRelays = Pick<D2Stats, "totalCount"> &
   Pick<PortalApp, "name" | "appEmoji">
 
 export type AccountPlanLoaderData = {
-  account: Account
+  accountData: PortalAccountWithRelations
   subscription?: Stripe.Subscription
   accountAppsRelays: AccountAppRelays[]
   user: AuthPortalUser & {
@@ -44,22 +45,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   const user = await requireUser(request)
-  const portal = initPortalClient({ token: user.accessToken })
   try {
     let subscription
-    let account
     const accountAppsRelays: AccountAppRelays[] = []
 
-    account = await portal.getUserAccount({ accountID: accountId, accepted: true })
+    const [accountData] = await getUserAccounts(user.accessToken, accountId)
 
-    if (account.getUserAccount.integrations?.stripeSubscriptionID) {
+    if (accountData.account.stripe_subscription_id) {
       subscription = await stripe.subscriptions.retrieve(
-        account.getUserAccount.integrations.stripeSubscriptionID,
+        accountData.account.stripe_subscription_id,
       )
     }
 
     return json<AccountPlanLoaderData>({
-      account: account.getUserAccount as Account,
+      accountData,
       subscription,
       accountAppsRelays,
       user: user.user,

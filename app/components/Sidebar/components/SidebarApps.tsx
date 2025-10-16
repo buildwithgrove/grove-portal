@@ -1,11 +1,11 @@
-import { AppShell, Button, Collapse, Stack } from "@mantine/core"
+import { Button, Collapse, Stack } from "@mantine/core"
 import { useMemo, useState } from "react"
 import { ChevronDown, ChevronRight } from "lucide-react"
 import { InternalLink, SidebarNavRoute } from "~/components/Sidebar/components"
-import { PortalApp } from "~/models/portal/sdk"
+import type { PortalApplicationSummary } from "~/models/portal-db/types"
 
 type SidebarAppsProps = {
-  apps: PortalApp[]
+  apps: PortalApplicationSummary[]
 }
 
 export const SidebarApps = ({ apps }: SidebarAppsProps) => {
@@ -13,11 +13,11 @@ export const SidebarApps = ({ apps }: SidebarAppsProps) => {
 
   const appsRoutes = useMemo(() => {
     return apps
-      .sort((a, b) => (a.name > b.name ? 1 : -1))
+      .sort((a, b) => ((a.portal_application_name ?? '') > (b.portal_application_name ?? '') ? 1 : -1))
       .map((app) => ({
-        to: app.id,
-        label: app.name,
-        icon: app.appEmoji,
+        to: app.portal_application_id,
+        label: app.portal_application_name ?? app.portal_application_id,
+        icon: app.emoji,
       })) as SidebarNavRoute[]
   }, [apps])
 

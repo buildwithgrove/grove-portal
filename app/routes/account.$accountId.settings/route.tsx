@@ -7,7 +7,7 @@ import ErrorBoundaryView from "~/components/ErrorBoundaryView/ErrorBoundaryView"
 import useActionNotification from "~/hooks/useActionNotification"
 
 export default function AccountSettings() {
-  const { account, accounts, user, userRole } = useRouteLoaderData(
+  const { portalAccount, portalAccounts, user, userRole } = useRouteLoaderData(
     "routes/account.$accountId",
   ) as AccountIdLoaderData
   const actionData = useActionData() as ActionDataStruct<{ success: boolean }>
@@ -16,8 +16,8 @@ export default function AccountSettings() {
   useActionNotification(actionData)
 
   return (
-    <AccountSettingsLayoutView account={account} userRole={userRole}>
-      <Outlet context={{ account, accounts, user, userRole }} />
+    <AccountSettingsLayoutView account={portalAccount} userRole={userRole}>
+      <Outlet context={{ account: portalAccount, accounts: portalAccounts, user, userRole }} />
     </AccountSettingsLayoutView>
   )
 }

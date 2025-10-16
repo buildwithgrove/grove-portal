@@ -17,13 +17,14 @@ import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
 import RouteModal from "~/components/RouteModal"
 import useActionNotification from "~/hooks/useActionNotification"
 import { initPortalClient } from "~/models/portal/portal.server"
+import { getUserAccounts } from "~/models/portal-db/queries.server"
+import type { PortalAccountWithRelations } from "~/models/portal-db/types"
 import {
-  Account,
   UpdateAccount as UpdateAccountParams,
   RoleName,
 } from "~/models/portal/sdk"
 import { ActionDataStruct } from "~/types/global"
-import { getUserAccountRole } from "~/utils/accountUtils"
+import { getUserAccountRoleFromRbac } from "~/utils/accountUtils"
 import { getErrorMessage } from "~/utils/catchError"
 import { seo_title_append } from "~/utils/seo"
 import { requireUser } from "~/utils/user.server"
@@ -37,7 +38,7 @@ export const meta: MetaFunction = () => {
 }
 
 type AccountUpdateData = {
-  account: Account
+  accountData: PortalAccountWithRelations
 }
 
 type AccountUpdateActionData = {
@@ -46,22 +47,15 @@ type AccountUpdateActionData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
-  const portal = initPortalClient({ token: user.accessToken })
   const { accountId } = params
   invariant(accountId, "AccountId must be set")
 
   try {
-    const getUserAccountResponse = await portal.getUserAccount({
-      accountID: accountId,
-      accepted: true,
-    })
+    const [accountData] = await getUserAccounts(user.accessToken, accountId)
 
-    if (!getUserAccountResponse) {
-      return redirect(`/account/${params.accountId}`)
-    }
-
-    const userRole = getUserAccountRole(
-      getUserAccountResponse.getUserAccount.users,
+    // Check user has permission to update account
+    const userRole = getUserAccountRoleFromRbac(
+      accountData.rbac,
       user.user.portal_user_id,
     )
 
@@ -70,7 +64,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     }
 
     return json<AccountUpdateData>({
-      account: getUserAccountResponse.getUserAccount as Account,
+      accountData,
     })
   } catch (error) {
     throw new Response(getErrorMessage(error), {
@@ -126,7 +120,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export default function UpdateAccount() {
-  const { account } = useLoaderData<AccountUpdateData>()
+  const { accountData } = useLoaderData<AccountUpdateData>()
   const actionData = useActionData<typeof action>()
   const fetcher = useFetcher()
   const [params] = useSearchParams()
@@ -137,7 +131,7 @@ export default function UpdateAccount() {
   return (
     <RouteModal loaderMessage="Updating your account..." state={fetcher.state}>
       <AccountForm
-        account={account}
+        account={accountData.account as any}
         redirectTo={redirectTo}
         onSubmit={(formData) =>
           fetcher.submit(formData, {
