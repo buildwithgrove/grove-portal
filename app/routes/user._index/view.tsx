@@ -1,11 +1,14 @@
 import { Box, Button, Divider, Stack, Text } from "@mantine/core"
 import { Form } from "@remix-run/react"
 import { Identicon } from "~/components/Identicon"
-import { User } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 
 type ProfileViewProps = {
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
 }
 
 export const ProfileView = ({ user }: ProfileViewProps) => {
@@ -14,8 +17,8 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
       <Box py={20}>
         <Identicon
           avatar
-          alt={`${user.portalUserID ?? "user"} profile picture`}
-          seed={user.portalUserID ?? "user default"}
+          alt={`${user.portal_user_id ?? "user"} profile picture`}
+          seed={user.portal_user_id ?? "user default"}
           size="lg"
           type="user"
         />
@@ -39,7 +42,7 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
             color="gray"
             name="email"
             type="submit"
-            value={user.email}
+            value={user.portal_user_email}
             variant="outline"
             onClick={() => {
               trackEvent({

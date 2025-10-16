@@ -1,13 +1,17 @@
 import { Divider, Box, Button, Flex } from "@mantine/core"
 import useModals from "~/hooks/useModals"
-import { Account, RoleName, User } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import InviteMemberFrom from "~/routes/account.$accountId.settings.members/components/InviteMemberForm"
 import TeamMembersTable from "~/routes/account.$accountId.settings.members/components/TeamMembersTable"
 
 type TeamViewProps = {
   account: Account
   userRole: RoleName
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
 }
 
 function MembersView({ account, userRole, user }: TeamViewProps) {

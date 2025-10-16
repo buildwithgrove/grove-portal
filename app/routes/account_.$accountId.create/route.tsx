@@ -55,7 +55,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     }
 
     const userAccount = getUserAccountResponse.getUserAccount as Account
-    const userRole = getUserAccountRole(userAccount.users, user.user.portalUserID)
+    const userRole = getUserAccountRole(userAccount.users, user.user.portal_user_id)
 
     if (!userRole || userRole === RoleName.Member) {
       return redirect(`/account/${params.accountId}`)

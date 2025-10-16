@@ -13,11 +13,14 @@ import { DISCORD_PATH, DOCS_PATH } from "~/utils/utils"
 
 import { ColorScheme } from "~/root"
 import { NovuNotificationPopover } from "~/components/AppHeader/NovuNotificationPopover"
-import { User } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { useFetcher } from "@remix-run/react"
 
 type HeaderProps = {
-  user?: User
+  user?: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
   opened: boolean
   toggle: () => void
 }
@@ -167,7 +170,7 @@ export const AppHeader = ({ user, opened, toggle }: HeaderProps) => {
         {user && (
           <NovuNotificationPopover
             colorScheme={colorScheme as ColorScheme}
-            subscriberId={user.portalUserID}
+            subscriberId={user.portal_user_id}
           />
         )}
       </Flex>

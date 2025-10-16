@@ -10,21 +10,21 @@ import {
 } from "@mantine/core"
 import { Link, LinkProps, useFetcher } from "@remix-run/react"
 import {
-  BookOpen,
   Leaf,
-  LifeBuoy,
   Smile,
-  TowerControl,
-  User,
   MessageCircleMore,
 } from "lucide-react"
 import React, { useState } from "react"
 import classes from "./AccountDrawer.module.css"
 import Identicon from "~/components/Identicon"
-import type { User as UserType } from "~/models/portal/sdk"
-import { DISCORD_PATH, DOCS_PATH } from "~/utils/utils"
+import type { AuthPortalUser } from "~/models/portal-db/types"
+import { DISCORD_PATH } from "~/utils/utils"
+
 type AccountDrawerProps = {
-  user?: UserType
+  user?: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
 }
 
 type DrawerLinkProps = NavLinkProps &
@@ -93,12 +93,12 @@ const AccountDrawer = ({ user }: AccountDrawerProps) => {
           <Group pt={4} w={252} wrap="nowrap">
             <Identicon
               avatar
-              alt={`${user.portalUserID ?? "user"} profile picture`}
-              seed={user.portalUserID ?? "user default"}
+              alt={`${user.portal_user_id ?? "user"} profile picture`}
+              seed={user.portal_user_id ?? "user default"}
               type="user"
             />
             <Text truncate fz={12}>
-              {user?.email}
+              {user?.portal_user_email}
             </Text>
           </Group>
         }
@@ -122,8 +122,8 @@ const AccountDrawer = ({ user }: AccountDrawerProps) => {
       <UnstyledButton onClick={() => setIsDrawerOpen(true)}>
         <Identicon
           avatar
-          alt={`${user.portalUserID ?? "user"} profile picture`}
-          seed={user.portalUserID ?? "user default"}
+          alt={`${user.portal_user_id ?? "user"} profile picture`}
+          seed={user.portal_user_id ?? "user default"}
           type="user"
         />
       </UnstyledButton>

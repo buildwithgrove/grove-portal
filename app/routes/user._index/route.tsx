@@ -3,7 +3,6 @@ import { ActionPassword, actionPassword } from "./utils/actionPassword"
 import { useActionData, useOutletContext } from "@remix-run/react"
 
 import { ActionDataStruct } from "~/types/global"
-import { ActionUser } from "./utils/actionUser"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView"
 import ProfileView from "./view"
 import { UserAccountLoaderData } from "~/routes/user/route"
@@ -28,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Profile() {
   const { user } = useOutletContext<UserAccountLoaderData>()
-  const actionData = useActionData() as ActionDataStruct<ActionUser | ActionPassword>
+  const actionData = useActionData() as ActionDataStruct<ActionPassword>
 
   useActionNotification(actionData)
 

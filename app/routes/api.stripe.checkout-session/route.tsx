@@ -19,7 +19,7 @@ function getBillingCycleAnchorTimestamp(): number {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request)
-  invariant(user.user.auth0ID && user.user.email, "user not found")
+  invariant(user.user.auth0ID && user.user.portal_user_email, "user not found")
   const userId = getPoktId(user.user.auth0ID)
 
   const url = new URL(request.url)
@@ -41,14 +41,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     // check that customer exists or create a new one
     let customer: Stripe.Customer | null = null
     const userExists = await stripe.customers.list({
-      email: user.user.email,
+      email: user.user.portal_user_email,
     })
     if (userExists.data.length > 0) {
       customer = userExists.data.find((cust) => cust.metadata.user_id === userId) ?? null
     }
     if (!customer) {
       customer = await stripe.customers.create({
-        email: user.user.email,
+        email: user.user.portal_user_email,
         metadata: {
           user_id: userId,
         },

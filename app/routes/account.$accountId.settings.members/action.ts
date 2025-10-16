@@ -166,7 +166,7 @@ export const action: ActionFunction = async ({ request, params }) => {
           limiter: Ratelimit.slidingWindow(1, "10s"),
         })
 
-        const { success } = await ratelimit.limit(`ratelimit_${user.user.portalUserID}`)
+        const { success } = await ratelimit.limit(`ratelimit_${user.user.portal_user_id}`)
 
         if (!success) {
           throw new Error(`You have reached your request limit`)

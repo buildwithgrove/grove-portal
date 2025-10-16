@@ -53,7 +53,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
     const account = getBillingRouteAccountInfoResponse.getUserAccount
     const accountStripeId = account.integrations?.stripeSubscriptionID
-    const userRole = getUserAccountRole(account.users, user.user.portalUserID) as RoleName
+    const userRole = getUserAccountRole(account.users, user.user.portal_user_id) as RoleName
 
     // Redirect to account page if user is a member or account is on Starter
     if (userRole === RoleName.Member || account.plan.type === PayPlanType.PlanFree) {

@@ -3,16 +3,21 @@ import { useDisclosure } from "@mantine/hooks"
 import React, { ReactNode } from "react"
 import { AppHeader } from "~/components/AppHeader"
 import { Sidebar } from "~/components/Sidebar"
-import { Account, RoleName, User } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { useRoot } from "~/root/hooks/useRoot"
 
 type RootAppShellProps = {
   account?: Account
   accounts: Account[]
   children: ReactNode
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
   userRole?: RoleName
 }
+
 export const RootAppShell = ({
   user,
   account,

@@ -1,9 +1,14 @@
 import { useLocation, useParams } from "@remix-run/react"
 import { useEffect, useMemo } from "react"
-import { User } from "~/models/portal/sdk"
+import { AuthPortalUser } from "~/models/portal-db/types"
 import { trackPage } from "~/utils/analytics"
 
-type useRootProps = { user: Awaited<User | undefined> }
+type useRootProps = {
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
+}
 
 export const useRoot = ({ user }: useRootProps) => {
   const { pathname } = useLocation()

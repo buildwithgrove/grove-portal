@@ -3,7 +3,8 @@ import { Crown } from "lucide-react"
 import { useMemo } from "react"
 import { DataTable } from "~/components/DataTable"
 import Identicon from "~/components/Identicon"
-import { Account, RoleName, User } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import InvitedAccountAction from "~/routes/user.accounts/components/InvitedAccountAction"
 import { getAccountAcceptedValue, getUserAccountRole } from "~/utils/accountUtils"
 import { getPlanName } from "~/utils/planUtils"
@@ -12,7 +13,7 @@ import { capitalizeFirstLetter } from "~/utils/utils"
 type AccountsTableProps = {
   accounts: Account[]
   pendingAccounts: Account[]
-  user: User
+  user: AuthPortalUser
 }
 
 export type TableUserAccount = Account & { accepted: boolean; role: RoleName }
@@ -21,7 +22,7 @@ const AccountsTable = ({ accounts, pendingAccounts, user }: AccountsTableProps) 
   const sortedAcceptedAccounts = useMemo(() => {
     const ownedAccount = accounts.find((account) =>
       account?.users.find(
-        (u) => u.id === user.portalUserID && u.roleName === RoleName.Owner,
+        (u) => u.id === user.portal_user_id && u.roleName === RoleName.Owner,
       ),
     )
     const filteredAccounts = accounts.filter(({ id }) => id !== ownedAccount?.id)
@@ -29,15 +30,15 @@ const AccountsTable = ({ accounts, pendingAccounts, user }: AccountsTableProps) 
       ownedAccount,
       ...filteredAccounts.sort((a, b) => (a.id > b.id ? 1 : -1)),
     ] as Account[]
-  }, [accounts, user.portalUserID])
+  }, [accounts, user.portal_user_id])
 
   const userAccounts = useMemo(() => {
     return [...pendingAccounts, ...sortedAcceptedAccounts].map((account) => ({
       ...account,
-      accepted: getAccountAcceptedValue(account.users, user.portalUserID),
-      role: getUserAccountRole(account.users, user.portalUserID),
+      accepted: getAccountAcceptedValue(account.users, user.portal_user_id),
+      role: getUserAccountRole(account.users, user.portal_user_id),
     })) as TableUserAccount[]
-  }, [pendingAccounts, sortedAcceptedAccounts, user.portalUserID])
+  }, [pendingAccounts, sortedAcceptedAccounts, user.portal_user_id])
 
   return userAccounts.length > 0 ? (
     <DataTable

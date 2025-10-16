@@ -1,4 +1,5 @@
-import { Account, RoleName, SortOrder, User } from "~/models/portal/sdk"
+import { Account, RoleName, SortOrder } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { Button, Stack } from "@mantine/core"
 import { LoaderFunction, json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
@@ -18,7 +19,10 @@ import { useEffect } from "react"
 export type UserAccountLoaderData = {
   accounts: Account[]
   pendingAccounts: Account[]
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
   primaryAccount?: Account
   primaryUserRole?: RoleName
   colorScheme: ColorScheme
@@ -51,12 +55,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     // Find the primary account (first Owner account, or first account if no owner)
     const primaryAccount =
       accountsList.find((account) => {
-        const userRole = getUserAccountRole(account.users, user.user.portalUserID)
+        const userRole = getUserAccountRole(account.users, user.user.portal_user_id)
         return userRole === RoleName.Owner
       }) || accountsList[0]
 
     const primaryUserRole = primaryAccount
-      ? (getUserAccountRole(primaryAccount.users, user.user.portalUserID) as RoleName)
+      ? (getUserAccountRole(primaryAccount.users, user.user.portal_user_id) as RoleName)
       : undefined
 
     return json<UserAccountLoaderData>({

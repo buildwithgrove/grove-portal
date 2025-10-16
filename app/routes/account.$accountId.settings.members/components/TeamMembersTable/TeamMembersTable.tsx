@@ -1,7 +1,8 @@
 import { Avatar, Flex, Group, Select, Text } from "@mantine/core"
 import { DataTable } from "~/components/DataTable"
 import Identicon from "~/components/Identicon"
-import { Account, RoleName, User } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import TeamMemberAction from "~/routes/account.$accountId.settings.members/components/TeamMemberAction"
 import useTeamModals from "~/routes/account.$accountId.settings.members/hooks/useTeamModals"
 import { capitalizeFirstLetter } from "~/utils/utils"
@@ -9,7 +10,7 @@ import { capitalizeFirstLetter } from "~/utils/utils"
 type TeamMembersTableProps = {
   account: Account
   userRole: RoleName | null
-  user?: User
+  user?: AuthPortalUser
 }
 
 const TeamMembersTable = ({ account, userRole, user }: TeamMembersTableProps) => {
@@ -76,8 +77,8 @@ const TeamMembersTable = ({ account, userRole, user }: TeamMembersTableProps) =>
                   roleName === RoleName.Owner
                     ? "var(--text-color)"
                     : accepted
-                    ? "var(--mantine-color-green-7)"
-                    : "var(--mantine-color-yellow-7)"
+                      ? "var(--mantine-color-green-7)"
+                      : "var(--mantine-color-yellow-7)"
                 }
               >
                 {roleName === RoleName.Owner ? "-" : accepted ? "Accepted" : "Pending"}

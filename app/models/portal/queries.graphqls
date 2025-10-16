@@ -1,22 +1,22 @@
-query getUserJWT($username: String!, $password: String!) {
-  getUserJWT(username: $username, password: $password)
-}
+# query getUserJWT($username: String!, $password: String!) {
+#   getUserJWT(username: $username, password: $password)
+# }
 
-query getPortalUserID {
-  getPortalUserID
-}
+# query getPortalUserID {
+#   getPortalUserID
+# }
 
-query getPortalUser {
-  getPortalUser {
-    portalUserID
-    email
-    iconURL
-    signedUp
-    updatesProduct
-    updatesMarketing
-    betaTester
-  }
-}
+# query getPortalUser {
+#   getPortalUser {
+#     portalUserID
+#     email
+#     iconURL
+#     signedUp
+#     updatesProduct
+#     updatesMarketing
+#     betaTester
+#   }
+# }
 
 query getUserAccount(
   $accountID: ID!

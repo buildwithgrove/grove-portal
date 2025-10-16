@@ -46,7 +46,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const userRole = getUserAccountRole(
     getUserAccountResponse.getUserAccount.users,
-    user.user.portalUserID,
+    user.user.portal_user_id,
   )
 
   if (

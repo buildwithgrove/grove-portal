@@ -14,11 +14,11 @@ mutation adminCreatePortalUser($email: String!, $providerUserID: ID!, $gcpAccoun
   }
 }
 
-mutation updatePortalUser($updateUser: UpdateUser!, $image: Upload) {
-  updatePortalUser(updateUser: $updateUser, image: $image) {
-    portalUserID
-  }
-}
+# mutation updatePortalUser($updateUser: UpdateUser!, $image: Upload) {
+#   updatePortalUser(updateUser: $updateUser, image: $image) {
+#     portalUserID
+#   }
+# }
 
 mutation createUserPortalApp($input: CreateUserPortalApp!) {
   createUserPortalApp(input: $input) {

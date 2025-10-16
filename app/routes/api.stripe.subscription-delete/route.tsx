@@ -9,7 +9,7 @@ import { requireUser } from "~/utils/user.server"
 
 export const action: ActionFunction = async ({ request }) => {
   const user = await requireUser(request)
-  invariant(user.user.auth0ID && user.user.email, "user not found")
+  invariant(user.user.auth0ID && user.user.portal_user_email, "user not found")
   const formData = await request.formData()
   const accountId = formData.get("account-id")
   const accountName = formData.get("account-name")

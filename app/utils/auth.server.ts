@@ -6,10 +6,11 @@ import { getRequiredServerEnvVar } from "./environment"
 import { sessionStorage } from "./session.server"
 import { initPortalClient } from "~/models/portal/portal.server"
 import {
-  User as PortalUser,
   AdminCreatePortalUserMutationVariables,
   getSdk as portalSDKType,
 } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
+import { initPortalDbClient } from "~/models/portal-db/portal-db.server"
 import { initAdminPortal } from "~/utils/adminPortal"
 
 // Create an instance of the authenticator, pass a generic with what your
@@ -17,7 +18,7 @@ import { initAdminPortal } from "~/utils/adminPortal"
 export const authenticator = new Authenticator<{
   accessToken: string
   refreshToken: string | undefined
-  user: PortalUser & {
+  user: AuthPortalUser & {
     auth0ID: string
     email_verified?: boolean
   }
@@ -26,7 +27,7 @@ export const authenticator = new Authenticator<{
 export type AuthUser = {
   accessToken: string
   refreshToken: string | undefined
-  user: PortalUser & {
+  user: AuthPortalUser & {
     auth0ID: string
     email_verified?: boolean
   }
@@ -48,13 +49,15 @@ const auth0Strategy = new Auth0Strategy(
     invariant(email, "email is not found")
     invariant(providerUserID, "providerUserID is not found")
 
+    // Initialize portal-db client once for all operations
+    const portalDbClient = initPortalDbClient({ token: accessToken })
     const portalSDK = initPortalClient({ token: accessToken })
 
     let portalUser: AuthUser["user"]
 
     try {
       // Case 1: Standard login
-      portalUser = await handlePortalUserFound(portalSDK, providerUserID, profile)
+      portalUser = await handlePortalUserFound(portalDbClient, providerUserID, profile)
     } catch (error) {
       const err = error as Error
 
@@ -96,14 +99,31 @@ const auth0Strategy = new Auth0Strategy(
 
 // Handles the case where the portal user is found (standard login)
 async function handlePortalUserFound(
-  portalSDK: ReturnType<typeof portalSDKType>,
+  portalDbClient: ReturnType<typeof initPortalDbClient>,
   providerUserID: string,
   profile: any,
 ): Promise<AuthUser["user"]> {
-  const getPortalUserResponse = await portalSDK.getPortalUser()
+  const { data: users, error } = await portalDbClient.GET("/portal_users", {
+    params: {
+      query: {
+        select: "portal_user_id,portal_user_email,signed_up",
+        limit: "1",
+      },
+    },
+  })
+
+  if (error || !users || users.length === 0) {
+    throw new Error("Portal user not found")
+  }
+
+  const portalUser = users[0]
+
+  console.log("portalUser", portalUser)
 
   return {
-    ...(getPortalUserResponse?.getPortalUser as PortalUser),
+    portal_user_id: portalUser.portal_user_id,
+    portal_user_email: portalUser.portal_user_email,
+    signed_up: portalUser.signed_up,
     auth0ID: providerUserID,
     email_verified: profile._json?.email_verified,
   }
@@ -125,7 +145,9 @@ async function handleGCPMarketplaceRedirect(
   const user = await portalAdmin.adminCreatePortalUser(createGCPPortalUserVars)
 
   return {
-    ...(user.adminCreatePortalUser as PortalUser),
+    portal_user_id: user.adminCreatePortalUser.portalUserID,
+    portal_user_email: email,
+    signed_up: true,
     auth0ID: providerUserID,
     email_verified: true,
   }
@@ -145,7 +167,9 @@ async function handleStandardSignup(
   const user = await portalAdmin.adminCreatePortalUser(createPortalUserVars)
 
   return {
-    ...(user.adminCreatePortalUser as PortalUser),
+    portal_user_id: user.adminCreatePortalUser.portalUserID,
+    portal_user_email: email,
+    signed_up: true,
     auth0ID: providerUserID,
     email_verified: true,
   }

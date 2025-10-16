@@ -1,4 +1,5 @@
-import { Account, RoleName, User } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { LoaderFunction, json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { redirectToUserAccount, requireUser } from "~/utils/user.server"
@@ -76,7 +77,10 @@ export type AccountIdLoaderData = {
   account: Account
   accounts: Account[]
   services: ServiceWithEndpoints[]
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
   userRole: RoleName
   colorScheme: ColorScheme
 }
@@ -103,7 +107,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
     const userRole = getUserAccountRole(
       account.getUserAccount.users,
-      user.user.portalUserID,
+      user.user.portal_user_id,
     ) as RoleName
 
     // Fetch all services with their endpoints from the portal database
@@ -124,7 +128,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
     const ownerAccount = userAccounts?.getUserAccounts?.find(
       (account) =>
-        account?.users?.find((u) => u.id === user.user.portalUserID)?.roleName ===
+        account?.users?.find((u) => u.id === user.user.portal_user_id)?.roleName ===
         RoleName.Owner,
     )
 

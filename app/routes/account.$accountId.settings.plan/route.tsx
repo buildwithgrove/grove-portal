@@ -4,7 +4,8 @@ import invariant from "tiny-invariant"
 import { AccountPlanView } from "./view"
 import ErrorBoundaryView from "~/components/ErrorBoundaryView/ErrorBoundaryView"
 import { initPortalClient } from "~/models/portal/portal.server"
-import { Account, D2Stats, PortalApp, User } from "~/models/portal/sdk"
+import { Account, D2Stats, PortalApp } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { Stripe, stripe } from "~/models/stripe/stripe.server"
 import { AppIdOutletContext } from "~/routes/account.$accountId.$appId/route"
 import { getErrorMessage } from "~/utils/catchError"
@@ -27,7 +28,10 @@ export type AccountPlanLoaderData = {
   account: Account
   subscription?: Stripe.Subscription
   accountAppsRelays: AccountAppRelays[]
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {

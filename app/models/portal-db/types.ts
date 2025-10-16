@@ -19,3 +19,6 @@ export type ServiceWithEndpoints = Service & {
     hasWebsocket: boolean
 }
 
+// Auth-specific portal user type with only needed fields
+export type AuthPortalUser = Pick<PortalUser, 'portal_user_id' | 'portal_user_email' | 'signed_up'>
+

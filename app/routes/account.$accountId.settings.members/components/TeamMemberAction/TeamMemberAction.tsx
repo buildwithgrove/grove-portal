@@ -1,13 +1,14 @@
 import { Flex, Menu, Text, ActionIcon } from "@mantine/core"
 import { Minus, Ellipsis, Send } from "lucide-react"
 import React, { useMemo } from "react"
-import { Account, RoleName, User, AccountUser } from "~/models/portal/sdk"
+import { Account, RoleName, AccountUser } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import useTeamModals from "~/routes/account.$accountId.settings.members/hooks/useTeamModals"
 
 type TeamMemberActionProps = {
   account: Account
   userRole: RoleName | null
-  user?: User
+  user?: AuthPortalUser
   teamMember: AccountUser
   status: boolean
 }
@@ -29,7 +30,7 @@ const TeamMemberAction = ({
 
     switch (userRole) {
       case RoleName.Owner:
-        if (teamMember.id === user?.portalUserID) {
+        if (teamMember.id === user?.portal_user_id) {
           // OWNER --CANNOT-- LEAVE THEIR OWN ACCOUNT
         } else {
           // OWNER --CAN--REMOVE OTHER USERS
@@ -49,7 +50,7 @@ const TeamMemberAction = ({
         }
         break
       case RoleName.Admin:
-        if (teamMember.id === user?.portalUserID) {
+        if (teamMember.id === user?.portal_user_id) {
           // ADMIN --CAN--REMOVE THEMSELVES
           items.push({
             icon: <Minus size={18} />,
@@ -75,15 +76,15 @@ const TeamMemberAction = ({
         break
       case RoleName.Member:
       default:
-        if (teamMember.id === user?.portalUserID) {
-          // MEMEBER --CAN-- LEAVE ACCOUNT THEMSELVES
+        if (teamMember.id === user?.portal_user_id) {
+          // MEMBER --CAN-- LEAVE ACCOUNT THEMSELVES
           items.push({
             icon: <Minus size={18} />,
             onClick: () => openLeaveTeamModal({ email, id }),
             label: "Leave",
           })
         } else {
-          // MEMEBER --CANNOT-- TAKE ACTION ON OTHER USERS
+          // MEMBER --CANNOT-- TAKE ACTION ON OTHER USERS
         }
         break
     }
@@ -92,7 +93,7 @@ const TeamMemberAction = ({
   }, [
     teamMember,
     userRole,
-    user?.portalUserID,
+    user?.portal_user_id,
     status,
     openRemoveUserModal,
     openResendEmailModal,

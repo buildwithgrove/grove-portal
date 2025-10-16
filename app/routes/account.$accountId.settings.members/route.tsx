@@ -3,7 +3,7 @@ import { useOutletContext } from "@remix-run/react"
 import { action } from "./action"
 import MembersView from "./view"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
-import { User } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { AccountIdLoaderData } from "~/routes/account.$accountId/route"
 import { seo_title_append } from "~/utils/seo"
 import { requireUser } from "~/utils/user.server"
@@ -17,7 +17,10 @@ export const meta: MetaFunction = () => {
 }
 
 export type TeamLoaderData = {
-  profile: User
+  profile: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
   accessToken: string
 }
 

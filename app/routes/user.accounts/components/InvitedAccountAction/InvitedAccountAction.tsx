@@ -1,14 +1,15 @@
 import { ActionIcon, Button, Group, Menu, Text } from "@mantine/core"
 import { Form, Link, useNavigation } from "@remix-run/react"
 import { ArrowUpRight, Minus, Ellipsis, Pencil } from "lucide-react"
-import { RoleName, User } from "~/models/portal/sdk"
+import { RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import useTeamModals from "~/routes/account.$accountId.settings.members/hooks/useTeamModals"
 import { TableUserAccount } from "~/routes/user.accounts/components/AccountsTable"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
 
 type InvitedAccountActionProps = {
   account: TableUserAccount
-  user: User
+  user: AuthPortalUser
 }
 
 const InvitedAccountAction = ({ account, user }: InvitedAccountActionProps) => {
@@ -47,7 +48,7 @@ const InvitedAccountAction = ({ account, user }: InvitedAccountActionProps) => {
               <Menu.Item
                 leftSection={<Minus size={18} />}
                 onClick={() =>
-                  openLeaveTeamModal({ email: user.email, id: user.portalUserID })
+                  openLeaveTeamModal({ email: user.portal_user_email, id: user.portal_user_id })
                 }
               >
                 <Text>Leave</Text>

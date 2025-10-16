@@ -2,7 +2,8 @@ import { redirect } from "@remix-run/node"
 import jwt_decode from "jwt-decode"
 import { authenticator, AuthUser } from "./auth.server"
 import { initPortalClient } from "~/models/portal/portal.server"
-import { User, Account, RoleName } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 
 export enum Permissions {
   PayPlanTypes = "write:pay_plan_types",
@@ -24,7 +25,7 @@ export const requireUser = async (request: Request, defaultRedirect = "/") => {
     throw await authenticator.logout(request, { redirectTo: "/email-verification" })
   }
 
-  if (!user.user.portalUserID) {
+  if (!user.user.portal_user_id) {
     user = await authenticator.authenticate("auth0", request)
   }
 
@@ -42,7 +43,7 @@ export const requireUser = async (request: Request, defaultRedirect = "/") => {
 export const requireUserProfile = async (
   request: Request,
   defaultRedirect = "/",
-): Promise<User> => {
+): Promise<AuthPortalUser> => {
   const user = await requireUser(request, defaultRedirect)
   return user.user
 }
@@ -50,7 +51,7 @@ export const requireUserProfile = async (
 export const requireAdmin = async (
   request: Request,
   defaultRedirect = "/",
-): Promise<User> => {
+): Promise<AuthPortalUser> => {
   const user = await authenticator.isAuthenticated(request)
 
   if (!user) {
@@ -107,7 +108,7 @@ export const redirectToUserAccount = async (user: AuthUser) => {
 
   const owner = accounts.getUserAccounts.find(
     (account) =>
-      account?.users.find((u) => u.id === user.user.portalUserID)?.roleName ===
+      account?.users.find((u) => u.id === user.user.portal_user_id)?.roleName ===
       RoleName.Owner,
   )
 

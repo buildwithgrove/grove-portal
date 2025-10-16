@@ -29,14 +29,14 @@ import React, { useMemo, useState } from "react"
 
 import AccountSelect from "~/components/AccountSelect"
 import GroveLogo from "~/components/GroveLogo"
-import Identicon from "~/components/Identicon"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 
 type SidebarProps = {
   account: Account
   accounts: Account[]
   userRole: RoleName
   toggle: () => void
-  user: UserType
+  user: AuthPortalUser
 }
 
 const getAccountRoutes = (
@@ -47,12 +47,12 @@ const getAccountRoutes = (
   return [
     ...(isFreeAccount && userRole !== RoleName.Member
       ? [
-          {
-            to: `/account/${activeAccount?.id}/upgrade`,
-            label: "Upgrade to Unlimited",
-            end: true,
-          },
-        ]
+        {
+          to: `/account/${activeAccount?.id}/upgrade`,
+          label: "Upgrade to Unlimited",
+          end: true,
+        },
+      ]
       : []),
     {
       to: `/account/${activeAccount?.id}`,
@@ -71,11 +71,11 @@ const getAccountRoutes = (
     },
     ...(!isFreeAccount && userRole !== RoleName.Member
       ? [
-          {
-            to: `/account/${activeAccount?.id}/billing`,
-            label: "Billing",
-          },
-        ]
+        {
+          to: `/account/${activeAccount?.id}/billing`,
+          label: "Billing",
+        },
+      ]
       : []),
     {
       to: `/account/${activeAccount?.id}/settings`,
@@ -258,14 +258,14 @@ export const Sidebar = ({ account, userRole, accounts, toggle, user }: SidebarPr
                     flexShrink: 0,
                   }}
                 >
-                  {user?.email?.charAt(0).toUpperCase() || "U"}
+                  {user?.portal_user_email?.charAt(0).toUpperCase() || "U"}
                 </Box>
                 <Stack gap={2} flex={1} style={{ minWidth: 0 }}>
                   <Text size="sm" fw={500} truncate>
-                    {user?.email?.split("@")[0] || "User"}
+                    {user?.portal_user_email?.split("@")[0] || "User"}
                   </Text>
                   <Text size="xs" c="dimmed" truncate>
-                    {user?.email || "No email"}
+                    {user?.portal_user_email || "No email"}
                   </Text>
                 </Stack>
               </Group>

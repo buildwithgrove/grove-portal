@@ -1,10 +1,14 @@
 import { json, LoaderFunction } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { ErrorBoundaryView } from "~/components/ErrorBoundaryView"
-import { User } from "~/models/portal/sdk"
+import type { AuthPortalUser } from "~/models/portal-db/types"
 import { requireUser } from "~/utils/user.server"
+
 export type AccountOutletContext = {
-  user: User
+  user: AuthPortalUser & {
+    auth0ID: string
+    email_verified?: boolean
+  }
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
