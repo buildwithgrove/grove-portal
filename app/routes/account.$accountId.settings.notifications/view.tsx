@@ -6,8 +6,6 @@ import useActionNotification, {
 } from "~/hooks/useActionNotification"
 import { Account, RoleName } from "~/models/portal/sdk"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
-import { formatNumberToSICompact } from "~/utils/formattingUtils"
-import { FREE_TIER_MONTHLY_RELAY_LIMIT } from "~/utils/planUtils"
 
 type NotificationLevel = "quarter" | "half" | "threeQuarters" | "full"
 
@@ -98,8 +96,7 @@ export default function AccountNotificationsView({
           <React.Fragment key={level}>
             <Group justify="space-between" px={20}>
               <Text>
-                {getUsagePercentage(level)} of{" "}
-                {formatNumberToSICompact(FREE_TIER_MONTHLY_RELAY_LIMIT)} relays per month
+                {getUsagePercentage(level)} monthly relay usage
               </Text>
               <Switch
                 defaultChecked={getNotificationCheckedState(level)}

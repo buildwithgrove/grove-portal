@@ -6,7 +6,6 @@ import Identicon from "~/components/Identicon"
 import { Account, RoleName, User } from "~/models/portal/sdk"
 import InvitedAccountAction from "~/routes/user.accounts/components/InvitedAccountAction"
 import { getAccountAcceptedValue, getUserAccountRole } from "~/utils/accountUtils"
-import { getPlanName } from "~/utils/planUtils"
 import { capitalizeFirstLetter } from "~/utils/utils"
 
 type AccountsTableProps = {
@@ -43,7 +42,6 @@ const AccountsTable = ({ accounts, pendingAccounts, user }: AccountsTableProps) 
     <DataTable
       columns={[
         "Account",
-        "Plan",
         "No. Members",
         "No. Applications",
         "Role",
@@ -70,9 +68,6 @@ const AccountsTable = ({ accounts, pendingAccounts, user }: AccountsTableProps) 
                 </Text>
               </Group>
             ),
-          },
-          plan: {
-            element: <Text>{getPlanName(account?.planType)}</Text>,
           },
           members: {
             element: (

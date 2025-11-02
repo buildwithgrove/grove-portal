@@ -1,4 +1,4 @@
-import { Account, PayPlanType, RoleName } from "~/models/portal/sdk"
+import { Account, RoleName } from "~/models/portal/sdk"
 import { Container, Stack, Title } from "@mantine/core"
 import React, { useMemo } from "react"
 
@@ -17,24 +17,16 @@ export default function AccountSettingsLayoutView({
 }: AccountSettingsLayoutViewProps) {
   const routes = useMemo(() => {
     return [
-      ...[
-        {
-          to: "",
-          label: "Account",
-          end: true,
-        },
-        {
-          to: "members",
-          label: "Members",
-        },
-        {
-          to: "plan",
-          label: "Plan",
-        },
-      ],
-      ...(account.planType === PayPlanType.PlanFree ||
-      userRole === RoleName.Admin ||
-      userRole === RoleName.Owner
+      {
+        to: "",
+        label: "Account",
+        end: true,
+      },
+      {
+        to: "members",
+        label: "Members",
+      },
+      ...(userRole === RoleName.Admin || userRole === RoleName.Owner
         ? [
             {
               to: "notifications",
@@ -43,7 +35,7 @@ export default function AccountSettingsLayoutView({
           ]
         : []),
     ]
-  }, [account, userRole])
+  }, [userRole])
 
   return (
     <Container fluid px={0}>

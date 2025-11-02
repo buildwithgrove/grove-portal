@@ -2,7 +2,6 @@ import { Novu } from "@novu/api"
 import { PayPlanType, RoleName, User } from "~/models/portal/sdk"
 import { TeamActionType } from "~/routes/account.$accountId.settings.members/action"
 import { getRequiredServerEnvVar } from "~/utils/environment"
-import { getPlanName } from "~/utils/planUtils"
 import { capitalizeFirstLetter } from "~/utils/utils"
 
 // New @novu/api initialization
@@ -53,22 +52,6 @@ type TriggerTeamActionNotificationProps = TriggerTeamActionNotificationBaseProps
       }
   )
 
-type TriggerSubscriptionActionNotificationProps = Omit<
-  TriggerNotificationBaseProps,
-  "actor"
-> &
-  (
-    | {
-        type: "cancel"
-        actor: User
-        planType?: PayPlanType
-      }
-    | {
-        type: "upgrade"
-        actor?: User
-        planType: PayPlanType
-      }
-  )
 
 type GetAccountNotificationPayloadProps = Omit<
   TriggerTeamActionNotificationProps,
@@ -386,59 +369,6 @@ export const triggerAcceptInvitationNotification = async ({
       })
 }
 
-export const triggerSubscriptionActionNotification = async ({
-  type,
-  accountName,
-  accountId,
-  actor,
-  planType,
-}: TriggerSubscriptionActionNotificationProps) => {
-  switch (type) {
-    case "cancel":
-      return await novu.triggerBulk({
-        events: [
-          {
-            workflowId: NOTIFICATIONS.IN_APP_NOTIFICATION,
-            to: {
-              subscriberId: actor.portalUserID,
-            },
-            payload: {
-              message: `You have cancelled  ${
-                accountName ?? accountId
-              } "Unlimited" subscription.`,
-              redirectTo: `/account/${accountId}`,
-            },
-          },
-          {
-            workflowId: NOTIFICATIONS.IN_APP_NOTIFICATION,
-            to: {
-              type: TriggerRecipientsTypeEnum.TOPIC,
-              topicKey: accountId,
-            },
-            actor: { subscriberId: actor.portalUserID },
-            payload: {
-              message: `${actor.email} has cancelled ${
-                accountName ?? accountId
-              } "Unlimited" subscription.`,
-              redirectTo: `/account/${accountId}/settings/members`,
-            },
-          },
-        ],
-      })
-    case "upgrade":
-      return await novu.trigger({
-        workflowId: NOTIFICATIONS.IN_APP_NOTIFICATION,
-        to: {
-          type: TriggerRecipientsTypeEnum.TOPIC,
-          topicKey: accountId,
-        },
-        payload: {
-          message: `${accountId} has been upgraded to ${getPlanName(planType)}`,
-          redirectTo: `/account/${accountId}`,
-        },
-      })
-  }
-}
 
 export const triggerAppActionNotification = async ({
   actor,

@@ -137,7 +137,7 @@ export default function UpdateAccount() {
   return (
     <RouteModal loaderMessage="Updating your account..." state={fetcher.state}>
       <AccountForm
-        account={account}
+        account={account as Account}
         redirectTo={redirectTo}
         onSubmit={(formData) =>
           fetcher.submit(formData, {

@@ -95,7 +95,7 @@ export default function AccountId() {
   }, [colorScheme])
 
   return (
-    <RootAppShell account={account} accounts={accounts} user={user} userRole={userRole}>
+    <RootAppShell account={account as Account} accounts={accounts as Account[]} user={user} userRole={userRole}>
       <Outlet context={{ account, accounts, blockchains, user, userRole }} />
     </RootAppShell>
   )
