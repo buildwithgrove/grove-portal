@@ -12,8 +12,6 @@ import { Link } from "@remix-run/react"
 import { Identicon } from "~/components/Identicon"
 import { Account, RoleName } from "~/models/portal/sdk"
 import { AnalyticActions, AnalyticCategories, trackEvent } from "~/utils/analytics"
-import { commify } from "~/utils/formattingUtils"
-import { isUnlimitedPlan } from "~/utils/planUtils"
 
 type AccountSettingsViewProps = {
   account: Account
@@ -36,31 +34,6 @@ export const AccountSettingsView = ({ account, userRole }: AccountSettingsViewPr
         <Text pt={5}>A unique image representing your account. </Text>
       </Box>
       <Divider />
-      {isUnlimitedPlan(account.planType) && (
-        <>
-          <Stack align="flex-start" py={20}>
-            <Box>
-              <Text fw={600}>Monthly Relay Limit</Text>
-              <Text pt={5}>
-                {account.monthlyUserLimit === 0
-                  ? `This account has no monthly relay limit. ${
-                      userRole === RoleName.Member
-                        ? "You may set a monthly relay limit in Account Settings."
-                        : "An admin of this account may set a monthly relay limit in Account Settings."
-                    }`
-                  : `This account has a monthly relay limit of ${commify(
-                      account.monthlyUserLimit,
-                    )} relays. Once you hit this limit, your account will stop working until the start of the next calendar month. ${
-                      userRole === RoleName.Member
-                        ? "An admin of this account may increase this limit in Account Settings."
-                        : "You may increase this limit in Account Settings."
-                    }`}
-              </Text>
-            </Box>
-          </Stack>
-          <Divider />
-        </>
-      )}
       {userRole !== RoleName.Member && (
         <>
           <Stack align="flex-start" py={20}>

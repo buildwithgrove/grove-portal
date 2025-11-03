@@ -1,6 +1,5 @@
 import {
   Account,
-  PayPlanType,
   PortalApp,
   RoleName,
   User as UserType,
@@ -43,22 +42,7 @@ const getAccountRoutes = (
   activeAccount: Account,
   userRole: RoleName,
 ): SidebarNavRoute[] => {
-  const isFreeAccount = activeAccount?.planType === PayPlanType.PlanFree
   return [
-    ...(isFreeAccount && userRole !== RoleName.Member
-      ? [
-          {
-            to: `/account/${activeAccount?.id}/upgrade`,
-            label: "Upgrade to Unlimited",
-            end: true,
-          },
-        ]
-      : []),
-    {
-      to: `/account/${activeAccount?.id}`,
-      label: "Insights",
-      end: true,
-    },
     {
       to: `/account/${activeAccount?.id}/logs`,
       label: "Logs",
@@ -69,14 +53,6 @@ const getAccountRoutes = (
       label: "Sandbox",
       end: true,
     },
-    ...(!isFreeAccount && userRole !== RoleName.Member
-      ? [
-          {
-            to: `/account/${activeAccount?.id}/billing`,
-            label: "Billing",
-          },
-        ]
-      : []),
     {
       to: `/account/${activeAccount?.id}/settings`,
       label: "Account Settings",

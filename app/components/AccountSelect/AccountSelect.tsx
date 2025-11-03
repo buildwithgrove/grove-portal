@@ -4,7 +4,6 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import React, { useMemo } from "react"
 import Identicon from "~/components/Identicon"
 import { Account } from "~/models/portal/sdk"
-import { getPlanName } from "~/utils/planUtils"
 
 type UserItemProps = {
   account: Account
@@ -38,7 +37,7 @@ const AccountItem = ({
           <Text truncate fw={500} fz={15} lh="17px" maw={145}>
             {account.name ? account.name : account.id}
           </Text>
-          <Text fz={11}>{`${getPlanName(account.planType)} · ${
+          <Text fz={11}>{`${
             account?.users?.length ?? 1
           } member${account?.users?.length > 1 ? "s" : ""}`}</Text>
         </Stack>

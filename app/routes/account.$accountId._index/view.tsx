@@ -1,29 +1,20 @@
-import { Button, Stack, Title } from "@mantine/core"
+import { Button, Stack, Title, Text } from "@mantine/core"
 import { Link, useParams } from "@remix-run/react"
 import { EmptyState } from "~/components/EmptyState"
-import { Blockchain, PortalApp, RoleName } from "~/models/portal/sdk"
+import { Account, PortalApp, RoleName } from "~/models/portal/sdk"
 import { AnnouncementAlert } from "~/routes/account.$accountId._index/components/AnnouncementAlert"
-import Insights from "~/routes/account.$accountId._index/components/Insights"
-import { AccountInsightsData } from "~/routes/account.$accountId._index/route"
 import { getRequiredClientEnvVar } from "~/utils/environment"
 
 const ANNOUNCEMENT_ALERT = getRequiredClientEnvVar("FLAG_ANNOUNCEMENT_ALERT")
 
-type AccountInsightsViewProps = Omit<AccountInsightsData, "account"> & {
-  apps: PortalApp[]
+type AccountOverviewViewProps = {
+  account: Account
   userRole: RoleName
-  blockchains: Blockchain[]
 }
 
-export const AccountInsightsView = ({
-  apps,
-  total,
-  userRole,
-  aggregate,
-  blockchains,
-  realtimeDataChains,
-}: AccountInsightsViewProps) => {
+export const AccountOverviewView = ({ account, userRole }: AccountOverviewViewProps) => {
   const { accountId } = useParams()
+  const apps = (account?.portalApps as PortalApp[]) || []
 
   return (
     <>
@@ -57,18 +48,15 @@ export const AccountInsightsView = ({
         />
       ) : (
         <Stack gap="xl">
-          <Title order={2}>Insights</Title>
-          <Insights
-            aggregate={aggregate}
-            apps={apps}
-            blockchains={blockchains}
-            realtimeDataChains={realtimeDataChains}
-            total={total}
-          />
+          <Title order={2}>Overview</Title>
+          <Text>
+            You have {apps.length} application{apps.length !== 1 ? "s" : ""} in this account.
+            View them in the sidebar or manage them in settings.
+          </Text>
         </Stack>
       )}
     </>
   )
 }
 
-export default AccountInsightsView
+export default AccountOverviewView
