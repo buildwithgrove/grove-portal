@@ -46,4 +46,4 @@ export const groupBy = (array: any[], key: string) => {
 }
 
 export const DISCORD_PATH = "https://discord.gg/build-with-grove"
-export const DOCS_PATH = "https://docs.grove.city"
+export const DOCS_PATH = "https://api.pocket.network/docs"

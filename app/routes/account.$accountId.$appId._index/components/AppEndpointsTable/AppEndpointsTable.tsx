@@ -162,7 +162,7 @@ const AppEndpointsTable = ({
                         component="a"
                         href={
                           chain.blockchain
-                            ? `${DOCS_PATH}/service-apis/${chain.blockchain}-api`
+                            ? `${DOCS_PATH}/${chain.blockchain}`
                             : DOCS_PATH
                         }
                         target="_blank"
